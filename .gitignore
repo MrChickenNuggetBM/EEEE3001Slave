@@ -1,4 +1,9 @@
 *.pdf
 *.url
+*.zip
+*.enl
+*.xlsx
+*.pptx
+*.docx
 */
 !/git*/
