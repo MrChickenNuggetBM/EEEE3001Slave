@@ -1,9 +1,13 @@
 *.pdf
 *.url
+
 *.zip
+!PCBDesign_MG.zip
+
 *.enl
 *.xlsx
 *.pptx
 *.docx
+
 */
-!/git*/
+!/*Git/
