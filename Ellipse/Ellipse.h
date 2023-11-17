@@ -8,9 +8,15 @@ template<typename radiiType, typename posType>
 class Ellipse
 {
 private:
+	std::string name;
+	std::pair<posType, posType> center;
+	radiiType minorRadius;
+	radiiType majorRadius;
+	
+public:
 	// constructors
-	Ellipse(radiiType newMinorRadius, radiiType newMajorRadius, pair<posType, posType> newCenter);
-	Ellipse(String newName, radiiType newMinorRadius, radiiType newMajorRadius, pair<posType, posType> newCenter);
+	Ellipse(radiiType newMinorRadius, radiiType newMajorRadius, std::pair<posType, posType> newCenter);
+	Ellipse(std::string newName, radiiType newMinorRadius, radiiType newMajorRadius, std::pair<posType, posType> newCenter);
 	Ellipse(Ellipse& newEllipse);
 
 	// deconstructor
@@ -18,7 +24,7 @@ private:
 
 	// operator overloads
 	Ellipse& operator=(Ellipse& assignedEllipse);
-public:
+
 };
 
 #endif // ELLIPSE_H
