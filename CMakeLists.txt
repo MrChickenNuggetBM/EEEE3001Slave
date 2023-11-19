@@ -4,6 +4,9 @@ cmake_minimum_required(VERSION 3.10)
 # Project name
 project(MeniscusDistortion)
 
+# Find OpenCV
+find_package(OpenCV REQUIRED PATHS "C:/opencv-4.8.0/build")
+
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
 
@@ -15,3 +18,6 @@ file(GLOB_RECURSE SOURCE_FILES ${SOURCE_DIR}/*.cpp ${SOURCE_DIR}/*.h)
 
 # Executable target
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+
+# Link OpenCV libraries
+target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
