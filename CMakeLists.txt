@@ -10,11 +10,14 @@ find_package(OpenCV REQUIRED PATHS "C:/opencv-4.8.0/build")
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
 
-# Add a variable for source files directory
-set(SOURCE_DIR Ellipse)
-
-# Collect source files (both .cpp and .h) from the specified directory
-file(GLOB_RECURSE SOURCE_FILES ${SOURCE_DIR}/*.cpp ${SOURCE_DIR}/*.h)
+# List your source files manually, excluding undesired files
+set(SOURCE_FILES
+    Ellipse/Ellipse.cpp
+    Ellipse/Ellipse.h
+	main.cpp
+	main.h
+    # Add more source files as needed
+)
 
 # Executable target
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})

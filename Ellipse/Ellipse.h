@@ -5,9 +5,14 @@
 
 class Ellipse : public cv::RotatedRect
 {
+private:
+	// public variables to store the colour and thickness of the ellipse
+	cv::Scalar colour;
+	int thickness;
+
 public:
 	// constructors
-	Ellipse(const cv::Point2f& center, const cv::Size2f& size, float angle, cv::Scalar newColour = (255, 255, 255), int newThickness = 1);
+	Ellipse(const cv::Point2f& center, cv::Size2f newSize, float angle, const cv::Scalar& newColour = (255, 255, 255), int newThickness = 1);
 	Ellipse(const Ellipse& newEllipse);
 
 	// destructor
@@ -16,18 +21,20 @@ public:
 	// operator overloads
 	Ellipse& operator=(const Ellipse& assignedEllipse);
 
-	// public variables to store the colour and thickness of the ellipse
-	cv::Scalar colour;
-	int thickness;
-
 	// gets
+	cv::Scalar getColour() const;
+	int getThickness() const;
 	float minorRadius() const;
 	float majorRadius() const;
 	float eccentricity() const;
 	float area() const;
 
-	bool isPointInside(const cv::Point2f& point);
-	bool isCircle();
+	// sets
+	void setColour(const cv::Scalar& newColour);
+	void setThickness(const int& newThickness);
+
+	bool isPointInside(const cv::Point2f& point) const;
+	bool isCircle() const;
 
 	void translate(float xTranslation, float yTranslation);
 	void operator+(float xyTranslation);
@@ -38,8 +45,8 @@ public:
 	void rotate(float angleDeg);
 	void rotateRad(float angleRad);
 
-	void draw(cv::Mat frame);
-	void operator()(cv::Mat frame);
+	cv::Mat draw(const cv::Mat& frame) const;
+	cv::Mat operator()(cv::Mat frame) const;
 };
 
 #endif // ELLIPSE_H
