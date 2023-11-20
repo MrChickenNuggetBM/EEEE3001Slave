@@ -121,8 +121,8 @@ void Ellipse::operator*(float xyScale) { scale(xyScale, xyScale); }
 void Ellipse::rotate(float angleDeg) { angle += angleDeg; }
 void Ellipse::rotateRad(float angleRad) { rotate((float)(angleRad * 180 / CV_PI)); }
 
-Mat Ellipse::draw(const Mat& frame) const {
+void Ellipse::draw(const Mat& frame) const {
 	ellipse(frame, *this, colour, thickness);
-	return(frame);
 }
-Mat Ellipse::operator()(Mat frame) const { return(draw(frame)); }
+
+void Ellipse::operator()(const Mat& frame) const { draw(frame); }
