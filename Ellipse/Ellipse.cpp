@@ -10,7 +10,6 @@ Ellipse::Ellipse(const Point2f& newCenter, Size2f newSize, float newAngleDeg, co
 	setThickness(newThickness);
 }
 
-
 Ellipse::Ellipse(const Ellipse& copiedEllipse) :
     RotatedRect(copiedEllipse.center, copiedEllipse.size, copiedEllipse.angle)
 {
@@ -36,9 +35,13 @@ float Ellipse::minorRadius() const { return (min(size.width, size.height) / 2.0f
 float Ellipse::majorRadius() const { return (max(size.width, size.height) / 2.0f); }
 
 float Ellipse::eccentricity() const {
-	float minRad(minorRadius());
-	float majRad(majorRadius());
-	return ((float)sqrt(1 - ((minRad * minRad) / (majRad * majRad))));
+	float sqrMinRad(minorRadius());
+    sqrMinRad *= sqrMinRad;
+
+	float sqrMajRad(majorRadius());
+    sqrMajRad *= sqrMajRad;
+
+	return ((float)sqrt(1 - (sqrMinRad / sqrMajRad)));
 }
 
 float Ellipse::area() const { return((float)(CV_PI * minorRadius() * majorRadius())); }

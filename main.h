@@ -16,7 +16,8 @@ int main(int argc, char *argv[]) {
     if (!setup()) return(1);
 
     // run loop until loop() returns false
-    ullint i(0); while (loop(i++));
+    ullint i(0);
+    while (loop(i++));
 
     return 0;
 }
