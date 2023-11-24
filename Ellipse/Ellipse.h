@@ -12,11 +12,11 @@ private:
 
 public:
 	// constructors
-	Ellipse(const cv::Point2f& center, cv::Size2f newSize, float angle, const cv::Scalar& newColour = (255, 255, 255), int newThickness = 1);
+	Ellipse(const cv::Point2f& center, cv::Size2f newSize, float angle, const cv::Scalar& newColour = cv::Scalar(255, 255, 255, 1), int newThickness = 1);
 	Ellipse(const Ellipse& newEllipse);
 
 	// destructor
-	~Ellipse();
+	~Ellipse() = default;
 
 	// operator overloads
 	Ellipse& operator=(const Ellipse& assignedEllipse);

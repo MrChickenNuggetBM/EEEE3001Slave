@@ -3,31 +3,20 @@ using namespace cv;
 using namespace std;
 
 // constructors
-Ellipse::Ellipse(const Point2f& newCenter, Size2f newSize, float newAngleDeg, const Scalar& newColour, int newThickness)
+Ellipse::Ellipse(const Point2f& newCenter, Size2f newSize, float newAngleDeg, const Scalar& newColour, int newThickness) :
+	RotatedRect(newCenter, newSize, (float)fmod(newAngleDeg, 360.0))
 {
 	setColour(newColour);
 	setThickness(newThickness);
-
-	// Correct negative sizes
-	if (newSize.width < 0 || newSize.height < 0) {
-		cout << "Invalid negative sizes. Setting negative sizes to 0...\n";
-		newSize.width = max(0.f, newSize.width);
-		newSize.height = max(0.f, newSize.height);
-	}
-
-	RotatedRect::RotatedRect(newCenter, newSize, (float)fmod(newAngleDeg, 360.0));
 }
 
 
-Ellipse::Ellipse(const Ellipse& copiedEllipse)
+Ellipse::Ellipse(const Ellipse& copiedEllipse) :
+    RotatedRect(copiedEllipse.center, copiedEllipse.size, copiedEllipse.angle)
 {
 	setColour(copiedEllipse.getColour());
 	setThickness(copiedEllipse.getThickness());
-	RotatedRect::RotatedRect(copiedEllipse.center, copiedEllipse.size, copiedEllipse.angle);
 }
-
-// destructor
-Ellipse::~Ellipse() {}
 
 // operator overloads
 Ellipse& Ellipse::operator=(const Ellipse& assignedEllipse)
@@ -56,6 +45,7 @@ float Ellipse::area() const { return((float)(CV_PI * minorRadius() * majorRadius
 
 void Ellipse::setColour(const Scalar& newColour)
 {
+	colour = newColour;
 	// Validate and correct color values
 	if (colour[0] < 0) {
 		colour[0] = 0;
