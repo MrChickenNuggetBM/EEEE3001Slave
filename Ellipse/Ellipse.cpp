@@ -30,21 +30,23 @@ Ellipse& Ellipse::operator=(const Ellipse& assignedEllipse)
 Scalar Ellipse::getColour() const { return colour; }
 int Ellipse::getThickness() const { return thickness; }
 
-float Ellipse::minorRadius() const { return (min(size.width, size.height) / 2.0f); }
+float Ellipse::getMinorRadius() const { return (size.height / 2.0f); }
 
-float Ellipse::majorRadius() const { return (max(size.width, size.height) / 2.0f); }
+float Ellipse::getMajorRadius() const { return (size.width / 2.0f); }
 
-float Ellipse::eccentricity() const {
-	float sqrMinRad(minorRadius());
+float Ellipse::getEccentricity() const {
+	float sqrMinRad(getMinorRadius());
     sqrMinRad *= sqrMinRad;
 
-	float sqrMajRad(majorRadius());
+	float sqrMajRad(getMajorRadius());
     sqrMajRad *= sqrMajRad;
 
 	return ((float)sqrt(1 - (sqrMinRad / sqrMajRad)));
 }
 
-float Ellipse::area() const { return((float)(CV_PI * minorRadius() * majorRadius())); }
+Size2f Ellipse::getCenter() { return(center); }
+
+float Ellipse::getArea() const { return((float)(CV_PI * getMinorRadius() * getMajorRadius())); }
 
 void Ellipse::setColour(const Scalar& newColour)
 {
@@ -80,14 +82,21 @@ void Ellipse::setColour(const Scalar& newColour)
 
 void Ellipse::setThickness(const int& newThickness) { thickness = max(1, newThickness); }
 
+void Ellipse::setMinorRadius(float newMinorRadius) { size.width = newMinorRadius * 2; }
+
+void Ellipse::setMajorRadius(float newMajorRadius) { size.height = newMajorRadius * 2; }
+
+void Ellipse::setCenterX(float newX) { center.x = newX; }
+void Ellipse::setCenterY(float newY) { center.y = newY; }
+
 bool Ellipse::isPointInside(const Point2f& point) const
 {
 	Rect_<float> boundingRect = boundingRect2f();
 	if (!boundingRect.contains(point))
 		return(false);
 
-	float a = minorRadius();
-	float b = majorRadius();
+	float a = getMinorRadius();
+	float b = getMajorRadius();
 	float xDiff = point.x - center.x;
 	float yDiff = point.y - center.y;
 
@@ -95,7 +104,7 @@ bool Ellipse::isPointInside(const Point2f& point) const
 	return((xDiff * xDiff) / (a * a) + (yDiff * yDiff) / (b * b) <= 1.0f);
 }
 
-bool Ellipse::isCircle() const { return(eccentricity() <= 0.2f); }
+bool Ellipse::isCircle() const { return(getEccentricity() <= 0.2f); }
 
 void Ellipse::translate(float xTranslation, float yTranslation)
 {

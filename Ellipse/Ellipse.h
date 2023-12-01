@@ -24,16 +24,21 @@ public:
 	// gets
 	cv::Scalar getColour() const;
 	int getThickness() const;
-	float minorRadius() const;
-	float majorRadius() const;
-	float eccentricity() const;
-	float area() const;
+	float getMinorRadius() const;
+	float getMajorRadius() const;
+    cv::Size2f Ellipse::getCenter();
+    float getEccentricity() const;
+    float getArea() const;
 
 	// sets
 	void setColour(const cv::Scalar& newColour);
 	void setThickness(const int& newThickness);
+    void setMinorRadius(float newMinorRadius);
+    void setMajorRadius(float newMajorRadius);
+    void setCenterX(float newX);
+    void setCenterY(float newX);
 
-	bool isPointInside(const cv::Point2f& point) const;
+    bool isPointInside(const cv::Point2f& point) const;
 	bool isCircle() const;
 
 	void translate(float xTranslation, float yTranslation);
