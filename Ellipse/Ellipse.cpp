@@ -86,10 +86,9 @@ void Ellipse::setMinorRadius(float newMinorRadius) { size.width = newMinorRadius
 
 void Ellipse::setMajorRadius(float newMajorRadius) { size.height = newMajorRadius * 2; }
 
+void Ellipse::setCenter(float newX, float newY) { center.x = newX; center.y = newY; }
 void Ellipse::setCenterX(float newX) { center.x = newX; }
 void Ellipse::setCenterY(float newY) { center.y = newY; }
-void Ellipse::setCenter(float newX, float newY) { center.x = newX; center.y = newY; }
-
 
 bool Ellipse::isPointInside(const Point2f& point) const
 {
