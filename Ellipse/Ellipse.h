@@ -35,6 +35,7 @@ public:
 	void setThickness(const int& newThickness);
     void setMinorRadius(float newMinorRadius);
     void setMajorRadius(float newMajorRadius);
+    void setCenter(float newX, float newY);
     void setCenterX(float newX);
     void setCenterY(float newX);
 
