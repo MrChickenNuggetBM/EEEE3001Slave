@@ -26,9 +26,9 @@ public:
 	int getThickness() const;
 	float getMinorRadius() const;
 	float getMajorRadius() const;
-    cv::Size2f Ellipse::getCenter();
-    float getEccentricity() const;
-    float getArea() const;
+	cv::Size2f getCenter();
+	float getEccentricity() const;
+	float getArea() const;
 
 	// sets
 	void setColour(const cv::Scalar& newColour);
