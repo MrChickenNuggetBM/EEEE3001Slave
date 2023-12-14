@@ -14,18 +14,25 @@
 //     return true;
 // }
 
-using namespace cv;
-using namespace std;
 
-int main(int argc, char *argv[]) {
-    // Capture an image with OpenCV (replace this with your image capture logic)
-    Mat image = imread("your_image.jpg");
+int main() {
+    // Image file path
+    const char* imageFilePath = "your_image.jpg";
 
-    // Assuming your second display is /dev/fb1 (adjust if needed)
-    const char* framebuffer_path = "/dev/fb1";
+    // Check if the image file exists
+    if (access(imageFilePath, F_OK) == -1) {
+        cerr << "Error: Image file not found" << endl;
+        return -1;
+    }
 
-    // Get framebuffer information
-    int fb = open(framebuffer_path, O_RDWR);
+    // Read the image
+    Mat image = imread(imageFilePath);
+
+    // í¼¨í° Assuming your second display is /dev/fb1 (adjust if needed)
+    const char* framebufferPath = "/dev/fb1";
+
+    // í¼Œí¿ Get framebuffer information
+    int fb = open(framebufferPath, O_RDWR);
     if (fb == -1) {
         cerr << "Error opening framebuffer device" << endl;
         return -1;
