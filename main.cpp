@@ -15,9 +15,9 @@
 // }
 
 
-int main() {
+int main(int argc, char *argv[]) {
     // Image file path
-    const char* imageFilePath = "your_image.jpg";
+    const char* imageFilePath = "test.jpg";
 
     // Check if the image file exists
     if (access(imageFilePath, F_OK) == -1) {
@@ -28,10 +28,10 @@ int main() {
     // Read the image
     Mat image = imread(imageFilePath);
 
-    // í¼¨í° Assuming your second display is /dev/fb1 (adjust if needed)
+    // Assuming your second display is /dev/fb1 (adjust if needed)
     const char* framebufferPath = "/dev/fb1";
 
-    // í¼Œí¿ Get framebuffer information
+    // Get framebuffer information
     int fb = open(framebufferPath, O_RDWR);
     if (fb == -1) {
         cerr << "Error opening framebuffer device" << endl;
