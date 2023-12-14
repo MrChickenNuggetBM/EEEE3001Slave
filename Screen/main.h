@@ -3,7 +3,6 @@
 
 #include "Ellipse/Ellipse.h"
 #include <iostream>
-
 using namespace cv;
 using namespace std;
 
