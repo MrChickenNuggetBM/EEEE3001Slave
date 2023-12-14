@@ -14,6 +14,7 @@ using namespace std;
 
 using ullint = unsigned long long int;
 
+/*
 bool setup();
 bool loop(ullint i);
 
@@ -27,5 +28,8 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
+*/
+
+int main(int argc, char *argv[]);
 
 #endif // MAIN_H
