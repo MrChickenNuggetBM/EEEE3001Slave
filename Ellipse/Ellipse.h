@@ -51,8 +51,8 @@ public:
 	void rotate(float angleDeg);
 	void rotateRad(float angleRad);
 
-	void draw(const cv::Mat& frame) const;
-	void operator()(const cv::Mat& frame) const;
+	void draw(const cv::Mat& frame, bool isBrightfield=true) const;
+	void operator()(const cv::Mat& frame, bool isBrightfield=true) const;
 };
 
 #endif // ELLIPSE_H

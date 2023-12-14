@@ -124,8 +124,8 @@ void Ellipse::operator*(float xyScale) { scale(xyScale, xyScale); }
 void Ellipse::rotate(float angleDeg) { angle += angleDeg; }
 void Ellipse::rotateRad(float angleRad) { rotate((float)(angleRad * 180 / CV_PI)); }
 
-void Ellipse::draw(const Mat& frame) const {
+void Ellipse::draw(const Mat& frame, bool isBrightfield) const {
 	ellipse(frame, *this, colour, thickness);
 }
 
-void Ellipse::operator()(const Mat& frame) const { draw(frame); }
+void Ellipse::operator()(const Mat& frame, bool isBrightfield) const { draw(frame, isBrightfield); }

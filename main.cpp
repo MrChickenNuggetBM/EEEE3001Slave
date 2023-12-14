@@ -1,20 +1,5 @@
 #include "main.h"
 
-// bool setup()
-// {
-//     return true;
-// }
-
-// bool loop(ullint i)
-// {
-//     if (i > 100)
-//         return false;
-
-//     cout << i << endl;
-//     return true;
-// }
-
-
 int main(int argc, char *argv[]) {
     // Image file path
     const char* imageFilePath = "test.jpg";
