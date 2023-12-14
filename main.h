@@ -2,8 +2,8 @@
 #define MAIN_H
 
 #include "Ellipse/Ellipse.h"
-using namespace cv;
 #include <iostream>
+using namespace cv;
 using namespace std;
 
 using ullint = unsigned long long int;
