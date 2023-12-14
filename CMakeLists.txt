@@ -9,8 +9,10 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # List your source files manually, excluding undesired files
 set(SOURCE_FILES
-    Ellipse/Ellipse.cpp
     Ellipse/Ellipse.h
+    Screen/Screen.h
+    Ellipse/Ellipse.cpp
+    Screen/Screen.cpp
     main.cpp
     main.h
     # Add more source files as needed

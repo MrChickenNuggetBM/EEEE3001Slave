@@ -12,12 +12,15 @@
 class Screen
 {
 private:
-    char* frameBufferPath;
+    int frameBuffer;
+    struct fb_var_screeninfo vinfo;
+    size_t screenSize;
+    char errorStatus;
 
 public:
     // constructors
-    Screen(const cv::Point2f& center, cv::Size2f newSize, float angle, const cv::Scalar& newColour = cv::Scalar(255, 255, 255, 1), int newThickness = 1);
-    Screen(const Screen& newScreen);
+    Screen::Screen(const char* frameBufferPath = "/dev/fb1");
+    Screen(const Screen& copiedScreen);
 
     // destructor
     ~Screen() = default;
@@ -25,8 +28,11 @@ public:
     // operator overloads
     Screen& operator=(const Screen& assignedScreen);
 
-    void send(Mat image);
+    void send(cv::Mat image);
     void operator()();
+
+    char getErrorStatus();
+    void setErrorStatus(char newErrorStatus);
 };
 
 #endif // SCREEN_H
