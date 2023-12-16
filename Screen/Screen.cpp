@@ -35,6 +35,8 @@ Screen::Screen(const char* frameBufferPath) :
         setErrorStatus(3);
         return;
     }
+
+    memset(frameBuffer, 0, screenSize);
 }
 
 Screen::Screen(const Screen& copiedScreen)
@@ -72,16 +74,18 @@ void Screen::send(Mat image, bool isFullScreen)
             int img_x = (x * (isFullScreen ? image.cols : vinfo.xres_virtual)) / vinfo.xres_virtual;
             int img_y = (y * (isFullScreen ? image.rows : vinfo.yres_virtual)) / vinfo.yres_virtual;
 
-            // Assuming your image is in BGR format
-            unsigned char* pixel = &frameBuffer[y * vinfo.xres_virtual * 4 + x * 4];
-            pixel[0] = image.at<Vec3b>(img_y, img_x)[0]; // Blue
-            pixel[1] = image.at<Vec3b>(img_y, img_x)[1]; // Green
-            pixel[2] = image.at<Vec3b>(img_y, img_x)[2]; // Red
-            pixel[3] = 0; // Alpha (transparency)
+            // Check if the coordinates are within image bounds
+            if (img_x >= 0 && img_x < image.cols && img_y >= 0 && img_y < image.rows)
+            {
+                // Assuming your image is in BGR format
+                unsigned char* pixel = &frameBuffer[y * vinfo.xres_virtual * 4 + x * 4];
+                pixel[0] = image.at<Vec3b>(img_y, img_x)[0]; // Blue
+                pixel[1] = image.at<Vec3b>(img_y, img_x)[1]; // Green
+                pixel[2] = image.at<Vec3b>(img_y, img_x)[2]; // Red
+                pixel[3] = 0; // Alpha (transparency)
+            }
         }
     }
-
-    return;
 }
 
 void Screen::operator()(Mat image, bool isFullScreen) { send(image, isFullScreen); }
