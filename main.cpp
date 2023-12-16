@@ -24,7 +24,10 @@ bool loop() {
 
     Mat frame(1080, 1920, CV_8UC1, Scalar(255, 255, 255));
 
-    Ellipse(Point2f(960,540), Size2f(1920,1080), 0, Scalar(0,0,0), 1)(frame);
+    int lool1 = 1920 / ((i % 5) + 1);
+    int lool2 = 1080 / ((i % 5) + 1);
+
+    Ellipse(Point2f(960,540), Size2f(lool1,lool2), 0, Scalar(0,0,0), 1)(frame);
 
     screen->send(frame);
     // screen->send(cameraImage);

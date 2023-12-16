@@ -30,8 +30,7 @@ int main(int argc, char *argv[]) {
     }
 
     // run loop until loop() returns false
-    while (loop()) {
-        i++;
+    while (loop(), ++i) {
         cout << i << endl;
     }
 
