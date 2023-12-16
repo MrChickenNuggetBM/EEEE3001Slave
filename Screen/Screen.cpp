@@ -45,6 +45,7 @@ Screen::Screen(const Screen& copiedScreen)
 Screen::~Screen()
 {
     // Cleanup and close the framebuffer
+    memset(frameBuffer, 0, screenSize);
     munmap(frameBuffer, screenSize);
     close(fb);
 }

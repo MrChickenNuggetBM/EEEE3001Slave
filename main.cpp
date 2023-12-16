@@ -26,14 +26,20 @@ bool loop(ullint i)
     Mat cameraImage;
     videoCapture->read(cameraImage);
 
-    (*screen)(cameraImage);
+    Mat frame = Mat::ones(480, 640, CV_8UC3) * 255;
+
+    Ellipse ellipse(Point2f(50,((50 + i) % 100)), Size2f(25,50), 0, Scalar(0,0,0), 1);
+
+    ellipse(frame);
+
+    screen->send(frame, false);
 
     // Mat blank(screen->getHeight(), screen->getWidth(), CV_8UC1, Scalar(0));
 
-    if (false)
-        return false;
-
     cout << i << endl;
+
+    if (i >= 100)
+        return false;
     return true;
 }
 

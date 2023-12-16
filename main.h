@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
 
     // run loop until loop() returns false
     ullint i(0);
-    while (loop(i++));
+    while (loop(++i));
 
     cout << "Stopped after " << i << " frames" << endl;
 
