@@ -62,22 +62,27 @@ Screen& Screen::operator=(const Screen& assignedScreen)
 
 void Screen::send(Mat image, bool isFullScreen)
 {
-    // Copy OpenCV image to the framebuffer
-    for (int y = 0; y < image.rows; ++y)
+    // Iterate through framebuffer dimensions
+    for (int y = 0; y < vinfo.yres_virtual; ++y)
     {
-        for (int x = 0; x < image.cols; ++x)
+        for (int x = 0; x < vinfo.xres_virtual; ++x)
         {
-            // Assuming your image is in BGR oid Screen::close()format
-            unsigned char* pixel = &frameBuffer[(vinfo.yoffset + y) * vinfo.xres_virtual * 4 + (vinfo.xoffset + x) * 4];
-            pixel[0] = image.at<Vec3b>(y, x)[0]; // Blue
-            pixel[1] = image.at<Vec3b>(y, x)[1]; // Green
-            pixel[2] = image.at<Vec3b>(y, x)[2]; // Red
+            // Calculate corresponding pixel position in the original image
+            int img_x = (x * (isFullScreen ? image.cols : vinfo.xres_virtual)) / vinfo.xres_virtual;
+            int img_y = (y * (isFullScreen ? image.rows : vinfo.yres_virtual)) / vinfo.yres_virtual;
+
+            // Assuming your image is in BGR format
+            unsigned char* pixel = &frameBuffer[y * vinfo.xres_virtual * 4 + x * 4];
+            pixel[0] = image.at<Vec3b>(img_y, img_x)[0]; // Blue
+            pixel[1] = image.at<Vec3b>(img_y, img_x)[1]; // Green
+            pixel[2] = image.at<Vec3b>(img_y, img_x)[2]; // Red
             pixel[3] = 0; // Alpha (transparency)
         }
     }
 
     return;
 }
+
 void Screen::operator()(Mat image, bool isFullScreen) { send(image, isFullScreen); }
 
 char Screen::getErrorStatus() const { return errorStatus; }
