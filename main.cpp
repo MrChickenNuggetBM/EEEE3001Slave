@@ -22,9 +22,9 @@ bool loop() {
     // Mat cameraImage;
     // videoCapture->read(cameraImage);
 
-    Mat frame(1080, 1920, CV_8UC3, Scalar(255, 255, 255));
+    Mat frame(1080, 1920, CV_8UC1, Scalar(255, 255, 255));
 
-    Ellipse(Point2f(540,960), Size2f(540,960), 0, Scalar(0,0,0), 1)(frame);
+    Ellipse(Point2f(960,540), Size2f(1920,1080), 0, Scalar(0,0,0), 1)(frame);
 
     screen->send(frame);
     // screen->send(cameraImage);

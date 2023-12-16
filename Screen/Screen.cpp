@@ -84,8 +84,9 @@ void Screen::send(Mat image)
         for (int imageX = 0; imageX < min(screenWidth, image.cols); ++imageX)
         {
             // Assuming your image is in BGR format
-            unsigned char* pixel = &frameBuffer[imageY * screenWidth * 4 + imageX * 4];
-            pixel[0] = pixel[1] = pixel[2] = image.at<uchar>(imageY, imageX);
+            uchar* pixel = &frameBuffer[imageY * screenWidth * 4 + imageX * 4];
+            uchar intensity = image.at<uchar>(imageY, imageX);
+            pixel[0] = pixel[1] = pixel[2] = intensity;
             pixel[3] = 0; // Alpha (transparency)
         }
     }
