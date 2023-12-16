@@ -9,6 +9,7 @@ using namespace std;
 
 using ullint = unsigned long long int;
 
+bool isQPressed();
 bool setup();
 bool loop(ullint i);
 bool teardown();
