@@ -26,7 +26,7 @@ public:
 	int getThickness() const;
 	float getMinorRadius() const;
 	float getMajorRadius() const;
-	cv::Size2f getCenter();
+	cv::Size2f getCenter() const;
 	float getEccentricity() const;
 	float getArea() const;
 
@@ -51,8 +51,8 @@ public:
 	void rotate(float angleDeg);
 	void rotateRad(float angleRad);
 
-	void draw(const cv::Mat& frame, bool isBrightfield=true) const;
-	void operator()(const cv::Mat& frame, bool isBrightfield=true) const;
+	void draw(const cv::Mat& frame) const;
+	void operator()(const cv::Mat& frame) const;
 };
 
 #endif // ELLIPSE_H

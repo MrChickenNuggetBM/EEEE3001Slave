@@ -1,64 +1,50 @@
 #include "main.h"
 
-int main(int argc, char *argv[]) {
-    // Image file path
-    const char* imageFilePath = "test.jpg";
+Screen *screen;
+VideoCapture *videoCapture;
 
-    // Check if the image file exists
-    if (access(imageFilePath, F_OK) == -1) {
-        cerr << "Error: Image file not found" << endl;
-        return -1;
+bool setup()
+{
+    screen = new Screen("/dev/fb1");
+    if (screen->getErrorStatus() > 0)
+    {
+        return false;
     }
 
-    // Read the image
-    Mat image = imread(imageFilePath);
-
-    // Assuming your second display is /dev/fb1 (adjust if needed)
-    const char* framebufferPath = "/dev/fb1";
-
-    // Get framebuffer information
-    int fb = open(framebufferPath, O_RDWR);
-    if (fb == -1) {
-        cerr << "Error opening framebuffer device" << endl;
-        return -1;
+    videoCapture = new VideoCapture(0);
+    if (!videoCapture->isOpened())
+    {
+        cerr << "Error: Could not open camera" << endl;
+        return false;
     }
 
-    struct fb_var_screeninfo vinfo;
-    if (ioctl(fb, FBIOGET_VSCREENINFO, &vinfo)) {
-        cerr << "Error reading variable information" << endl;
-        close(fb);
-        return -1;
-    }
+    return true;
+}
 
-    // Calculate the size of the framebuffer
-    size_t screensize = vinfo.yres_virtual * vinfo.xres_virtual * vinfo.bits_per_pixel / 8;
+bool loop(ullint i)
+{
+    Mat cameraImage;
+    videoCapture->read(cameraImage);
 
-    // Map framebuffer to user space
-    unsigned char* framebuffer = (unsigned char*)mmap(nullptr, screensize, PROT_READ | PROT_WRITE, MAP_SHARED, fb, 0);
-    if (framebuffer == MAP_FAILED) {
-        cerr << "Error mapping framebuffer device to memory" << endl;
-        close(fb);
-        return -1;
-    }
+    (*screen)(cameraImage);
 
-    // Copy OpenCV image to the framebuffer
-    for (int y = 0; y < image.rows; ++y) {
-        for (int x = 0; x < image.cols; ++x) {
-            // Assuming your image is in BGR format
-            unsigned char* pixel = &framebuffer[(vinfo.yoffset + y) * vinfo.xres_virtual * 4 + (vinfo.xoffset + x) * 4];
-            pixel[0] = image.at<Vec3b>(y, x)[0]; // Blue
-            pixel[1] = image.at<Vec3b>(y, x)[1]; // Green
-            pixel[2] = image.at<Vec3b>(y, x)[2]; // Red
-            pixel[3] = 0; // Alpha (transparency)
-        }
-    }
+    // Mat blank(screen->getHeight(), screen->getWidth(), CV_8UC1, Scalar(0));
 
-    // Optionally, you can add a delay to display the image for some time
-    usleep(5000000); // 5 seconds
+    if (false)
+        return false;
 
-    // Cleanup and close the framebuffer
-    munmap(framebuffer, screensize);
-    close(fb);
+    cout << i << endl;
+    return true;
+}
 
-    return 0;
+bool teardown()
+{
+    delete screen;
+
+    videoCapture->release();
+    delete videoCapture;
+
+    destroyAllWindows();
+
+    return true;
 }

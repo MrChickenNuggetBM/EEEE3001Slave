@@ -1,15 +1,7 @@
 #include "main.h"
 
-bool setup()
-{
-    return true;
-}
+int main(int argc, char *argv[]) {
+    Screen screen;
 
-bool loop(ullint i)
-{
-    if (i > 100)
-        return false;
-
-    cout << i << endl;
-    return true;
+    return 0;
 }

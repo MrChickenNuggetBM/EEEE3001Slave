@@ -3,11 +3,11 @@ using namespace std;
 using namespace cv;
 
 // constructors
-    Screen::Screen(const char* frameBufferPath)
+Screen::Screen(const char* frameBufferPath) :
+    errorStatus(0)
 {
-        setErrorStatus(0);
     // Get framebuffer information
-    int fb = open(frameBufferPath, O_RDWR);
+    fb = open(frameBufferPath, O_RDWR);
     if (fb == -1)
     {
         cerr << "Error opening framebuffer device" << endl;
@@ -37,32 +37,48 @@ using namespace cv;
     }
 }
 
-    Screen::Screen(const Screen& copiedScreen) { frameBuffer = copiedScreen.frameBuffer; };
+Screen::Screen(const Screen& copiedScreen)
+{
+    frameBuffer = copiedScreen.frameBuffer;
+}
 
-    // destructor
-    Screen::~Screen() = default;
+// operator overloads
+Screen& Screen::operator=(const Screen& assignedScreen)
+{
+    frameBuffer = assignedScreen.frameBuffer;
+    return (*this);char getErrorStatus();
+    void setErrorStatus(char newErrorStatus);
+}
 
-    // operator overloads
-    Screen& Screen::operator=(const Screen& assignedScreen) { frameBuffer = assignedScreen.frameBuffer; };
-
-    void Screen::send(Mat image)()
+void Screen::send(Mat image)
+{
+    // Copy OpenCV image to the framebuffer
+    for (int y = 0; y < image.rows; ++y)
     {
-        // Copy OpenCV image to the framebuffer
-        for (int y = 0; y < image.rows; ++y)
+        for (int x = 0; x < image.cols; ++x)
         {
-            for (int x = 0; x < image.cols; ++x)
-            {
-                // Assuming your image is in BGR format
-                unsigned char* pixel = &frameBuffer[(vinfo.yoffset + y) * vinfo.xres_virtual * 4 + (vinfo.xoffset + x) * 4];
-                pixel[0] = image.at<Vec3b>(y, x)[0]; // Blue
-                pixel[1] = image.at<Vec3b>(y, x)[1]; // Green
-                pixel[2] = image.at<Vec3b>(y, x)[2]; // Red
-                pixel[3] = 0; // Alpha (transparency)
-            }
+            // Assuming your image is in BGR oid Screen::close()format
+            unsigned char* pixel = &frameBuffer[(vinfo.yoffset + y) * vinfo.xres_virtual * 4 + (vinfo.xoffset + x) * 4];
+            pixel[0] = image.at<Vec3b>(y, x)[0]; // Blue
+            pixel[1] = image.at<Vec3b>(y, x)[1]; // Green
+            pixel[2] = image.at<Vec3b>(y, x)[2]; // Red
+            pixel[3] = 0; // Alpha (transparency)
         }
-
-        // Cleanup and close the framebuffer
-        munmap(frameBuffer, screenSize);
-        close(fb);
     }
-    void Screen::operator()(Mat image) { send(image); }
+
+    return;
+}
+void Screen::operator()(Mat image) { send(image); }
+
+void Screen::endSession()
+{
+    // Cleanup and close the framebuffer
+    munmap(frameBuffer, screenSize);
+    close(fb);
+}
+
+char Screen::getErrorStatus() const { return errorStatus; }
+int Screen::getWidth() const { return vinfo.xres_virtual; }
+int Screen::getHeight() const { return vinfo.yres_virtual; }
+
+void Screen::setErrorStatus(char newErrorStatus) { errorStatus = newErrorStatus; }

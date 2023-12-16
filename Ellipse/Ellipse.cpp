@@ -44,7 +44,7 @@ float Ellipse::getEccentricity() const {
 	return ((float)sqrt(1 - (sqrMinRad / sqrMajRad)));
 }
 
-Size2f Ellipse::getCenter() { return(center); }
+Size2f Ellipse::getCenter() const { return(center); }
 
 float Ellipse::getArea() const { return((float)(CV_PI * getMinorRadius() * getMajorRadius())); }
 
@@ -74,7 +74,7 @@ void Ellipse::setColour(const Scalar& newColour)
 		colour[2] = 0;
 		cout << "Red less than 0. Trimming...";
 	}
-	else if (colour[2] > 255) {
+	else if (colour[2] > 255) {setColour(newColour);
 		colour[2] = 255;
 		cout << "Red more than 255. Trimming...";
 	}
@@ -95,7 +95,6 @@ bool Ellipse::isPointInside(const Point2f& point) const
 	Rect_<float> boundingRect = boundingRect2f();
 	if (!boundingRect.contains(point))
 		return(false);
-
 	float a = getMinorRadius();
 	float b = getMajorRadius();
 	float xDiff = point.x - center.x;
@@ -124,8 +123,8 @@ void Ellipse::operator*(float xyScale) { scale(xyScale, xyScale); }
 void Ellipse::rotate(float angleDeg) { angle += angleDeg; }
 void Ellipse::rotateRad(float angleRad) { rotate((float)(angleRad * 180 / CV_PI)); }
 
-void Ellipse::draw(const Mat& frame, bool isBrightfield) const {
+void Ellipse::draw(const Mat& frame) const {
 	ellipse(frame, *this, colour, thickness);
 }
 
-void Ellipse::operator()(const Mat& frame, bool isBrightfield) const { draw(frame, isBrightfield); }
+void Ellipse::operator()(const Mat& frame) const { draw(frame); }
