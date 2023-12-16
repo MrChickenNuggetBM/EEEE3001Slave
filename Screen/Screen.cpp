@@ -75,46 +75,24 @@ void Screen::fitToMe(Mat& image)
 
 void Screen::send(Mat image)
 {
-    const int screenWidth = vinfo.xres_virtual;
-    const int screenHeight = vinfo.yres_virtual;
+    const int screenWidth = 960;//vinfo.xres_virtual;
+    const int screenHeight = 540;//vinfo.yres_virtual;
     const int imageWidth = image.cols;
     const int imageHeight = image.rows;
 
     // Iterate through framebuffer dimensions
-    for (int screenY = 0; screenY < screenHeight; screenY += 2)
+    for (int screenY = 0; screenY < screenHeight; ++screenY)
     {
-        for (int screenX = 0; screenX < screenWidth; screenX += 2)
+        for (int screenX = 0; screenX < screenWidth; ++screenX)
         {
-            int imageX = screenX / 2;
-            int imageY = screenY / 2;
+            uchar* screenPixels = &frameBuffer[screenY * screenWidth * 4 + screenX * 4];
 
-            // Assuming your image is in BGR format
-            uchar* screenPixel1 = &frameBuffer[screenY * screenWidth * 4 + screenX * 4];
-            uchar* screenPixel2 = &frameBuffer[(screenY + 1) * screenWidth * 4 + screenX * 4];
+            uchar intensity = image.at<uchar>(screenY, screenX);
 
-            uchar intensity = image.at<uchar>(imageY, imageX);
-
-            screenPixel1[0] =
-            screenPixel1[1] =
-            screenPixel1[2] =
-            screenPixel1[4] =
-            screenPixel1[5] =
-            screenPixel1[6] =
-
-            screenPixel2[0] =
-            screenPixel2[1] =
-            screenPixel2[2] =
-            screenPixel2[4] =
-            screenPixel2[5] =
-            screenPixel2[6] = intensity;
-
-
-            screenPixel1[3] =
-            screenPixel1[7] =
-
-            screenPixel2[3] =
-            screenPixel2[7] = 0;
-
+            screenPixels[0] =
+            screenPixels[1] =
+            screenPixels[2] = intensity;
+            screenPixels[3] = 0;
             //for (int i = 0; i < 100000; i++);
         }
     }
