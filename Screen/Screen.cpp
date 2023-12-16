@@ -63,32 +63,35 @@ Screen& Screen::operator=(const Screen& assignedScreen)
     return (*this);
 }
 
-void Screen::send(Mat image, bool isFullScreen)
+void Screen::fitToMe(Mat& image)
 {
-    // Iterate through framebuffer dimensions
-    for (int y = 0; y < vinfo.yres_virtual; ++y)
-    {
-        for (int x = 0; x < vinfo.xres_virtual; ++x)
-        {
-            // Calculate corresponding pixel position in the original image
-            int img_x = (x * (isFullScreen ? image.cols : vinfo.xres_virtual)) / vinfo.xres_virtual;
-            int img_y = (y * (isFullScreen ? image.rows : vinfo.yres_virtual)) / vinfo.yres_virtual;
+    double xScale = (double)vinfo.xres_virtual / (double)image.cols;
+    double yScale = (double)vinfo.yres_virtual / (double)image.rows;
 
-            // Check if the coordinates are within image bounds
-            if (img_x >= 0 && img_x < image.cols && img_y >= 0 && img_y < image.rows)
-            {
-                // Assuming your image is in BGR format
-                unsigned char* pixel = &frameBuffer[y * vinfo.xres_virtual * 4 + x * 4];
-                pixel[0] = image.at<Vec3b>(img_y, img_x)[0]; // Blue
-                pixel[1] = image.at<Vec3b>(img_y, img_x)[1]; // Green
-                pixel[2] = image.at<Vec3b>(img_y, img_x)[2]; // Red
-                pixel[3] = 0; // Alpha (transparency)
-            }
+    resize(image, image, cv::Size(), xScale, yScale);
+
+    return;
+}
+
+void Screen::send(Mat image)
+{
+    const int screenWidth = vinfo.xres_virtual;
+    const int screenHeight = vinfo.yres_virtual;
+
+    // Iterate through framebuffer dimensions
+    for (int imageY = 0; imageY < min(screenHeight, image.rows); ++imageY)
+    {
+        for (int imageX = 0; imageX < min(screenWidth, image.cols); ++imageX)
+        {
+            // Assuming your image is in BGR format
+            unsigned char* pixel = &frameBuffer[imageY * screenWidth * 4 + imageX * 4];
+            pixel[0] = pixel[1] = pixel[2] = image.at<uchar>(imageY, imageX);
+            pixel[3] = 0; // Alpha (transparency)
         }
     }
 }
 
-void Screen::operator()(Mat image, bool isFullScreen) { send(image, isFullScreen); }
+void Screen::operator()(Mat image) { send(image); }
 
 char Screen::getErrorStatus() const { return errorStatus; }
 int Screen::getWidth() const { return vinfo.xres_virtual; }

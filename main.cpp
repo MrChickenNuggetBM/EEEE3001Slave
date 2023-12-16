@@ -19,16 +19,15 @@ bool setup() {
 }
 
 bool loop() {
-    Mat cameraImage;
-    videoCapture->read(cameraImage);
+    // Mat cameraImage;
+    // videoCapture->read(cameraImage);
 
-    Mat frame(480, 640, CV_8UC3, Scalar(255, 255, 255));
+    Mat frame(1080, 1920, CV_8UC3, Scalar(255, 255, 255));
 
-    Ellipse(Point2f(50,((50 + i) % 100)), Size2f(25,50), 0, Scalar(0,0,0), 1)(frame);
+    Ellipse(Point2f(540,960), Size2f(540,960), 0, Scalar(0,0,0), 1)(frame);
 
-    screen->send(frame, false);
-    //screen->send(cameraImage, false);
-
+    screen->send(frame);
+    // screen->send(cameraImage);
 
     if (false) return false;
 
@@ -49,5 +48,4 @@ void teardown() {
 void teardown(int signal) {
     exit(EXIT_SUCCESS);
 }
-
 

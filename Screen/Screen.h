@@ -29,8 +29,9 @@ public:
     // operator overloads
     Screen& operator=(const Screen& assignedScreen);
 
-    void send(cv::Mat image, bool isFullScreen = true);
-    void operator()(cv::Mat image, bool isFullScreen = true);
+    void fitToMe(cv::Mat& image);
+    void send(cv::Mat image);
+    void operator()(cv::Mat image);
 
     char getErrorStatus() const;
     int getWidth() const;
