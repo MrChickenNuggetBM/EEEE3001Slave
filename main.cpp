@@ -22,12 +22,12 @@ bool loop() {
     // Mat cameraImage;
     // videoCapture->read(cameraImage);
 
-    Mat frame(1080, 1920, CV_8UC1, Scalar(255, 255, 255));
+    Mat frame(540, 960, CV_8UC1, Scalar(255, 255, 255));
 
-    int lool1 = 1920 / ((i % 5) + 1);
-    int lool2 = 1080 / ((i % 5) + 1);
+    int lool1 = 960 / ((i % 5) + 1);
+    int lool2 = 540 / ((i % 5) + 1);
 
-    Ellipse(Point2f(960,540), Size2f(lool1,lool2), 0, Scalar(0,0,0), 1)(frame);
+    Ellipse(Point2f(480,270), Size2f(lool1,lool2), 0, Scalar(0,0,0), 1)(frame);
 
     screen->send(frame);
     // screen->send(cameraImage);
@@ -51,4 +51,3 @@ void teardown() {
 void teardown(int signal) {
     exit(EXIT_SUCCESS);
 }
-
