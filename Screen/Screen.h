@@ -24,14 +24,13 @@ public:
     Screen(const Screen& copiedScreen);
 
     // destructor
-    ~Screen() = default;
+    ~Screen();
 
     // operator overloads
     Screen& operator=(const Screen& assignedScreen);
 
-    void send(cv::Mat image);
-    void operator()(cv::Mat image);
-    void endSession();
+    void send(cv::Mat image, bool isFullScreen = true);
+    void operator()(cv::Mat image, bool isFullScreen = true);
 
     char getErrorStatus() const;
     int getWidth() const;

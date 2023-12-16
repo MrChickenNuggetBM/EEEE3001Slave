@@ -39,18 +39,28 @@ Screen::Screen(const char* frameBufferPath) :
 
 Screen::Screen(const Screen& copiedScreen)
 {
-    frameBuffer = copiedScreen.frameBuffer;
+    (*this) = copiedScreen;
+}
+
+Screen::~Screen()
+{
+    // Cleanup and close the framebuffer
+    munmap(frameBuffer, screenSize);
+    close(fb);
 }
 
 // operator overloads
 Screen& Screen::operator=(const Screen& assignedScreen)
 {
     frameBuffer = assignedScreen.frameBuffer;
-    return (*this);char getErrorStatus();
-    void setErrorStatus(char newErrorStatus);
+    fb = assignedScreen.fb;
+    vinfo = assignedScreen.vinfo;
+    screenSize = assignedScreen.screenSize;
+    errorStatus = assignedScreen.errorStatus;
+    return (*this);
 }
 
-void Screen::send(Mat image)
+void Screen::send(Mat image, bool isFullScreen)
 {
     // Copy OpenCV image to the framebuffer
     for (int y = 0; y < image.rows; ++y)
@@ -68,14 +78,7 @@ void Screen::send(Mat image)
 
     return;
 }
-void Screen::operator()(Mat image) { send(image); }
-
-void Screen::endSession()
-{
-    // Cleanup and close the framebuffer
-    munmap(frameBuffer, screenSize);
-    close(fb);
-}
+void Screen::operator()(Mat image, bool isFullScreen) { send(image, isFullScreen); }
 
 char Screen::getErrorStatus() const { return errorStatus; }
 int Screen::getWidth() const { return vinfo.xres_virtual; }

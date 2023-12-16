@@ -6,7 +6,7 @@ VideoCapture *videoCapture;
 bool setup()
 {
     screen = new Screen("/dev/fb1");
-    if (screen->getErrorStatus() > 0)
+    if (screen->getErrorStatus())
     {
         return false;
     }
