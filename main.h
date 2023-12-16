@@ -3,16 +3,23 @@
 
 #include "Ellipse/Ellipse.h"
 #include "Screen/Screen.h"
+#include <termios.h>
+#include <unistd.h>
+#include <csignal>
 
 using namespace cv;
 using namespace std;
 
 using ullint = unsigned long long int;
 
-bool isQPressed();
+ullint i(0);
+Screen *screen;
+VideoCapture *videoCapture;
+
 bool setup();
-bool loop(ullint i);
-bool teardown();
+bool loop();
+void teardown();
+void teardown(int signal);
 
 int main(int argc, char *argv[]) {
     // run setup, if failure return
@@ -23,15 +30,9 @@ int main(int argc, char *argv[]) {
     }
 
     // run loop until loop() returns false
-    ullint i(0);
-    while (loop(++i));
-
-    cout << "Stopped after " << i << " frames" << endl;
-
-    if (!teardown())
-    {
-        cerr << "Error in teardown" << endl;
-        return(-1);
+    while (loop()) {
+        i++;
+        cout << i << endl;
     }
 
     return 0;
