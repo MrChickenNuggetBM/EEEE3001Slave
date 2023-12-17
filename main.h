@@ -6,6 +6,7 @@
 #include <termios.h>
 #include <unistd.h>
 #include <csignal>
+#include <fstream>
 
 using namespace cv;
 using namespace std;
@@ -13,7 +14,7 @@ using namespace std;
 using ullint = unsigned long long int;
 
 ullint i(0);
-Screen *screen;
+// Screen *screen;
 VideoCapture *videoCapture;
 
 bool setup();
