@@ -24,24 +24,45 @@ bool loop() {
     Mat cameraImage;
     videoCapture->read(cameraImage);
 
-    Mat frame(
-        1080,
-        1920,
-        CV_8UC4,
-        Scalar(255, 255, 255, 0)
-    );
+    Mat* frame;
 
-    Ellipse ellipse(
-        Point2f(960,540),
-        Size2f(
-            1920 / (1 + float(i % 10)),
-            1080 / (1 + float(i % 10))
-        ),
-        0,
-        Scalar(0,0,0),
-        3
-    );
-    ellipse(frame);
+    if (i % 2) {
+        frame = new Mat(
+            1080,
+                                        1920,
+                                        CV_8UC4,
+                                        Scalar(255, 255, 255, 0)
+                        );
+        Ellipse ellipse(
+                Point2f(960, 540),
+                Size2f(
+                        1920 / (1 + float(i % 10)),
+                        1080 / (1 + float(i % 10))
+                ),
+                0,
+                Scalar(0, 0, 0),
+                3
+        );
+        ellipse(*frame);
+    } else {
+        frame = new Mat(
+                1080,
+                1920,
+                CV_8UC4,
+                Scalar(0, 0, 0, 0)
+        );
+        Ellipse ellipse(
+                Point2f(960, 540),
+                Size2f(
+                        1920 / (1 + float(i % 10)),
+                        1080 / (1 + float(i % 10))
+                ),
+                0,
+                Scalar(255, 255, 255),
+                3
+        );
+        ellipse(*frame);
+    }
 
     std::ofstream fb("/dev/fb1", std::ios::binary);
 
