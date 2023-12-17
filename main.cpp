@@ -30,7 +30,7 @@ bool loop() {
 
     //imshow("img", cameraImage);
 
-    Ellipse(Point2f((1920 + i) % 960,(1080 + i) % 960), Size2f(3840,2160), 0, Scalar(0,0,0), 3)(frame);
+    Ellipse(Point2f((1920 + i) % 3840,1080), Size2f(3840,2160), 0, Scalar(0,0,0), 3)(frame);
 
     // screen->send(frame);
     // screen->fitToMe(cameraImage);
