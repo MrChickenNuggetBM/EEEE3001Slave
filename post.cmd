@@ -2,22 +2,19 @@
 setlocal enabledelayedexpansion
 
 echo --------------------------------------------------- git status -------------------------------------------------
-@echo on
+@echo git status
 git status
-@echo off
 echo:
 
 echo --------------------------------------------------- git add * --------------------------------------------------
 set /p "file=Please enter the file names (* for all files): "
-@echo on
+@echo git add %file%
 git add %file%
-@echo off
 echo:
 
 echo --------------------------------------------------- git status -------------------------------------------------
-@echo on
+@echo git status
 git status
-@echo off
 echo:
 
 echo --------------------------------------------------- git commit -------------------------------------------------
@@ -28,13 +25,11 @@ set /a X+=1
 echo !X!>!file!
 set /p msg="Please enter the commit message, or press enter for auto message "
 if /i "%msg%"=="" (
-    @echo on
+    @echo git commit -m "v!X!"
     git commit -m "v!X!"
-    @echo off
 ) else (
-    @echo on
+    @echo git commit -m "%msg%"
     git commit -m "%msg%"
-    @echo off
 )
 echo:
 
@@ -51,9 +46,8 @@ IF /i "%decision%"=="y" (
         exit /B
     )
 )
-@echo on
+@echo git push
 git push
-@echo off
 echo:
 echo:
 
