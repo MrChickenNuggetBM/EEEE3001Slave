@@ -24,16 +24,13 @@ bool loop() {
     Mat cameraImage;
     videoCapture->read(cameraImage);
     cout << cameraImage.channels() << endl;
-    // cvtColor(cameraImage, cameraImage, COLOR_BGR2GRAY);
+    cvtColor(cameraImage, cameraImage, COLOR_BGR2GRAY);
 
-    Mat frame(540, 960, CV_8UC1, Scalar(255, 255, 255));
+    Mat frame(1080, 1920, CV_8UC1, Scalar(255, 255, 255));
 
     //imshow("img", cameraImage);
 
-    int lool1 = 900 / ((i % 5) + 1);
-    int lool2 = 480 / ((i % 5) + 1);
-
-    Ellipse(Point2f(480,270), Size2f(lool1,lool2), 0, Scalar(0,0,0), 3)(frame);
+    Ellipse(Point2f(960,540), Size2f(1920,1080), 0, Scalar(0,0,0), 3)(frame);
 
     // screen->send(frame);
     // screen->fitToMe(cameraImage);
