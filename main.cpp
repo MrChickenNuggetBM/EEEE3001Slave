@@ -54,8 +54,6 @@ bool loop() {
         return false;
     }
 
-    fb.
-
     fb.write(reinterpret_cast<char*>(cameraImage.data), cameraImage.total() * cameraImage.elemSize());
 
     fb.close();
