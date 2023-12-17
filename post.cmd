@@ -10,11 +10,11 @@ echo !X!>!file!
 
 :: Git commands
 git add *
-echo > git add *
+echo git add *
 git commit -m "v!X!"
-echo > git commit -m "v!X!"
+echo git commit -m "v!X!"
 git push
-echo > git push
+echo git push
 
 :: Display the incremented version
 echo Updated to version !X! ??
