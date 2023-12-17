@@ -31,12 +31,12 @@ bool loop() {
         Scalar(255, 255, 255, 0)
     );
 
-    float width = 1920 / (1 + float(i % 10));
-    float height = 1080 / (1 + float(i % 10));
-
     Ellipse ellipse(
         Point2f(960,540),
-        Size2f(width, height),
+        Size2f(
+            1920 / (1 + float(i % 10)),
+            1080 / (1 + float(i % 10))
+        ),
         0,
         Scalar(0,0,0),
         3
