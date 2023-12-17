@@ -23,6 +23,7 @@ bool setup() {
 bool loop() {
     Mat cameraImage;
     videoCapture->read(cameraImage);
+    cout << cameraImage.channels() << endl;
     // cvtColor(cameraImage, cameraImage, COLOR_BGR2GRAY);
 
     Mat frame(540, 960, CV_8UC1, Scalar(255, 255, 255));
