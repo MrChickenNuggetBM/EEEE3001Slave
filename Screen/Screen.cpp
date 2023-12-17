@@ -26,6 +26,8 @@ Screen::Screen(const char* frameBufferPath) :
     // Calculate the size of the framebuffer
     screenSize = vinfo.yres_virtual * vinfo.xres_virtual * vinfo.bits_per_pixel / 8;
 
+    cout << vinfo.xres_virtual << " * " << vinfo.yres_virtual << endl;
+
     // Map framebuffer to user space
     frameBuffer = (unsigned char*)mmap(nullptr, screenSize, PROT_READ | PROT_WRITE, MAP_SHARED, fb, 0);
     if (frameBuffer == MAP_FAILED)
