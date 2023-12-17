@@ -17,6 +17,14 @@ bool setup() {
     atexit(teardown);
     signal(SIGINT, teardown);
 
+    // Get the dimensions of the framebuffer
+    int screenWidth = 0;  // Initialize to 0
+    int screenHeight = 0; // Initialize to 0
+
+    std::ifstream fb_dimensions("/sys/class/graphics/fb1/virtual_size");
+    fb_dimensions >> screenWidth >> screenHeight;
+    fb_dimensions.close();
+
     return true;
 }
 
@@ -45,6 +53,8 @@ bool loop() {
         std::cerr << "Error: Unable to open framebuffer device." << std::endl;
         return false;
     }
+
+    fb.
 
     fb.write(reinterpret_cast<char*>(cameraImage.data), cameraImage.total() * cameraImage.elemSize());
 
