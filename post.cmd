@@ -9,9 +9,11 @@ set /a X+=1
 echo !X!>!file!
 
 :: Git commands
+@echo on
 git add *
 git commit -m "v!X!"
 git push
+@echo off
 
 :: Display the incremented version
 echo Updated to version !X! ??
