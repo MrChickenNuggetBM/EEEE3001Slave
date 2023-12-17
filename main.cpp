@@ -28,7 +28,7 @@ bool loop() {
         1080,
         1920,
         CV_8UC4,
-        Scalar(255, 255, 255, 0)
+        Scalar(0, 0, 0, 0)
     );
 
     Ellipse ellipse(
@@ -38,7 +38,7 @@ bool loop() {
             1080 / (1 + float(i % 10))
         ),
         0,
-        Scalar(0,0,0),
+        Scalar(255,255,255),
         3
     );
     ellipse(frame);
