@@ -2,3 +2,4 @@ build/
 .idea/
 *.cbp
 *.layout
+version.txt
