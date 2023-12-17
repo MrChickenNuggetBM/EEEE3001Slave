@@ -17,16 +17,6 @@ bool setup() {
     atexit(teardown);
     signal(SIGINT, teardown);
 
-    // Get the dimensions of the framebuffer
-    int screenWidth = 0;  // Initialize to 0
-    int screenHeight = 0; // Initialize to 0
-
-    std::ifstream fb_dimensions("/sys/class/graphics/fb1/virtual_size");
-    fb_dimensions >> screenWidth >> screenHeight;
-    fb_dimensions.close();
-
-    cout << screenWidth << " * " << screenHeight << endl;
-
     return true;
 }
 
@@ -57,6 +47,8 @@ bool loop() {
     }
 
     fb.write(reinterpret_cast<char*>(cameraImage.data), cameraImage.total() * cameraImage.elemSize());
+
+    cout << fb.width();
 
     fb.close();
 
