@@ -27,7 +27,7 @@ bool loop() {
 
     cout << cameraImage.channels() << endl;
 
-    Mat frame(1080, 1920, CV_8UC3, Scalar(255, 255, 255));
+    Mat frame(1080, 1920, CV_8UC1, Scalar(255, 255, 255));
 
     //imshow("img", cameraImage);
 
@@ -45,7 +45,7 @@ bool loop() {
         return false;
     }
 
-    fb.write(reinterpret_cast<char*>(frame.data), frame.total() * frame.elemSize());
+    fb.write(reinterpret_cast<char*>(frame.data), static_cast<std::streamsize>(frame.total() * frame.elemSize()));
 
     cout << videoCapture->get(CAP_PROP_FRAME_WIDTH) << " * " << videoCapture->get(CAP_PROP_FRAME_HEIGHT) << endl;
     cout << cameraImage.cols << " * " << cameraImage.rows << endl;
