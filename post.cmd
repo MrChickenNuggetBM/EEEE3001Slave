@@ -1,5 +1,6 @@
 @echo off
 setlocal enabledelayedexpansion
+echo:
 
 echo --------------------------------------------------- git status -------------------------------------------------
 @echo git status
@@ -15,7 +16,6 @@ echo:
 echo --------------------------------------------------- git status -------------------------------------------------
 @echo git status
 git status
-echo:
 
 echo --------------------------------------------------- git commit -------------------------------------------------
 set "file=version.txt"
@@ -49,10 +49,9 @@ IF /i "%decision%"=="y" (
 @echo git push
 git push
 echo:
-echo:
 
 :: Display the incremented version
-echo Updated to version !X! ??
+echo Updated to version !X!
 if not "!msg!"=="" (
     echo Commit Message: "!msg!"
 )
