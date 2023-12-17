@@ -11,8 +11,8 @@ bool setup() {
         cerr << "Error: Could not open camera" << endl;
         return false;
     }
-    videoCapture->set(CAP_PROP_FRAME_WIDTH, 960);
-    videoCapture->set(CAP_PROP_FRAME_HEIGHT, 540);
+    videoCapture->set(CAP_PROP_FRAME_WIDTH, 1920);
+    videoCapture->set(CAP_PROP_FRAME_HEIGHT, 1080);
 
     atexit(teardown);
     signal(SIGINT, teardown);
@@ -48,7 +48,8 @@ bool loop() {
 
     fb.write(reinterpret_cast<char*>(cameraImage.data), cameraImage.total() * cameraImage.elemSize());
 
-    cout << videoCapture->get(CAP_PROP_FRAME_WIDTH) << " * " << videoCapture->get(CAP_PROP_FRAME_HEIGHT);
+    cout << videoCapture->get(CAP_PROP_FRAME_WIDTH) << " * " << videoCapture->get(CAP_PROP_FRAME_HEIGHT) << endl;
+    cout << cameraImage.cols << " * " << cameraImage.rows << endl;
 
     fb.close();
 
