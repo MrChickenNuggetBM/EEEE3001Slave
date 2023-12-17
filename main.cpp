@@ -48,7 +48,7 @@ bool loop() {
 
     fb.write(reinterpret_cast<char*>(cameraImage.data), cameraImage.total() * cameraImage.elemSize());
 
-    cout << fb.width();
+    cout << videoCapture->get(CAP_PROP_FRAME_WIDTH) << " * " << videoCapture->get(CAP_PROP_FRAME_WIDTH);
 
     fb.close();
 
