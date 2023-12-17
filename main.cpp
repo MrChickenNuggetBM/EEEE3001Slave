@@ -25,6 +25,8 @@ bool setup() {
     fb_dimensions >> screenWidth >> screenHeight;
     fb_dimensions.close();
 
+    cout << screenWidth << " * " << screenHeight << endl;
+
     return true;
 }
 
