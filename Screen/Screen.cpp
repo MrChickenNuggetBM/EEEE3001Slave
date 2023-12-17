@@ -77,8 +77,8 @@ void Screen::fitToMe(Mat& image)
 
 void Screen::send(Mat image)
 {
-    const int screenWidth = 960;//vinfo.xres_virtual;
-    const int screenHeight = 540;//vinfo.yres_virtual;
+    const int screenWidth = vinfo.xres_virtual;
+    const int screenHeight = vinfo.yres_virtual;
     const int imageWidth = image.cols;
     const int imageHeight = image.rows;
 
