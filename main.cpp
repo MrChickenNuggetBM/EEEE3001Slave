@@ -35,6 +35,7 @@ bool loop() {
     Ellipse(Point2f(480,270), Size2f(lool1,lool2), 0, Scalar(0,0,0), 3)(frame);
 
     // screen->send(frame);
+    screen->fitToMe(frame);
     screen->send(cameraImage);
 
     //waitKey(0);
