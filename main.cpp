@@ -23,9 +23,9 @@ bool setup() {
 bool loop() {
     Mat cameraImage;
     videoCapture->read(cameraImage);
-    cvtColor(cameraImage, cameraImage, COLOR_BGR2GRAY);
+    // cvtColor(cameraImage, cameraImage, COLOR_BGR2GRAY);
 
-    Mat frame(540, 960, CV_8UC3, Scalar(255, 255, 255));
+    Mat frame(540, 960, CV_8UC1, Scalar(255, 255, 255));
 
     //imshow("img", cameraImage);
 
