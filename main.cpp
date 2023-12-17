@@ -27,7 +27,7 @@ bool loop() {
 
     cout << cameraImage.channels() << endl;
 
-    Mat frame(1080, 1920, CV_8UC1, Scalar(255, 255, 255));
+    Mat frame(1080, 1920, CV_8UC3, Scalar(255, 255, 255));
 
     //imshow("img", cameraImage);
 
