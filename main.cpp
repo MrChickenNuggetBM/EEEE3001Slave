@@ -1,10 +1,10 @@
 #include "main.h"
 
 bool setup() {
-    screen = new Screen("/dev/fb1");
-    if (screen->getErrorStatus()) {
-        return false;
-    }
+//    screen = new Screen("/dev/fb1");
+//    if (screen->getErrorStatus()) {
+//        return false;
+//    }
 
     videoCapture = new VideoCapture(0);
     if (!videoCapture->isOpened()) {
@@ -60,7 +60,7 @@ bool loop() {
 void teardown() {
     cout << endl << "Stopped after " << i << " frames" << endl;
 
-    delete screen;
+    // delete screen;
 
     videoCapture->release();
     delete videoCapture;
