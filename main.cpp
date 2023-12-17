@@ -31,7 +31,7 @@ bool loop() {
 
     //imshow("img", cameraImage);
 
-    Ellipse(Point2f(960,540), Size2f(1920 / (1 + (i % 960)),1080), 0, Scalar(0,0,0), 3)(frame);
+    Ellipse(Point2f(960,540), Size2f(1920 / (1 + (i % 10)),1080), 0, Scalar(0,0,0), 3)(frame);
 
     // screen->send(frame);
     // screen->fitToMe(cameraImage);
@@ -46,9 +46,6 @@ bool loop() {
     }
 
     fb.write(reinterpret_cast<char*>(frame.data), static_cast<std::streamsize>(frame.total() * frame.elemSize()));
-
-    cout << videoCapture->get(CAP_PROP_FRAME_WIDTH) << " * " << videoCapture->get(CAP_PROP_FRAME_HEIGHT) << endl;
-    cout << cameraImage.cols << " * " << cameraImage.rows << endl;
 
     fb.close();
 
