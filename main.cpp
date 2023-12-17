@@ -23,20 +23,25 @@ bool setup() {
 bool loop() {
     Mat cameraImage;
     videoCapture->read(cameraImage);
-    cvtColor(cameraImage, cameraImage, COLOR_BGR2GRAY);
 
-    cout << cameraImage.channels() << endl;
+    Mat frame(
+        1080,
+        1920,
+        CV_8UC4,
+        Scalar(255, 255, 255, 0)
+    );
 
-    Mat frame(1080, 1920, CV_8UC4, Scalar(255, 255, 255, 0));
+    float width = 1920 / (1 + float(i % 10));
+    float height = 1080 / (1 + float(i % 10));
 
-    //imshow("img", cameraImage);
-
-    Ellipse(Point2f(960,540), Size2f(1920 / (1 + (i % 10)),1080), 0, Scalar(0,0,0), 3)(frame);
-
-    // screen->send(frame);
-    // screen->fitToMe(cameraImage);
-    // cout << cameraImage.cols << " * " << cameraImage.rows << endl;
-    // screen->send(cameraImage);
+    Ellipse ellipse(
+        Point2f(960,540),
+        Size2f(width, height),
+        0,
+        Scalar(0,0,0),
+        3
+    );
+    ellipse(frame);
 
     std::ofstream fb("/dev/fb1", std::ios::binary);
 
