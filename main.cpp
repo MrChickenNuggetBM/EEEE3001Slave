@@ -26,7 +26,7 @@ bool loop() {
     cout << cameraImage.channels() << endl;
     cvtColor(cameraImage, cameraImage, COLOR_BGR2GRAY);
 
-    Mat frame(2160, 3840, CV_8UC1, Scalar(255, 255, 255));
+    Mat frame(2160, 1920, CV_8UC1, Scalar(255, 255, 255));
 
     //imshow("img", cameraImage);
 
