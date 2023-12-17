@@ -11,6 +11,8 @@ bool setup() {
         cerr << "Error: Could not open camera" << endl;
         return false;
     }
+    videoCapture->set(CAP_PROP_FRAME_WIDTH, 960);
+    videoCapture->set(CAP_PROP_FRAME_HEIGHT, 540);
 
     atexit(teardown);
     signal(SIGINT, teardown);
@@ -19,15 +21,23 @@ bool setup() {
 }
 
 bool loop() {
-    // Mat cameraImage;
-    // videoCapture->read(cameraImage);
+    Mat cameraImage;
+    videoCapture->read(cameraImage);
+    cvtColor(cameraImage, cameraImage, COLOR_BGR2GRAY);
 
-    Mat frame(1080, 1920, CV_8UC3, Scalar(255, 255, 255));
+    Mat frame(540, 960, CV_8UC1, Scalar(255, 255, 255));
 
-    Ellipse(Point2f(540,960), Size2f(540,960), 0, Scalar(0,0,0), 1)(frame);
+    //imshow("img", cameraImage);
 
-    screen->send(frame);
-    // screen->send(cameraImage);
+    int lool1 = 900 / ((i % 5) + 1);
+    int lool2 = 480 / ((i % 5) + 1);
+
+    Ellipse(Point2f(480,270), Size2f(lool1,lool2), 0, Scalar(0,0,0), 3)(frame);
+
+    // screen->send(frame);
+    screen->send(cameraImage);
+
+    //waitKey(0);
 
     if (false) return false;
 
@@ -48,4 +58,3 @@ void teardown() {
 void teardown(int signal) {
     exit(EXIT_SUCCESS);
 }
-

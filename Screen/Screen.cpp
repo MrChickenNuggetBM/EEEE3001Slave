@@ -75,18 +75,25 @@ void Screen::fitToMe(Mat& image)
 
 void Screen::send(Mat image)
 {
-    const int screenWidth = vinfo.xres_virtual;
-    const int screenHeight = vinfo.yres_virtual;
+    const int screenWidth = 960;//vinfo.xres_virtual;
+    const int screenHeight = 540;//vinfo.yres_virtual;
+    const int imageWidth = image.cols;
+    const int imageHeight = image.rows;
 
     // Iterate through framebuffer dimensions
-    for (int imageY = 0; imageY < min(screenHeight, image.rows); ++imageY)
+    for (int screenY = 0; screenY < screenHeight; ++screenY)
     {
-        for (int imageX = 0; imageX < min(screenWidth, image.cols); ++imageX)
+        for (int screenX = 0; screenX < screenWidth; ++screenX)
         {
-            // Assuming your image is in BGR format
-            unsigned char* pixel = &frameBuffer[imageY * screenWidth * 4 + imageX * 4];
-            pixel[0] = pixel[1] = pixel[2] = image.at<uchar>(imageY, imageX);
-            pixel[3] = 0; // Alpha (transparency)
+            uchar* screenPixels = &frameBuffer[screenY * screenWidth * 4 + screenX * 4];
+
+            uchar intensity = image.at<uchar>(screenY, screenX);
+
+            screenPixels[0] =
+            screenPixels[1] =
+            screenPixels[2] = intensity;
+            screenPixels[3] = 0;
+            //for (int i = 0; i < 100000; i++);
         }
     }
 }
