@@ -53,7 +53,7 @@ bool loop()
     frameBuffer->flush();  // Ensure the data is written immediately
 
     // Update the framebuffer
-    // system("fbset -fb /dev/fb1 -xres_virtual 1920");
+    system("fbset -fb /dev/fb1 -xres_virtual 1920");
 
     // waitKey(0);
 
