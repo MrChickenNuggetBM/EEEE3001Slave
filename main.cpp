@@ -22,8 +22,8 @@ bool setup()
 
 bool loop()
 {
-    Mat cameraImage;
-    videoCapture->read(cameraImage);
+    // Mat cameraImage;
+    // videoCapture->read(cameraImage);
 
     Mat frame(
         1080,
@@ -41,7 +41,7 @@ bool loop()
         3);
     ellipse(frame);
 
-    std::ofstream frameBuffer("/dev/fb1", std::ios::binary);
+    std::ofstream frameBuffer("/dev/fb0", std::ios::binary);
 
     if (!frameBuffer.is_open())
     {
