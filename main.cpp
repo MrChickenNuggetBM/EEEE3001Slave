@@ -20,8 +20,8 @@ bool setup()
 
 bool loop()
 {
-    // Mat cameraImage;
-    //videoCapture->read(cameraImage);
+    Mat cameraImage;
+    videoCapture->read(cameraImage);
 
     system("clear");
 
@@ -71,7 +71,7 @@ void teardown(int signal)
 
 bool sendToScreen(Mat image)
 {
-    ofstream frameBuffer("/dev/fb1", ios::binary);
+    ofstream frameBuffer("/dev/fb0", ios::binary);
 
     if (!frameBuffer.is_open())
     {
