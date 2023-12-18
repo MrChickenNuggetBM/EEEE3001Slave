@@ -16,7 +16,7 @@ bool setup()
     videoCapture->set(CAP_PROP_FRAME_HEIGHT, 1080);
 
     frameBuffer = new ofstream("/dev/fb1", std::ios::binary);
-    if (!frameBuffer.is_open())
+    if (!frameBuffer->is_open())
     {
         std::cerr << "Error: Unable to open framebuffer device." << std::endl;
         return false;
@@ -49,11 +49,7 @@ bool loop()
         3);
     ellipse(frame);
 
-
-
-    frameBuffer.write(reinterpret_cast<char *>(frame.data), static_cast<std::streamsize>(frame.total() * frame.elemSize()));
-
-    
+    frameBuffer->write(reinterpret_cast<char *>(frame.data), static_cast<std::streamsize>(frame.total() * frame.elemSize()));
 
     // waitKey(0);
 
@@ -73,7 +69,8 @@ void teardown()
 
     destroyAllWindows();
 
-    fb.close();
+    frameBuffer->close();
+    delete frameBuffer;
 }
 
 void teardown(int signal)
