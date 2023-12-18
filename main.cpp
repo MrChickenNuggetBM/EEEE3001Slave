@@ -41,11 +41,11 @@ bool loop()
         3);
     ellipse(frame);
 
-    sendToScreen(frame);
+    
 
     // waitKey(0);
 
-    if (false)
+    if (sendToScreen(frame))
         return false;
 
     return true;
@@ -69,7 +69,7 @@ void teardown(int signal)
     exit(EXIT_SUCCESS);
 }
 
-void sendToScreen(Mat image)
+bool sendToScreen(Mat image)
 {
     ofstream frameBuffer("/dev/fb1", ios::binary);
 
@@ -82,4 +82,6 @@ void sendToScreen(Mat image)
     frameBuffer.write(reinterpret_cast<char *>(image.data), static_cast<streamsize>(image.total() * image.elemSize()));
 
     frameBuffer.close();
+
+    return true;
 }
