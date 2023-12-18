@@ -29,7 +29,7 @@ bool loop()
         1080,
         1920,
         CV_8UC4,
-        Scalar(0, 0, 0, 0));
+        Scalar(255, 0, 0, 0));
 
     Ellipse ellipse(
         Point2f(960,540),
@@ -39,7 +39,7 @@ bool loop()
         0,
         Scalar(255, 255, 255),
         3);
-    ellipse(frame);
+    // ellipse(frame);
 
     
 
