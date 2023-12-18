@@ -20,8 +20,8 @@ bool setup()
 
 bool loop()
 {
-    Mat cameraImage;
-    videoCapture->read(cameraImage);
+    // Mat cameraImage;
+    //videoCapture->read(cameraImage);
 
     system("clear");
 
