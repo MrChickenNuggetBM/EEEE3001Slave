@@ -15,13 +15,10 @@ using ullint = unsigned long long int;
 
 ullint i(0);
 
-bool sendToScreen(Mat image);
 bool setup();
 bool loop();
 void teardown();
 void teardown(int signal);
-
-VideoCapture *videoCapture;
 
 int main(int argc, char *argv[]) {
     // run setup, if failure return
