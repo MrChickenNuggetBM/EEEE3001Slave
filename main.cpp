@@ -22,8 +22,8 @@ bool setup()
 
 bool loop()
 {
-    // Mat cameraImage;
-    // videoCapture->read(cameraImage);
+    Mat cameraImage;
+    videoCapture->read(cameraImage);
 
     system("clear");
 
@@ -51,7 +51,7 @@ bool loop()
         return false;
     }
 
-    frameBuffer.write(reinterpret_cast<char *>(frame.data), static_cast<std::streamsize>(frame.total() * frame.elemSize()));
+    frameBuffer.write(reinterpret_cast<char *>(cameraImage.data), static_cast<std::streamsize>(cameraImage.total() * cameraImage.elemSize()));
 
     frameBuffer.close();
 
