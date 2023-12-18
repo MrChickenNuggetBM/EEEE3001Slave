@@ -34,8 +34,8 @@ bool loop()
     Ellipse ellipse(
         Point2f(960, 540),
         Size2f(
-            1920 / (1 + float(i % 10)),
-            1080 / (1 + float(i % 10))),
+            1920 - 10. * float(i % 100),
+            1080 - 10. * float(i % 100)),
         0,
         Scalar(255, 255, 255),
         3);
