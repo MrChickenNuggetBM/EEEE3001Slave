@@ -14,8 +14,6 @@ using namespace std;
 using ullint = unsigned long long int;
 
 ullint i(0);
-// Screen *screen;
-VideoCapture *videoCapture;
 
 bool setup();
 bool loop();
