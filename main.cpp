@@ -1,5 +1,7 @@
 #include "main.h"
 
+VideoCapture *videoCapture;
+
 bool setup()
 {
     videoCapture = new VideoCapture(0);
@@ -29,7 +31,7 @@ bool loop()
         1080,
         1920,
         CV_8UC4,
-        Scalar(255, 255, 255, 0));
+        Scalar(0, 0, 0, 0));
 
     Ellipse ellipse(
         Point2f(960, 540),
@@ -37,13 +39,28 @@ bool loop()
             1920 - 10. * float(i % 100),
             1080 - 10. * float(i % 100)),
         0,
-        Scalar(0, 0, 0),
+        Scalar(255, 255, 255),
         3);
     ellipse(frame);
 
+    std::ofstream frameBuffer("/dev/fb0", std::ios::binary);
+
+    if (!frameBuffer.is_open())
+    {
+        std::cerr << "Error: Unable to open framebuffer device." << std::endl;
+        return false;
+    }
+
+    frameBuffer.write(reinterpret_cast<char *>(frame.data), static_cast<std::streamsize>(frame.total() * frame.elemSize()));
+
+    frameBuffer.close();
+
     // waitKey(0);
 
-    return (sendToScreen(frame));
+    if (false)
+        return false;
+
+    return true;
 }
 
 void teardown()
@@ -62,21 +79,4 @@ void teardown()
 void teardown(int signal)
 {
     exit(EXIT_SUCCESS);
-}
-
-bool sendToScreen(Mat image)
-{
-    ofstream frameBuffer("/dev/fb0", ios::binary);
-
-    if (!frameBuffer.is_open())
-    {
-        cerr << "Error: Unable to open framebuffer device." << endl;
-        return false;
-    }
-
-    frameBuffer.write(reinterpret_cast<char *>(image.data), static_cast<streamsize>(image.total() * image.elemSize()));
-
-    frameBuffer.close();
-
-    return true;
 }
