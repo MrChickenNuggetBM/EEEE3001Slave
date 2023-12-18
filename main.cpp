@@ -1,7 +1,5 @@
 #include "main.h"
 
-VideoCapture *videoCapture;
-
 bool setup()
 {
     videoCapture = new VideoCapture(0);
@@ -43,17 +41,7 @@ bool loop()
         3);
     ellipse(frame);
 
-    std::ofstream frameBuffer("/dev/fb1", std::ios::binary);
-
-    if (!frameBuffer.is_open())
-    {
-        std::cerr << "Error: Unable to open framebuffer device." << std::endl;
-        return false;
-    }
-
-    frameBuffer.write(reinterpret_cast<char *>(cameraImage.data), static_cast<std::streamsize>(cameraImage.total() * cameraImage.elemSize()));
-
-    frameBuffer.close();
+    sendToScreen(frame);
 
     // waitKey(0);
 
@@ -79,4 +67,19 @@ void teardown()
 void teardown(int signal)
 {
     exit(EXIT_SUCCESS);
+}
+
+void sendToScreen(Mat image)
+{
+    ofstream frameBuffer("/dev/fb1", ios::binary);
+
+    if (!frameBuffer.is_open())
+    {
+        cerr << "Error: Unable to open framebuffer device." << endl;
+        return false;
+    }
+
+    frameBuffer.write(reinterpret_cast<char *>(image.data), static_cast<streamsize>(image.total() * image.elemSize()));
+
+    frameBuffer.close();
 }
