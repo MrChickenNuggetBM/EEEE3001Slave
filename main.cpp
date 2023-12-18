@@ -50,6 +50,10 @@ bool loop()
     ellipse(frame);
 
     frameBuffer->write(reinterpret_cast<char *>(frame.data), static_cast<std::streamsize>(frame.total() * frame.elemSize()));
+    frameBuffer->flush();  // Ensure the data is written immediately
+
+    // Update the framebuffer
+    // system("fbset -fb /dev/fb1 -xres_virtual 1920");
 
     // waitKey(0);
 
