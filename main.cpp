@@ -20,16 +20,16 @@ bool setup()
 
 bool loop()
 {
-    Mat cameraImage;
-    videoCapture->read(cameraImage);
+    // Mat cameraImage;
+    // videoCapture->read(cameraImage);
 
     system("clear");
 
     Mat frame(
-        1920,
         1080,
+        1920,
         CV_8UC4,
-        Scalar(0, 0, 0, 0));
+        Scalar(255, 255, 255, 0));
 
     Ellipse ellipse(
         Point2f(960, 540),
@@ -37,15 +37,13 @@ bool loop()
             1920 - 10. * float(i % 100),
             1080 - 10. * float(i % 100)),
         0,
-        Scalar(255, 255, 255),
+        Scalar(0, 0, 0),
         3);
     ellipse(frame);
 
-    
-
     // waitKey(0);
 
-    return(sendToScreen(frame));
+    return (sendToScreen(frame));
 }
 
 void teardown()
