@@ -1,7 +1,5 @@
 #include "main.h"
 
-VideoCapture *videoCapture;
-
 bool setup()
 {
     videoCapture = new VideoCapture(0);
@@ -22,10 +20,8 @@ bool setup()
 
 bool loop()
 {
-    // Mat cameraImage;
-    // videoCapture->read(cameraImage);
-
-    system("clear");
+    Mat cameraImage;
+    videoCapture->read(cameraImage);
 
     Mat frame(
         1080,
@@ -36,24 +32,24 @@ bool loop()
     Ellipse ellipse(
         Point2f(960, 540),
         Size2f(
-            1920 - 10. * float(i % 100),
-            1080 - 10. * float(i % 100)),
+            1920 / (1 + float(i % 10)),
+            1080 / (1 + float(i % 10))),
         0,
         Scalar(255, 255, 255),
         3);
     ellipse(frame);
 
-    std::ofstream frameBuffer("/dev/fb0", std::ios::binary);
+    std::ofstream fb("/dev/fb1", std::ios::binary);
 
-    if (!frameBuffer.is_open())
+    if (!fb.is_open())
     {
         std::cerr << "Error: Unable to open framebuffer device." << std::endl;
         return false;
     }
 
-    frameBuffer.write(reinterpret_cast<char *>(frame.data), static_cast<std::streamsize>(frame.total() * frame.elemSize()));
+    fb.write(reinterpret_cast<char *>(frame.data), static_cast<std::streamsize>(frame.total() * frame.elemSize()));
 
-    frameBuffer.close();
+    fb.close();
 
     // waitKey(0);
 
