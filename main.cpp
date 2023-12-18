@@ -45,10 +45,7 @@ bool loop()
 
     // waitKey(0);
 
-    if (sendToScreen(frame))
-        return false;
-
-    return true;
+    return(sendToScreen(frame);
 }
 
 void teardown()
