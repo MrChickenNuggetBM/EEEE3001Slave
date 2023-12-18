@@ -32,7 +32,7 @@ bool loop()
         Scalar(0, 0, 0, 0));
 
     Ellipse ellipse(
-        Point2f(960, 540),
+        Point2f(0,0),
         Size2f(
             1920 - 10. * float(i % 100),
             1080 - 10. * float(i % 100)),
