@@ -1,7 +1,6 @@
 #include "main.h"
 
 VideoCapture *videoCapture;
-ofstream *frameBuffer;
 
 bool setup()
 {
@@ -14,13 +13,6 @@ bool setup()
 
     videoCapture->set(CAP_PROP_FRAME_WIDTH, 1920);
     videoCapture->set(CAP_PROP_FRAME_HEIGHT, 1080);
-
-    frameBuffer = new ofstream("/dev/fb1", std::ios::binary);
-    if (!frameBuffer->is_open())
-    {
-        std::cerr << "Error: Unable to open framebuffer device." << std::endl;
-        return false;
-    }
 
     atexit(teardown);
     signal(SIGINT, teardown);
@@ -49,11 +41,17 @@ bool loop()
         3);
     ellipse(frame);
 
-    frameBuffer->write(reinterpret_cast<char *>(frame.data), static_cast<std::streamsize>(frame.total() * frame.elemSize()));
-    frameBuffer->flush();  // Ensure the data is written immediately
+    std::ofstream frameBuffer("/dev/fb1", std::ios::binary);
 
-    // Update the framebuffer
-    system("fbset -fb /dev/fb1 -xres_virtual 1920");
+    if (!frameBuffer.is_open())
+    {
+        std::cerr << "Error: Unable to open framebuffer device." << std::endl;
+        return false;
+    }
+
+    frameBuffer.write(reinterpret_cast<char *>(frame.data), static_cast<std::streamsize>(frame.total() * frame.elemSize()));
+
+    frameBuffer.close();
 
     // waitKey(0);
 
@@ -68,13 +66,12 @@ void teardown()
     cout << endl
          << "Stopped after " << i << " frames" << endl;
 
+    // delete screen;
+
     videoCapture->release();
     delete videoCapture;
 
     destroyAllWindows();
-
-    frameBuffer->close();
-    delete frameBuffer;
 }
 
 void teardown(int signal)
