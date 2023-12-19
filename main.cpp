@@ -70,9 +70,9 @@ void teardown()
     cout << endl
          << "Stopped after " << i << " frames" << endl;
 
-    videoCapture.release();
+    // videoCapture.release();
 
-    destroyAllWindows();
+    // destroyAllWindows();
 }
 
 void teardown(int signal)
