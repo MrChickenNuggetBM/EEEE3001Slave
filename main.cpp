@@ -25,6 +25,8 @@ bool loop()
     // Mat cameraImage;
     // videoCapture->read(cameraImage);
 
+    system("clear");
+
     Mat frame(
         1080,
         1920,
