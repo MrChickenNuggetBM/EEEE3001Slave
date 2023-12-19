@@ -4,6 +4,8 @@ VideoCapture *videoCapture;
 
 bool setup()
 {
+    system("clear");
+
     videoCapture = new VideoCapture(0);
     if (!videoCapture->isOpened())
     {
@@ -25,8 +27,6 @@ bool loop()
     // Mat cameraImage;
     // videoCapture->read(cameraImage);
 
-    system("clear");
-
     Mat frame(
         1080,
         1920,
@@ -43,15 +43,15 @@ bool loop()
         3);
     ellipse(frame);
 
-    std::ofstream frameBuffer("/dev/fb0", std::ios::binary);
+    ofstream frameBuffer("/dev/fb0", ios::binary);
 
     if (!frameBuffer.is_open())
     {
-        std::cerr << "Error: Unable to open framebuffer device." << std::endl;
+        cerr << "Error: Unable to open framebuffer device." << endl;
         return false;
     }
 
-    frameBuffer.write(reinterpret_cast<char *>(frame.data), static_cast<std::streamsize>(frame.total() * frame.elemSize()));
+    frameBuffer.write(reinterpret_cast<char *>(frame.data), static_cast<streamsize>(frame.total() * frame.elemSize()));
 
     frameBuffer.close();
 
