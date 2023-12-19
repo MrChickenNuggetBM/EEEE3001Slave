@@ -1,6 +1,6 @@
 #include "main.h"
 
-VideoCapture videoCapture(0);
+// VideoCapture videoCapture(0);
 
 bool display(Mat &image)
 {
@@ -23,14 +23,14 @@ bool setup()
 {
     system("setterm -cursor off;clear");
 
-    if (!videoCapture.isOpened())
-    {
-        cerr << "Error: Could not open camera" << endl;
-        return false;
-    }
+    // if (!videoCapture.isOpened())
+    // {
+    //     cerr << "Error: Could not open camera" << endl;
+    //     return false;
+    // }
 
-    videoCapture.set(CAP_PROP_FRAME_WIDTH, 960);
-    videoCapture.set(CAP_PROP_FRAME_HEIGHT, 540);
+    // videoCapture.set(CAP_PROP_FRAME_WIDTH, 960);
+    // videoCapture.set(CAP_PROP_FRAME_HEIGHT, 540);
 
     atexit(teardown);
     signal(SIGINT, teardown);
@@ -40,8 +40,8 @@ bool setup()
 
 bool loop()
 {
-    Mat cameraImage;
-    videoCapture.read(cameraImage);
+    // Mat cameraImage;
+    // videoCapture.read(cameraImage);
 
     Mat frame(
         1080,
@@ -59,7 +59,7 @@ bool loop()
         3);
     ellipse(frame);
 
-    imshow("hi", cameraImage);
+    // imshow("hi", cameraImage);
     return (display(frame) && (waitKey(1) < 0));
 }
 
