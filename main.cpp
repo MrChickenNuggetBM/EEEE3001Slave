@@ -29,8 +29,8 @@ bool setup()
         return false;
     }
 
-    videoCapture.set(CAP_PROP_FRAME_WIDTH, 1920);
-    videoCapture.set(CAP_PROP_FRAME_HEIGHT, 1080);
+    videoCapture.set(CAP_PROP_FRAME_WIDTH, 960);
+    videoCapture.set(CAP_PROP_FRAME_HEIGHT, 540);
 
     atexit(teardown);
     signal(SIGINT, teardown);
@@ -62,7 +62,6 @@ bool loop()
         Scalar(255, 255, 255),
         3);
     ellipse(frame);
-
 
     cvtColor(cameraImage, cameraImage, COLOR_BGR2RGBA);
     imshow("hi", cameraImage);
