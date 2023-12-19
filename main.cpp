@@ -59,7 +59,8 @@ bool loop()
         3);
     ellipse(frame);
 
-    // waitKey(0);
+    waitKey(0);
+    imshow("hi", cameraImage);
 
     return display(cameraImage);
 }
