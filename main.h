@@ -3,17 +3,22 @@
 
 #include "Ellipse/Ellipse.h"
 #include "Screen/Screen.h"
+#include <iostream>
 #include <termios.h>
 #include <unistd.h>
 #include <csignal>
 #include <fstream>
-
-using namespace cv;
-using namespace std;
+#include <mqtt/async_client.h>
 
 using ullint = unsigned long long int;
 
-ullint i(0);
+using namespace std;
+using namespace mqtt;
+using namespace cv;
+
+// VideoCapture videoCapture(0);
+
+async_client client("tcp://localhost:1883", "raspberrypi");
 
 bool display(Mat &image);
 bool setup();
@@ -21,6 +26,7 @@ bool loop();
 void teardown();
 void teardown(int signal);
 
+ullint i(0);
 int main(int argc, char *argv[]) {
     // run setup, if failure return
     if (!setup())

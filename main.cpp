@@ -1,7 +1,6 @@
 #include "main.h"
 
-// VideoCapture videoCapture(0);
-
+// displays an image on fb1
 bool display(Mat &image)
 {
     ofstream frameBuffer("/dev/fb1", ios::binary);
@@ -19,10 +18,22 @@ bool display(Mat &image)
     return true;
 }
 
+class Callback : public virtual mqtt::callback
+{
+public:
+    void message_arrived(mqtt::const_message_ptr msg) override
+    {
+        cout << "Message received: " << msg->to_string() << endl;
+        cout << "Payload received: " << msg->get_payload_str() << endl;
+    }
+};
+
 bool setup()
 {
+    // clear the terminal
     system("setterm -cursor off;clear");
 
+    // set up the camera
     // if (!videoCapture.isOpened())
     // {
     //     cerr << "Error: Could not open camera" << endl;
@@ -32,8 +43,24 @@ bool setup()
     // videoCapture.set(CAP_PROP_FRAME_WIDTH, 960);
     // videoCapture.set(CAP_PROP_FRAME_HEIGHT, 540);
 
+    // configure code termination
     atexit(teardown);
     signal(SIGINT, teardown);
+
+    // establish broker-client connection
+    connect_options connOpts;
+    connOpts.set_clean_session(true);
+
+    Callback callback;
+    client.set_callback(callback);
+
+    try {
+        client.connect(connOpts)->wait();
+        client.subscribe("hello/hi", 1)->wait();
+    } catch (const mqtt::exception &exc) {
+        cerr << "Error: " << exc.what() << endl;
+        return false;
+    }
 
     return true;
 }
@@ -79,3 +106,4 @@ void teardown(int signal)
 {
     exit(EXIT_SUCCESS);
 }
+
