@@ -30,7 +30,7 @@ bool hasNon255Alpha(const Mat &image)
     Mat alphaChannel;
     extractChannel(image, alphaChannel, 3); // Extract the alpha channel
 
-    return countNonZero(alphaChannel != 255) > 0;
+    return countNonZero(alphaChannel != 255) == 0;
 }
 
 bool setup()
