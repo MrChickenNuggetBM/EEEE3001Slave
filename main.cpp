@@ -59,8 +59,6 @@ bool loop()
         3);
     ellipse(frame);
 
-    cvtColor(cameraImage, cameraImage, COLOR_BGR2RGBA);
-    cout << cameraImage << endl;
     imshow("hi", cameraImage);
     return (display(frame) && (waitKey(1) < 0));
 }
