@@ -77,9 +77,9 @@ bool loop()
         3);
     ellipse(frame);
 
-    if (hasNon255Alpha(cameraImage)) cout << "silly";
 
     cvtColor(cameraImage, cameraImage, COLOR_BGR2RGBA);
+    if (hasNon255Alpha(cameraImage)) cout << "silly";
     imshow("hi", cameraImage);
     return (display(cameraImage) && (waitKey(1) < 0));
 }
