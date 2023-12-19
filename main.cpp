@@ -19,20 +19,6 @@ bool display(Mat &image)
     return true;
 }
 
-bool hasNon255Alpha(const Mat &image)
-{
-    if (image.channels() != 4)
-    {
-        cerr << "Error: Input image must have 4 channels (RGBA)" << endl;
-        return false;
-    }
-
-    Mat alphaChannel;
-    extractChannel(image, alphaChannel, 3); // Extract the alpha channel
-
-    return countNonZero(alphaChannel != 255) == 0;
-}
-
 bool setup()
 {
     system("setterm -cursor off;clear");
@@ -79,9 +65,8 @@ bool loop()
 
 
     cvtColor(cameraImage, cameraImage, COLOR_BGR2RGBA);
-    if (hasNon255Alpha(cameraImage)) cout << "silly";
     imshow("hi", cameraImage);
-    return (display(cameraImage) && (waitKey(1) < 0));
+    return (display(frame) && (waitKey(1) < 0));
 }
 
 void teardown()
