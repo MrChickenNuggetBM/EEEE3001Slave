@@ -4,8 +4,7 @@ VideoCapture *videoCapture;
 
 bool setup()
 {
-    std::cout << "\e[?25l";
-    system("clear");
+    system("setterm -cursor off;clear");
 
     videoCapture = new VideoCapture(0);
     if (!videoCapture->isOpened())
@@ -66,6 +65,8 @@ bool loop()
 
 void teardown()
 {
+    system("setterm -cursor off;clear");
+
     cout << endl
          << "Stopped after " << i << " frames" << endl;
 
@@ -75,9 +76,6 @@ void teardown()
     delete videoCapture;
 
     destroyAllWindows();
-
-    std::cout << "\e[?25h";
-    system("clear");
 }
 
 void teardown(int signal)
