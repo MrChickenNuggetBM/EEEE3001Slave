@@ -15,7 +15,7 @@ using ullint = unsigned long long int;
 
 ullint i(0);
 
-void sendToScreen(Mat image);
+bool screen(Mat image);
 bool setup();
 bool loop();
 void teardown();

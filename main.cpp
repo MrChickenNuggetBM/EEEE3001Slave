@@ -1,7 +1,23 @@
 #include "main.h"
 
 VideoCapture videoCapture(0);
-ofstream frameBuffer("/dev/fb1", ios::binary);
+
+bool screen(Mat image)
+{
+    ofstream frameBuffer("/dev/fb1", ios::binary);
+
+    if (!frameBuffer.is_open())
+    {
+        cerr << "Error: Unable to open framebuffer device." << endl;
+        return false;
+    }
+
+    frameBuffer.write(reinterpret_cast<char *>(image.data), static_cast<streamsize>(image.total() * image.elemSize()));
+
+    frameBuffer.close();
+
+    return true;
+}
 
 bool setup()
 {
@@ -49,20 +65,9 @@ bool loop()
         3);
     ellipse(frame);
 
-    if (!frameBuffer.is_open())
-    {
-        cerr << "Error: Unable to open framebuffer device." << endl;
-        return false;
-    }
-
-    frameBuffer.write(reinterpret_cast<char *>(frame.data), static_cast<streamsize>(frame.total() * frame.elemSize()));
-
     // waitKey(0);
 
-    if (false)
-        return false;
-
-    return true;
+    return screen(frame);
 }
 
 void teardown()
@@ -75,8 +80,6 @@ void teardown()
     // delete screen;
 
     videoCapture.release();
-
-    frameBuffer.close();
 
     destroyAllWindows();
 }
