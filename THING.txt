@@ -1,0 +1,14 @@
+CMake Error at CMakeLists.txt:60 (add_subdirectory):
+  add_subdirectory given source
+  "/home/mohamed/paho.mqtt.cpp/externals/paho-mqtt-c" which is not an
+  existing directory.
+
+
+CMake Error at CMakeLists.txt:64 (add_library):
+  add_library cannot create ALIAS target "eclipse-paho-mqtt-c::paho-mqtt3a"
+  because target "paho-mqtt3a" does not already exist.
+
+
+CMake Error at CMakeLists.txt:66 (add_library):
+  add_library cannot create ALIAS target "eclipse-paho-mqtt-c::paho-mqtt3as"
+  because target "paho-mqtt3as" does not already exist.
