@@ -2,7 +2,7 @@
 
 VideoCapture videoCapture(0);
 
-bool screen(Mat image)
+bool display(Mat image)
 {
     ofstream frameBuffer("/dev/fb1", ios::binary);
 
@@ -40,8 +40,8 @@ bool setup()
 
 bool loop()
 {
-    // Mat cameraImage;
-    // videoCapture.read(cameraImage);
+    Mat cameraImage;
+    videoCapture.read(cameraImage);
 
     Mat frame(
         1080,
@@ -61,7 +61,7 @@ bool loop()
 
     // waitKey(0);
 
-    return screen(frame);
+    return display(cameraImage);
 }
 
 void teardown()
@@ -70,8 +70,6 @@ void teardown()
 
     cout << endl
          << "Stopped after " << i << " frames" << endl;
-
-    // delete screen;
 
     videoCapture.release();
 
