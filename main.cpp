@@ -29,12 +29,6 @@ bool setup()
         return false;
     }
 
-    if (!frameBuffer.is_open())
-    {
-        cerr << "Error: Unable to open framebuffer device." << endl;
-        return false;
-    }
-
     videoCapture.set(CAP_PROP_FRAME_WIDTH, 1920);
     videoCapture.set(CAP_PROP_FRAME_HEIGHT, 1080);
 
