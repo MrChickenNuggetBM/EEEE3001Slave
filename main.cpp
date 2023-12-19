@@ -40,11 +40,7 @@ bool setup()
 
 bool loop()
 {
-    Mat cameraImage(
-        1080,
-        1920,
-        CV_8UC4,
-        Scalar(0, 0, 0, 255));
+    Mat cameraImage;
     videoCapture.read(cameraImage);
 
     Mat frame(
@@ -64,6 +60,7 @@ bool loop()
     ellipse(frame);
 
     cvtColor(cameraImage, cameraImage, COLOR_BGR2RGBA);
+    cout << cameraImage << endl;
     imshow("hi", cameraImage);
     return (display(frame) && (waitKey(1) < 0));
 }
