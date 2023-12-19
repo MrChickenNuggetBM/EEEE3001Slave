@@ -1,20 +1,26 @@
 #include "main.h"
 
-VideoCapture *videoCapture;
+VideoCapture videoCapture(0);
+ofstream frameBuffer("/dev/fb1", ios::binary);
 
 bool setup()
 {
     system("setterm -cursor off;clear");
 
-    videoCapture = new VideoCapture(0);
-    if (!videoCapture->isOpened())
+    if (!videoCapture.isOpened())
     {
         cerr << "Error: Could not open camera" << endl;
         return false;
     }
 
-    videoCapture->set(CAP_PROP_FRAME_WIDTH, 1920);
-    videoCapture->set(CAP_PROP_FRAME_HEIGHT, 1080);
+    if (!frameBuffer.is_open())
+    {
+        cerr << "Error: Unable to open framebuffer device." << endl;
+        return false;
+    }
+
+    videoCapture.set(CAP_PROP_FRAME_WIDTH, 1920);
+    videoCapture.set(CAP_PROP_FRAME_HEIGHT, 1080);
 
     atexit(teardown);
     signal(SIGINT, teardown);
@@ -25,7 +31,7 @@ bool setup()
 bool loop()
 {
     // Mat cameraImage;
-    // videoCapture->read(cameraImage);
+    // videoCapture.read(cameraImage);
 
     Mat frame(
         1080,
@@ -43,17 +49,9 @@ bool loop()
         3);
     ellipse(frame);
 
-    ofstream frameBuffer("/dev/fb1", ios::binary);
-
-    if (!frameBuffer.is_open())
-    {
-        cerr << "Error: Unable to open framebuffer device." << endl;
-        return false;
-    }
+    cout << "writing" << endl;
 
     frameBuffer.write(reinterpret_cast<char *>(frame.data), static_cast<streamsize>(frame.total() * frame.elemSize()));
-
-    frameBuffer.close();
 
     // waitKey(0);
 
@@ -65,15 +63,16 @@ bool loop()
 
 void teardown()
 {
-    system("setterm -cursor off;clear");
+    system("setterm -cursor on;clear");
 
     cout << endl
          << "Stopped after " << i << " frames" << endl;
 
     // delete screen;
 
-    videoCapture->release();
-    delete videoCapture;
+    videoCapture.release();
+
+    frameBuffer.close();
 
     destroyAllWindows();
 }
