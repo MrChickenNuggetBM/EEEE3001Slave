@@ -23,10 +23,12 @@ if (NOT RASPBERRY_PI)
     set(OPEN_CV_BUILD "C:/opencv-4.8.0/build")
     find_package(OpenCV REQUIRED PATHS OPEN_CV_BUILD)
 else()
-	set(OPEN_CV_BUILD "/usr/local")
+    set(OPEN_CV_BUILD "/usr/local")
     find_package(OpenCV REQUIRED)
 endif()
 
+include_directories("/usr/local/include")
+
 # Link OpenCV libraries
 add_executable(${PROJECT_NAME} ${SOURCE_FILES}) # Executable target
-target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
+target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} /usr/local/lib)
