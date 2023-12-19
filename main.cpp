@@ -62,6 +62,8 @@ bool loop()
     waitKey(0);
     imshow("hi", cameraImage);
 
+    cout << cameraImage.channels();
+
     return display(cameraImage);
 }
 
