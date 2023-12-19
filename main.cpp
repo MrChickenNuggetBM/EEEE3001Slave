@@ -40,14 +40,18 @@ bool setup()
 
 bool loop()
 {
-    Mat cameraImage;
+    Mat cameraImage(
+        1080,
+        1920,
+        CV_8UC4,
+        Scalar(0, 0, 0, 255));
     videoCapture.read(cameraImage);
 
     Mat frame(
         1080,
         1920,
         CV_8UC4,
-        Scalar(0, 0, 0, 0));
+        Scalar(0, 0, 0, 255));
 
     Ellipse ellipse(
         Point2f(960, 540),
