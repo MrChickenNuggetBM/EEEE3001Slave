@@ -77,3 +77,35 @@ make[1]: *** [CMakeFiles/Makefile2:76: CMakeFiles/MeniscusDistortion.dir/all] Er
 make: *** [Makefile:84: all] Error 2
 
 
+mohamed@raspberrypi:~/EEEE3001/build $ make
+-- Looking for C++ include pthread.h
+-- Looking for C++ include pthread.h - found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - found
+-- Found Threads: TRUE  
+-- Configuring done
+CMake Error at CMakeLists.txt:34 (add_executable):
+  Target "MeniscusDistortion" links to target
+  "eclipse-paho-mqtt-c::paho-mqtt3as" but the target was not found.  Perhaps
+  a find_package() call is missing for an IMPORTED target, or an ALIAS target
+  is missing?
+
+
+CMake Error at CMakeLists.txt:34 (add_executable):
+  Target "MeniscusDistortion" links to target
+  "eclipse-paho-mqtt-c::paho-mqtt3as" but the target was not found.  Perhaps
+  a find_package() call is missing for an IMPORTED target, or an ALIAS target
+  is missing?
+
+
+-- Generating done
+CMake Generate step failed.  Build files cannot be regenerated correctly.
+make: *** [Makefile:236: cmake_check_build_system] Error 1
+mohamed@raspberrypi:~/EEEE3001/build $ 
+
+
+
