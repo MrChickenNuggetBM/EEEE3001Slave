@@ -59,12 +59,12 @@ bool loop()
         3);
     ellipse(frame);
 
-    
     imshow("hi", cameraImage);
 
     cout << cameraImage.channels();
+    waitKey(0);
 
-    return display(cameraImage);
+    return (display(cameraImage) && (waitKey >= 0));
 }
 
 void teardown()
