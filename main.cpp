@@ -59,7 +59,7 @@ bool loop()
         3);
     ellipse(frame);
 
-    waitKey(0);
+    
     imshow("hi", cameraImage);
 
     cout << cameraImage.channels();
