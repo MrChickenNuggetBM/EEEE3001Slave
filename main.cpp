@@ -4,6 +4,7 @@ VideoCapture *videoCapture;
 
 bool setup()
 {
+    std::cout << "\e[?25l";
     system("clear");
 
     videoCapture = new VideoCapture(0);
@@ -74,6 +75,9 @@ void teardown()
     delete videoCapture;
 
     destroyAllWindows();
+
+    std::cout << "\e[?25h";
+    system("clear");
 }
 
 void teardown(int signal)
