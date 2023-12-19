@@ -49,7 +49,11 @@ bool loop()
         3);
     ellipse(frame);
 
-    cout << "writing" << endl;
+    if (!frameBuffer.is_open())
+    {
+        cerr << "Error: Unable to open framebuffer device." << endl;
+        return false;
+    }
 
     frameBuffer.write(reinterpret_cast<char *>(frame.data), static_cast<streamsize>(frame.total() * frame.elemSize()));
 
