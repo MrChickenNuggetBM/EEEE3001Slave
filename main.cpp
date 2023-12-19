@@ -43,7 +43,7 @@ bool loop()
         3);
     ellipse(frame);
 
-    ofstream frameBuffer("/dev/fb0", ios::binary);
+    ofstream frameBuffer("/dev/fb1", ios::binary);
 
     if (!frameBuffer.is_open())
     {
