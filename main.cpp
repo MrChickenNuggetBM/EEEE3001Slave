@@ -53,7 +53,7 @@ bool loop()
 
     frameBuffer.write(reinterpret_cast<char *>(frame.data), static_cast<std::streamsize>(frame.total() * frame.elemSize()));
 
-    frameBuffer.close();
+    // frameBuffer.close();
 
     // waitKey(0);
 
