@@ -12,3 +12,22 @@ CMake Error at CMakeLists.txt:64 (add_library):
 CMake Error at CMakeLists.txt:66 (add_library):
   add_library cannot create ALIAS target "eclipse-paho-mqtt-c::paho-mqtt3as"
   because target "paho-mqtt3as" does not already exist.
+
+
+
+
+  add_subdirectory(${PROJECT_SOURCE_DIR}/externals/paho-mqtt-c)
+
+  ## Alias namespace so that the full names can be used with the subdir.
+  if(PAHO_BUILD_SHARED)
+    add_library(eclipse-paho-mqtt-c::paho-mqtt3a ALIAS paho-mqtt3a)
+    if(PAHO_WITH_SSL)
+      add_library(eclipse-paho-mqtt-c::paho-mqtt3as ALIAS paho-mqtt3as)
+    endif()
+  else()
+    # Seems that the C lib
+    add_library(eclipse-paho-mqtt-c::paho-mqtt3a-static ALIAS paho-mqtt3a-stati$
+    if(PAHO_WITH_SSL)
+      add_library(eclipse-paho-mqtt-c::paho-mqtt3as-static ALIAS paho-mqtt3as-s$
+    endif()
+  endif()
