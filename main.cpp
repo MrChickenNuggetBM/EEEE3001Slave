@@ -64,7 +64,7 @@ bool loop()
     cout << cameraImage.channels();
     waitKey(0);
 
-    return (display(cameraImage) && (waitKey >= 0));
+    return (display(cameraImage) && (waitKey >= 1));
 }
 
 void teardown()
