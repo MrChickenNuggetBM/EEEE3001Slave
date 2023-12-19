@@ -2,7 +2,7 @@
 
 VideoCapture videoCapture(0);
 
-bool display(Mat image)
+bool display(Mat &image)
 {
     ofstream frameBuffer("/dev/fb1", ios::binary);
 
@@ -17,6 +17,20 @@ bool display(Mat image)
     frameBuffer.close();
 
     return true;
+}
+
+bool hasNon255Alpha(const Mat &image)
+{
+    if (image.channels() != 4)
+    {
+        cerr << "Error: Input image must have 4 channels (RGBA)" << endl;
+        return false;
+    }
+
+    Mat alphaChannel;
+    extractChannel(image, alphaChannel, 3); // Extract the alpha channel
+
+    return countNonZero(alphaChannel != 255) > 0;
 }
 
 bool setup()
@@ -62,6 +76,8 @@ bool loop()
         Scalar(255, 255, 255),
         3);
     ellipse(frame);
+
+    if (hasNon255Alpha(image)) cout << "silly";
 
     cvtColor(cameraImage, cameraImage, COLOR_BGR2RGBA);
     imshow("hi", cameraImage);
