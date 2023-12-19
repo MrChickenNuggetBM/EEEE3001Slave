@@ -1,6 +1,7 @@
 #include "main.h"
 
 VideoCapture *videoCapture;
+std::ofstream frameBuffer("/dev/fb0", std::ios::binary);
 
 bool setup()
 {
@@ -8,6 +9,12 @@ bool setup()
     if (!videoCapture->isOpened())
     {
         cerr << "Error: Could not open camera" << endl;
+        return false;
+    }
+
+    if (!frameBuffer.is_open())
+    {
+        std::cerr << "Error: Unable to open framebuffer device." << std::endl;
         return false;
     }
 
@@ -36,20 +43,12 @@ bool loop()
     Ellipse ellipse(
         Point2f(960, 540),
         Size2f(
-            1920/*  - 10. * float(i % 100) */,
-            1080/*  - 10. * float(i % 100) */),
+            1920 /*  - 10. * float(i % 100) */,
+            1080 /*  - 10. * float(i % 100) */),
         0,
         Scalar(255, 255, 255),
         3);
     ellipse(frame);
-
-    std::ofstream frameBuffer("/dev/fb0", std::ios::binary);
-
-    if (!frameBuffer.is_open())
-    {
-        std::cerr << "Error: Unable to open framebuffer device." << std::endl;
-        return false;
-    }
 
     frameBuffer.write(reinterpret_cast<char *>(frame.data), static_cast<std::streamsize>(frame.total() * frame.elemSize()));
 
