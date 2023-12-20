@@ -44,6 +44,9 @@ if(PAHO_MQTT_AS_LIB)
 	message(STATUS "Found paho-mqtt3as")
 endif()
 
+message(STATUS ${PAHO_MQTT_C_LIB})
+message(STATUS ${PAHO_MQTT_AS_LIB})
+
 # Link OpenCV and Paho MQTT libraries
 add_executable(${PROJECT_NAME} ${SOURCE_FILES}) # Executable target
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} PahoMqttCpp::paho-mqttpp3 ${PAHO_MQTT_C_LIB} ${PAHO_MQTT_AS_LIB})
