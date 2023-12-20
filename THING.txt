@@ -158,5 +158,63 @@ MQTTClient_publish_async  paho_c_sub
 
 
 
+# Minimum CMake version required
+cmake_minimum_required(VERSION 3.10)
+project(MeniscusDistortion VERSION 1.0 LANGUAGES CXX) # Project name
+set(CMAKE_CXX_STANDARD 17) # Set C++ standard
+
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+# List your source files manually, excluding undesired files
+set(SOURCE_FILES
+    Ellipse/Ellipse.h
+    Screen/Screen.h
+    Ellipse/Ellipse.cpp
+    Screen/Screen.cpp
+    main.cpp
+    main.h
+    # Add more source files as needed
+)
+
+include_directories("/usr/local/include")
+
+# Find OpenCV
+if (NOT RASPBERRY_PI)
+    set(OPEN_CV_BUILD "C:/opencv-4.8.0/build")
+    find_package(OpenCV REQUIRED PATHS ${OPEN_CV_BUILD})
+else()
+    set(OPEN_CV_BUILD "/usr/local")
+    find_package(OpenCV REQUIRED)
+endif()
+
+# Find Paho MQTT C++
+find_package(PahoMqttCpp REQUIRED)
+find_library(PAHO_MQTT_C_LIB paho-mqtt3c)
+
+if(PAHO_MQTT_C_LIB)
+	message(STATUS "Found init")
+endif()
+
+# Link OpenCV and Paho MQTT libraries
+target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} PahoMqttCpp::paho-mqttpp3 PahoMqttCpp::paho-mqtt3as)
+add_executable(${PROJECT_NAME} ${SOURCE_FILES}) # Executable target
+
+mohamed@raspberrypi:~/EEEE3001/build $ cmake ..
+-- Found init
+CMake Error at CMakeLists.txt:41 (target_link_libraries):
+  Cannot specify link libraries for target "MeniscusDistortion" which is not
+  built by this project.
+
+
+-- Configuring incomplete, errors occurred!
+See also "/home/mohamed/EEEE3001/build/CMakeFiles/CMakeOutput.log".
+See also "/home/mohamed/EEEE3001/build/CMakeFiles/CMakeError.log".
+
+
+
+
+
 
 

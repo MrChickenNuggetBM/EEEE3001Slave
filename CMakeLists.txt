@@ -18,6 +18,8 @@ set(SOURCE_FILES
     # Add more source files as needed
 )
 
+include_directories("/usr/local/include")
+
 # Find OpenCV
 if (NOT RASPBERRY_PI)
     set(OPEN_CV_BUILD "C:/opencv-4.8.0/build")
@@ -29,9 +31,12 @@ endif()
 
 # Find Paho MQTT C++
 find_package(PahoMqttCpp REQUIRED)
-include_directories("/usr/local/include")
-include_directories("/home/mohamed/paho.mqtt.c/src")
+find_library(PAHO_MQTT_C_LIB paho-mqtt3c)
+
+if(PAHO_MQTT_C_LIB)
+	message(STATUS "Found init")
+endif()
 
 # Link OpenCV and Paho MQTT libraries
-add_executable(${PROJECT_NAME} ${SOURCE_FILES}) # Executable target
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} PahoMqttCpp::paho-mqttpp3 PahoMqttCpp::paho-mqtt3as)
+add_executable(${PROJECT_NAME} ${SOURCE_FILES}) # Executable target
