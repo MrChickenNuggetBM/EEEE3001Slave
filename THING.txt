@@ -123,5 +123,40 @@ make[1]: *** [CMakeFiles/Makefile2:76: CMakeFiles/MeniscusDistortion.dir/all] Er
 make: *** [Makefile:84: all] Error 2
 
 
+mohamed@raspberrypi:~ $ cd /usr/local/lib
+mohamed@raspberrypi:/usr/local/lib $ ls
+cmake                      libpaho-mqtt3c.so.1.3
+libpaho-mqtt3a.a           libpaho-mqtt3c.so.1.3.13
+libpaho-mqtt3as.a          libpaho-mqtt3cs.so
+libpaho-mqtt3a.so          libpaho-mqtt3cs.so.1
+libpaho-mqtt3a.so.1        libpaho-mqtt3cs.so.1.3
+libpaho-mqtt3a.so.1.3      libpaho-mqtt3cs.so.1.3.13
+libpaho-mqtt3a.so.1.3.13   libpaho-mqttpp3.a
+libpaho-mqtt3as.so         libpaho-mqttpp3.so
+libpaho-mqtt3as.so.1       libpaho-mqttpp3.so.1
+libpaho-mqtt3as.so.1.3     libpaho-mqttpp3.so.1.4.0.1
+libpaho-mqtt3as.so.1.3.13  node_modules
+libpaho-mqtt3c.a           pypy2.7
+libpaho-mqtt3cs.a          python2.7
+libpaho-mqtt3c.so          python3.7
+libpaho-mqtt3c.so.1
+mohamed@raspberrypi:/usr/local/lib $ cd /usr/local/bin
+mohamed@raspberrypi:/usr/local/bin $ ls
+async_consume             MQTTClient_subscribe  paho_c_sub_static
+async_consume_v5          mqttpp_chat           paho_c_version
+async_publish             MQTTVersion           pub_speed_test
+async_publish_time        multithr_pub_sub      rpc_math_cli
+async_subscribe           node-red              rpc_math_srvr
+data_publish              node-red-pi           ssl_publish
+hostapdstart              paho_c_pub            sync_consume
+hostapdstart.save         paho_c_pub_static     sync_consume_v5
+MQTTAsync_publish         paho_cs_pub           sync_publish
+MQTTAsync_publish_time    paho_cs_pub_static    sync_reconnect
+MQTTAsync_subscribe       paho_cs_sub           topic_publish
+MQTTClient_publish        paho_cs_sub_static    ws_publish
+MQTTClient_publish_async  paho_c_sub
+
+
+
 
 
