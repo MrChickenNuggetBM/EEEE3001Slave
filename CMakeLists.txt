@@ -29,6 +29,8 @@ endif()
 
 # Find Paho MQTT C++
 find_package(PahoMqttCpp REQUIRED)
+include_directories("/usr/local/include")
+include_directories("/home/mohamed/paho.mqtt.c/src")
 
 # Link OpenCV and Paho MQTT libraries
 add_executable(${PROJECT_NAME} ${SOURCE_FILES}) # Executable target
