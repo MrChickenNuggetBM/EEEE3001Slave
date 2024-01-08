@@ -3,6 +3,24 @@
 // mqtt broker
 async_client client("mqtt://localhost:1883", "raspberrypi");
 
+// displays an image on fb1
+bool display(Mat &image)
+{
+    ofstream frameBuffer("/dev/fb0", ios::binary);
+
+    if (!frameBuffer.is_open())
+    {
+        cerr << "Error: Unable to open framebuffer device." << endl;
+        return false;
+    }
+
+    frameBuffer.write(reinterpret_cast<char *>(image.data), static_cast<streamsize>(image.total() * image.elemSize()));
+
+    frameBuffer.close();
+
+    return true;
+}
+
 // defining the callback
 class Callback : public virtual callback
 {
@@ -20,6 +38,20 @@ public:
 
 bool setup()
 {
+    // clear the terminal
+    system("setterm -cursor off;clear");
+
+    // set up the camera
+    // if (!videoCapture.isOpened())
+    // {
+    //     cerr << "Error: Could not open camera" << endl;
+    //     return false;
+    // }
+
+    // videoCapture.set(CAP_PROP_FRAME_WIDTH, 960);
+    // videoCapture.set(CAP_PROP_FRAME_HEIGHT, 540);
+
+    // configure code termination
     atexit(teardown);
     signal(SIGINT, teardown);
 
@@ -49,6 +81,9 @@ bool setup()
 
 bool loop()
 {
+    // Mat cameraImage;
+    // videoCapture.read(cameraImage);
+
     Mat frame(
         1080,
         1920,
@@ -63,13 +98,22 @@ bool loop()
         0,
         Scalar(255, 255, 255),
         3);
-    // ellipse(frame);
+    ellipse(frame);
 
-    return true;
+    // imshow("hi", cameraImage);
+    return (/* display(frame) && */(waitKey(1) < 0));
 }
 
 void teardown()
 {
+    system("setterm -cursor on;clear");
+
+    cout << endl
+         << "Stopped after " << i << " frames" << endl;
+
+    // videoCapture.release();
+
+    // destroyAllWindows();
 }
 
 void teardown(int signal)
