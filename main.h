@@ -8,17 +8,17 @@
 #include <unistd.h>
 #include <csignal>
 #include <fstream>
-#include <mqtt/async_client.h>
+// #include <mqtt/async_client.h>
 
 using ullint = unsigned long long int;
 
 using namespace std;
-using namespace mqtt;
+// using namespace mqtt;
 using namespace cv;
 
 // VideoCapture videoCapture(0);
 
-async_client client("tcp://localhost:1883", "raspberrypi");
+// async_client client("tcp://localhost:1883", "raspberrypi");
 
 bool display(Mat &image);
 bool setup();
