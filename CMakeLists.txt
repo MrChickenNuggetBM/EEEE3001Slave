@@ -51,4 +51,5 @@ endif()
 # Link OpenCV and Paho MQTT libraries
 add_executable(${PROJECT_NAME} ${SOURCE_FILES}) # Executable target
 # target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} PahoMqttCpp::paho-mqttpp3 PahoMqttCpp::paho-mqttpp3as)
-target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} /usr/local/include/mqtt/async_client.h)
+# target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} /usr/local/lib/libpaho-mqtt3c.so /usr/local/lib/libpaho-mqtt3as.so)
+target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
