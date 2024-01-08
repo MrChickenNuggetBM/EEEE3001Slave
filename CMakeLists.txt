@@ -52,4 +52,4 @@ find_library(PAHO_MQTT_AS_LIB paho-mqtt3as REQUIRED)
 add_executable(${PROJECT_NAME} ${SOURCE_FILES}) # Executable target
 # target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} PahoMqttCpp::paho-mqttpp3 PahoMqttCpp::paho-mqttpp3as)
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} /usr/local/lib/libpaho-mqtt3c.so /usr/local/lib/libpaho-mqtt3as.so)
-/ target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
+# target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
