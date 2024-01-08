@@ -1,6 +1,8 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+#include <mqtt/async_client.h>
+#include <mqtt/connect_options.h>
 #include "Ellipse/Ellipse.h"
 #include "Screen/Screen.h"
 #include <iostream>
@@ -8,7 +10,7 @@
 #include <unistd.h>
 #include <csignal>
 #include <fstream>
-#include <mqtt/async_client.h>
+
 
 using ullint = unsigned long long int;
 
