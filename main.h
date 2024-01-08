@@ -14,7 +14,7 @@
 using ullint = unsigned long long int;
 
 using namespace std;
-// using namespace mqtt;
+using namespace mqtt;
 using namespace cv;
 
 // VideoCapture videoCapture(0);
