@@ -3,7 +3,7 @@
 // displays an image on fb1
 bool display(Mat &image)
 {
-    ofstream frameBuffer("/dev/fb1", ios::binary);
+    ofstream frameBuffer("/dev/fb0", ios::binary);
 
     if (!frameBuffer.is_open())
     {
