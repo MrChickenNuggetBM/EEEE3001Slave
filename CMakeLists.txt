@@ -1,5 +1,5 @@
 # Minimum CMake version required
-set(PahoMqttCpp_DIR "/home/mohamed/paho.mqtt.cpp/build/cmake")
+# set(PahoMqttCpp_DIR "/home/mohamed/paho.mqtt.cpp/build/cmake")
 
 cmake_minimum_required(VERSION 3.10)
 project(MeniscusDistortion VERSION 1.0 LANGUAGES CXX) # Project name
@@ -35,15 +35,15 @@ find_package(PahoMqttCpp REQUIRED)
 find_library(PAHO_MQTT_C_LIB paho-mqtt3c REQUIRED)
 find_library(PAHO_MQTT_AS_LIB paho-mqtt3as REQUIRED)
 
-#if(PahoMqttCpp_FOUND)
-#	message(STATUS "Found PahoMqttCpp package")
-#endif()
-#if(PAHO_MQTT_C_LIB)
-#	message(STATUS "Found paho-mqtt3c")
-#endif()
-#if(PAHO_MQTT_AS_LIB)
-#	message(STATUS "Found paho-mqtt3as")
-#endif()
+if(PahoMqttCpp_FOUND)
+	message(STATUS "Found PahoMqttCpp package")
+endif()
+if(PAHO_MQTT_C_LIB)
+	message(STATUS "Found paho-mqtt3c")
+endif()
+if(PAHO_MQTT_AS_LIB)
+	message(STATUS "Found paho-mqtt3as")
+endif()
 
 #message(STATUS ${PAHO_MQTT_C_LIB})
 #message(STATUS ${PAHO_MQTT_AS_LIB})
