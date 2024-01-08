@@ -18,15 +18,15 @@ bool display(Mat &image)
     return true;
 }
 
-class Callback : public virtual mqtt::callback
-{
-public:
-    void message_arrived(mqtt::const_message_ptr msg) override
-    {
-        cout << "Message received: " << msg->to_string() << endl;
-        cout << "Payload received: " << msg->get_payload_str() << endl;
-    }
-};
+//class Callback : public virtual mqtt::callback
+//{
+//public:
+//    void message_arrived(mqtt::const_message_ptr msg) override
+//    {
+//        cout << "Message received: " << msg->to_string() << endl;
+//        cout << "Payload received: " << msg->get_payload_str() << endl;
+//    }
+//};
 
 bool setup()
 {
@@ -48,19 +48,19 @@ bool setup()
     signal(SIGINT, teardown);
 
     // establish broker-client connection
-    connect_options connOpts;
-    connOpts.set_clean_session(true);
+//    connect_options connOpts;
+//    connOpts.set_clean_session(true);
 
-    Callback callback;
-    client.set_callback(callback);
+//    Callback callback;
+//    client.set_callback(callback);
 
-    try {
-        client.connect(connOpts)->wait();
-        client.subscribe("hello/hi", 1)->wait();
-    } catch (const mqtt::exception &exc) {
-        cerr << "Error: " << exc.what() << endl;
-        return false;
-    }
+//    try {
+//        client.connect(connOpts)->wait();
+//        client.subscribe("hello/hi", 1)->wait();
+//    } catch (const mqtt::exception &exc) {
+//        cerr << "Error: " << exc.what() << endl;
+//        return false;
+//    }
 
     return true;
 }
