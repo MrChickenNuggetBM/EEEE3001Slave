@@ -1,5 +1,4 @@
 # Minimum CMake version required
-# set(PahoMqttCpp_DIR "/home/mohamed/paho.mqtt.cpp/build/cmake")
 
 cmake_minimum_required(VERSION 3.10)
 project(MeniscusDistortion VERSION 1.0 LANGUAGES CXX) # Project name
@@ -45,11 +44,9 @@ if(PAHO_MQTT_AS_LIB)
 	message(STATUS "Found paho-mqtt3as")
 endif()
 
-#message(STATUS ${PAHO_MQTT_C_LIB})
-#message(STATUS ${PAHO_MQTT_AS_LIB})
+message(STATUS ${PAHO_MQTT_C_LIB})
+message(STATUS ${PAHO_MQTT_AS_LIB})
 
 # Link OpenCV and Paho MQTT libraries
 add_executable(${PROJECT_NAME} ${SOURCE_FILES}) # Executable target
-# target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} PahoMqttCpp::paho-mqttpp3 PahoMqttCpp::paho-mqttpp3as)
-target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} /usr/local/lib/libpaho-mqtt3c.so /usr/local/lib/libpaho-mqtt3as.so)
-# target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
+target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} paho-mqttpp3 paho-mqtt3c)

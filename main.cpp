@@ -1,5 +1,8 @@
 #include "main.h"
 
+// mqtt broker
+async_client client("mqtt://localhost:1883", "raspberrypi");
+
 // displays an image on fb1
 bool display(Mat &image)
 {
@@ -18,15 +21,18 @@ bool display(Mat &image)
     return true;
 }
 
-//class Callback : public virtual mqtt::callback
-//{
-//public:
-//    void message_arrived(mqtt::const_message_ptr msg) override
-//    {
-//        cout << "Message received: " << msg->to_string() << endl;
-//        cout << "Payload received: " << msg->get_payload_str() << endl;
-//    }
-//};
+// defining the callback
+class Callback : public virtual callback
+{
+public:
+    void message_arrived(const_message_ptr msg) override
+    {
+        cout << "sus1" << endl;
+        cout << "Message received: " << msg->to_string() << endl;
+        cout << "Payload received: " << msg->get_payload_str() << endl;
+        cout << "sus2" << endl;
+    }
+};
 
 bool setup()
 {
@@ -48,19 +54,22 @@ bool setup()
     signal(SIGINT, teardown);
 
     // establish broker-client connection
-//    connect_options connOpts;
-//    connOpts.set_clean_session(true);
+    connect_options connOpts;
+    connOpts.set_clean_session(true);
 
-//    Callback callback;
-//    client.set_callback(callback);
+    Callback _callback;
+    client.set_callback(_callback);
 
-//    try {
-//        client.connect(connOpts)->wait();
-//        client.subscribe("hello/hi", 1)->wait();
-//    } catch (const mqtt::exception &exc) {
-//        cerr << "Error: " << exc.what() << endl;
-//        return false;
-//    }
+    try {
+        client.connect(connOpts)->wait();
+        client.subscribe("parameters/isCircle", 1)->wait();
+        client.subscribe("parameters/minorRadius", 1)->wait();
+        client.subscribe("parameters/majorRadius", 1)->wait();
+        client.subscribe("parameters/thickness", 1)->wait();
+    } catch (const mqtt::exception &exc) {
+        cerr << "Error: " << exc.what() << endl;
+        return false;
+    }
 
     return true;
 }

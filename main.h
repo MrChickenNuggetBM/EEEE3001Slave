@@ -1,7 +1,6 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include <mqtt/connect_options.h>
 #include "Ellipse/Ellipse.h"
 #include "Screen/Screen.h"
 #include <iostream>
@@ -18,8 +17,6 @@ using namespace mqtt;
 using namespace cv;
 
 // VideoCapture videoCapture(0);
-
-async_client client("tcp://localhost:1883", "raspberrypi");
 
 bool display(Mat &image);
 bool setup();
@@ -38,7 +35,7 @@ int main(int argc, char *argv[]) {
 
     // run loop until loop() returns false
     while (loop(), ++i) {
-        // cout << "Frame: " << i << endl;
+        cout << "Frame: " << i << endl;
     }
 
     return 0;
