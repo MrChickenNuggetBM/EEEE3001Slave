@@ -27,6 +27,8 @@ class Callback : public virtual callback
 public:
     void message_arrived(const_message_ptr msg) override
     {
+        int whyme = 5;
+        float ccuz = 6.7;
         cout << "sus1" << endl;
         cout << "Message received: " << msg->to_string() << endl;
         cout << "Payload received: " << msg->get_payload_str() << endl;
@@ -60,13 +62,16 @@ bool setup()
     Callback _callback;
     client.set_callback(_callback);
 
-    try {
+    try
+    {
         client.connect(connOpts)->wait();
         client.subscribe("parameters/isCircle", 1)->wait();
         client.subscribe("parameters/minorRadius", 1)->wait();
         client.subscribe("parameters/majorRadius", 1)->wait();
         client.subscribe("parameters/thickness", 1)->wait();
-    } catch (const mqtt::exception &exc) {
+    }
+    catch (const mqtt::exception &exc)
+    {
         cerr << "Error: " << exc.what() << endl;
         return false;
     }
@@ -96,7 +101,7 @@ bool loop()
     ellipse(frame);
 
     // imshow("hi", cameraImage);
-    return (display(frame) && (waitKey(1) < 0));
+    return (/* display(frame) && */(waitKey(1) < 0));
 }
 
 void teardown()

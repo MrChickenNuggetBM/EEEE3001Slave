@@ -1,6 +1,9 @@
 build/
 .idea/
 obj/
+bin/
+
+*.depend
 *.cbp
 *.layout
 version.txt

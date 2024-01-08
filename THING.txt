@@ -81,3 +81,25 @@ collect2: error: ld returned 1 exit status
 make[2]: *** [CMakeFiles/MeniscusDistortion.dir/build.make:157: bin/MeniscusDistortion] Error 1
 make[1]: *** [CMakeFiles/Makefile2:76: CMakeFiles/MeniscusDistortion.dir/all] Error 2
 make: *** [Makefile:84: all] Error 2
+
+
+
+
+Active debugger config: GDB/CDB debugger:Default
+Building to ensure sources are up-to-date
+Selecting target: 
+Debug
+Adding source dir: /home/mohamed/EEEE3001/
+Adding source dir: /home/mohamed/EEEE3001/
+Adding file: /home/mohamed/EEEE3001/bin/Debug/EEEE3001
+Changing directory to: /home/mohamed/EEEE3001/.
+Set variable: LD_LIBRARY_PATH=.:
+Starting debugger: /usr/bin/gdb -nx -fullname -quiet  -args /home/mohamed/EEEE3001/bin/Debug/EEEE3001
+done
+Setting breakpoints
+Debugger name and version: GNU gdb (Raspbian 8.2.1-2) 8.2.1
+Child process PID: 3093
+In mqtt::async_client::on_message_arrived(void*, char*, int, MQTTAsync_message*) () (/usr/local/lib/libpaho-mqttpp3.so.1)
+486	pthread_create.c: No such file or directory.
+#6  0xb66f0494 in start_thread (arg=0xa9d1e440) at pthread_create.c:486
+
