@@ -4,9 +4,13 @@
 async_client client("mqtt://localhost:1883", "raspberrypi");
 
 // defining the callback
-class Callback : public virtual callback
+class _Callback : public virtual callback
 {
 public:
+    void connection_lost(const std::string& cause) override {
+        std::cout << "Connection lost: " << cause << std::endl;
+    }
+
     void message_arrived(const_message_ptr msg) override
     {
         int whyme = 5;
@@ -16,6 +20,8 @@ public:
         cout << "Payload received: " << msg->get_payload_str() << endl;
         cout << "sus2" << endl;
     }
+
+    void delivery_complete(mqtt::delivery_token_ptr token) override {}
 };
 
 bool setup()
@@ -27,7 +33,7 @@ bool setup()
     connect_options connOpts;
     connOpts.set_clean_session(true);
 
-    Callback _callback;
+    _Callback _callback;
     client.set_callback(_callback);
 
     try
@@ -63,13 +69,14 @@ bool loop()
         0,
         Scalar(255, 255, 255),
         3);
-    // ellipse(frame);
+    ellipse(frame);
 
     return true;
 }
 
 void teardown()
 {
+    client.disconnect()->wait();
 }
 
 void teardown(int signal)
