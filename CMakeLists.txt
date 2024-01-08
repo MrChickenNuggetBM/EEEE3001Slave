@@ -30,24 +30,26 @@ else()
 endif()
 
 # Find Paho MQTT C++
-find_package(PahoMqttCpp REQUIRED)
-find_library(PAHO_MQTT_C_LIB paho-mqtt3c REQUIRED)
-find_library(PAHO_MQTT_AS_LIB paho-mqtt3as REQUIRED)
+#find_package(PahoMqttCpp REQUIRED)
+#find_library(PAHO_MQTT_C_LIB paho-mqtt3c REQUIRED)
+#find_library(PAHO_MQTT_AS_LIB paho-mqtt3as REQUIRED)
 
-if(PahoMqttCpp_FOUND)
-	message(STATUS "Found PahoMqttCpp package")
-endif()
-if(PAHO_MQTT_C_LIB)
-	message(STATUS "Found paho-mqtt3c")
-endif()
-if(PAHO_MQTT_AS_LIB)
-	message(STATUS "Found paho-mqtt3as")
-endif()
+#if(PahoMqttCpp_FOUND)
+#	message(STATUS "Found PahoMqttCpp package")
+#endif()
+#if(PAHO_MQTT_C_LIB)
+#	message(STATUS "Found paho-mqtt3c")
+#endif()
+#if(PAHO_MQTT_AS_LIB)
+#	message(STATUS "Found paho-mqtt3as")
+#endif()
 
-message(STATUS ${PAHO_MQTT_C_LIB})
-message(STATUS ${PAHO_MQTT_AS_LIB})
+#message(STATUS ${PAHO_MQTT_C_LIB})
+#message(STATUS ${PAHO_MQTT_AS_LIB})
 
 # Link OpenCV and Paho MQTT libraries
 add_executable(${PROJECT_NAME} ${SOURCE_FILES}) # Executable target
 # target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} PahoMqttCpp::paho-mqttpp3 PahoMqttCpp::paho-mqttpp3as)
-target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} /usr/local/lib/libpaho-mqtt3c.so /usr/local/lib/libpaho-mqtt3as.so)
+# target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} /usr/local/lib/libpaho-mqtt3c.so /usr/local/lib/libpaho-mqtt3as.so)
+target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
+
