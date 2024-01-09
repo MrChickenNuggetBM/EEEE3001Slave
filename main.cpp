@@ -21,7 +21,7 @@ public:
         cout << "sus2" << endl;
     }
 
-    void delivery_complete(mqtt::delivery_token_ptr token) override {}
+    void delivery_complete(delivery_token_ptr token) override {}
 };
 
 bool setup()
@@ -50,7 +50,6 @@ bool setup()
         return false;
     }
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
     return true;
 }
 
