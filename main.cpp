@@ -40,8 +40,8 @@
 #include "mqtt/async_client.h"
 
 const std::string SERVER_ADDRESS("mqtt://localhost:1883");
-const std::string CLIENT_ID("paho_cpp_async_subcribe");
-const std::string TOPIC("hello");
+const std::string CLIENT_ID("raspberryPi);
+const std::string TOPIC("parameters/minorRadius");
 
 const int	QOS = 1;
 const int	N_RETRY_ATTEMPTS = 5;
