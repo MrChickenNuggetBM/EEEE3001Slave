@@ -45,6 +45,27 @@
 const int	QoS = 1;
 const int	N_RETRY_ATTEMPTS = 5;
 
+// parameters
+// topics to subscribe to
+
+namespace mqtt
+{
+namespace topics
+{
+namespace parameters
+{
+static int xCenter = 0,
+           yCenter = 0,
+           xRadius = 960,
+           yRadius = 540,
+           thickness = 3;
+
+static bool isCircle = false,
+            isBrightfield = true;
+}
+}
+}
+
 /////////////////////////////////////////////////////////////////////////////
 
 // Callbacks for the success or failures of requested actions.
@@ -98,7 +119,8 @@ class Callback : public virtual mqtt::callback,
     // An action listener to display the result of actions.
     action_listener SUB_LISTENER;
     // array of topics to connect to
-    std::string* TOPICS;
+    const char numTopics;
+    const std::string* TOPICS;
 
     // This deomonstrates manually reconnecting to the broker by calling
     // connect() again. This is a possibility for an application that keeps
@@ -140,11 +162,8 @@ class Callback : public virtual mqtt::callback,
                   << std::endl;
 
         int i = 0;
-        int numTopics = sizeof(TOPICS)/sizeof(std::string*);
-
-        for (std::string topic = TOPICS[i]; i < numTopics; topic = TOPICS[i++])
+        for (std::string topic = TOPICS[i]; i < numTopics; topic = TOPICS[++i])
         {
-
             std::cout << "\nSubscribing to topic '" << topic << "'" << std::endl
                       << "\tfor client " << CLIENT.get_client_id() << " using QoS" << QoS << std::endl
                       << std::flush;
@@ -169,20 +188,39 @@ class Callback : public virtual mqtt::callback,
     // Callback for when a message arrives.
     void message_arrived(mqtt::const_message_ptr msg) override
     {
+        std::string topic = msg->get_topic();
+        std::string payload = msg->to_string();
+
         std::cout << "Message arrived!" << std::endl;
-        std::cout << "\ttopic: '" << msg->get_topic() << "'" << std::endl;
-        std::cout << "\tpayload: '" << msg->to_string() << "'\n" << std::endl;
+        std::cout << "\ttopic: '" << topic << "'" << std::endl;
+        std::cout << "\tpayload: '" << payload << "'\n" << std::endl;
+
+        if (topic == "parameters/xCenter")
+            mqtt::topics::parameters::xCenter = std::stoi(payload);
+        else if(topic ==  "parameters/yCenter")
+            mqtt::topics::parameters::yCenter = std::stoi(payload);
+        else if(topic ==  "parameters/xRadius")
+            mqtt::topics::parameters::xRadius = std::stoi(payload);
+        else if(topic ==  "parameters/yRadius")
+            mqtt::topics::parameters::yRadius = std::stoi(payload);
+        else if(topic ==  "parameters/thickness")
+            mqtt::topics::parameters::thickness = std::stoi(payload);
+        else if(topic ==  "parameters/isCircle")
+            mqtt::topics::parameters::isCircle = (payload == "true");
+        else if(topic ==  "parameters/isBrightfield")
+            mqtt::topics::parameters::isBrightfield = (payload == "true");
     }
 
     void delivery_complete(mqtt::delivery_token_ptr token) override {}
 
 public:
-    Callback(mqtt::async_client& cli, mqtt::connect_options& connOpts, std::string* topics)
+    Callback(mqtt::async_client& CLIENT, mqtt::connect_options& connOpts, const std::string* topics, const int numtopics)
         : nretry_(0),
-          CLIENT(cli),
+          CLIENT(CLIENT),
           CONN_OPTS(connOpts),
           SUB_LISTENER("Subscription"),
-          TOPICS(topics)
+          TOPICS(topics),
+          numTopics(numtopics)
     {}
 };
 

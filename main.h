@@ -9,7 +9,6 @@
 #include <unistd.h>
 #include <csignal>
 #include <fstream>
-#include <mqtt/async_client.h>
 #include <chrono>
 #include <thread>
 
@@ -28,7 +27,7 @@ void teardown();
 void teardown(int signal);
 
 ullint i(0);
-/* int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) {
     // run setup, if failure return
     if (!setup())
     {
@@ -38,10 +37,10 @@ ullint i(0);
 
     // run loop until loop() returns false
     while (loop(), ++i) {
-        cout << "Frame: " << i << endl;
+        // cout << "Frame: " << i << endl;
     }
 
     return 0;
-} */
+}
 
 #endif // MAIN_H
