@@ -1,8 +1,9 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include "Ellipse/Ellipse.h"
-#include "Screen/Screen.h"
+#include "include/Ellipse.h"
+#include "include/Screen.h"
+#include "include/MQTT++.h"
 #include <iostream>
 #include <termios.h>
 #include <unistd.h>
@@ -27,7 +28,7 @@ void teardown();
 void teardown(int signal);
 
 ullint i(0);
-int main(int argc, char *argv[]) {
+/* int main(int argc, char *argv[]) {
     // run setup, if failure return
     if (!setup())
     {
@@ -41,6 +42,6 @@ int main(int argc, char *argv[]) {
     }
 
     return 0;
-}
+} */
 
 #endif // MAIN_H

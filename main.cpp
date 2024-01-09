@@ -1,18 +1,24 @@
-#include "MQTT++.h"
+#include "main.h"
 
-int main(int argc, char* argv[])
-{
+
+
+string SERVER_ADDRESS("mqtt://localhost:1883");
+string TOPICS[]  = {"parameters/minorRadius"};
+
+async_client cli(SERVER_ADDRESS, "raspberrypi");
+
+int main(int argc, char* argv[]) {
     // A subscriber often wants the server to remember its messages when its
     // disconnected. In that case, it needs a unique ClientID and a
     // non-clean session.
 
-    async_client cli(SERVER_ADDRESS, CLIENT_ID);
+
 
     connect_options connOpts;
     connOpts.set_clean_session(false);
 
     // Install the callback(s) before connecting.
-    callback cb(cli, connOpts);
+    Callback cb(cli, connOpts, TOPICS);
     cli.set_callback(cb);
 
     // Start the connection.
@@ -22,7 +28,7 @@ int main(int argc, char* argv[])
         cout << "Connecting to the MQTT server..." << flush;
         cli.connect(connOpts, nullptr, cb);
     }
-    catch (const exception& exc) {
+    catch (const mqtt::exception& exc) {
         cerr << "\nERROR: Unable to connect to MQTT server: '"
              << SERVER_ADDRESS << "'" << exc << endl;
         return 1;
@@ -40,7 +46,7 @@ int main(int argc, char* argv[])
         cli.disconnect()->wait();
         cout << "OK" << endl;
     }
-    catch (const exception& exc) {
+    catch (const mqtt::exception& exc) {
         cerr << exc << endl;
         return 1;
     }

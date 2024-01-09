@@ -10,14 +10,13 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # List your source files manually, excluding undesired files
 set(SOURCE_FILES
-	main.h
+    main.h
     include/Ellipse.h
-	include/MQTT++.h
+    include/MQTT++.h
     include/Screen.h
     
-	main.cpp
+    main.cpp
     src/Ellipse.cpp
-	src/MQTT++.CPP
     src/Screen.cpp
 )
 
