@@ -10,13 +10,14 @@ const string TOPICS[]  =
     "parameters/isCircle",
     "parameters/isBrightfield"
 };
+
 // mqtt broker definition
 const string SERVER_ADDRESS("mqtt://localhost:1883");
 async_client CLIENT(SERVER_ADDRESS, "raspberrypi");
-// connection options
-connect_options options;
+// connection OPTIONS
+connect_options OPTIONS;
 // callback
-Callback cb(CLIENT, options, TOPICS, 7);
+Callback CALLBACK(CLIENT, OPTIONS, TOPICS, 7);
 
 // variable for screen
 Screen screen;
@@ -42,18 +43,18 @@ bool setup()
 
     // establish broker-client connection
 
-    options.set_clean_session(false);
+    OPTIONS.set_clean_session(false);
 
     // Install the callback(s) before connecting.
 
-    CLIENT.set_callback(cb);
+    CLIENT.set_callback(CALLBACK);
 
     // Start the connection.
     // When completed, the callback will subscribe to topic.
     try
     {
         cout << "Connecting to the MQTT server..." << flush;
-        CLIENT.connect(options, nullptr, cb);
+        CLIENT.connect(OPTIONS, nullptr, CALLBACK);
     }
     catch (const mqtt::exception& exc)
     {

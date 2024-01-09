@@ -125,8 +125,8 @@ class Callback : public virtual mqtt::callback,
     // This deomonstrates manually reconnecting to the broker by calling
     // connect() again. This is a possibility for an application that keeps
     // a copy of it's original connect_options, or if the app wants to
-    // reconnect with different options.
-    // Another way this can be done manually, if using the same options, is
+    // reconnect with different OPTIONS.
+    // Another way this can be done manually, if using the same OPTIONS, is
     // to just call the async_client::reconnect() method.
     void reconnect()
     {
