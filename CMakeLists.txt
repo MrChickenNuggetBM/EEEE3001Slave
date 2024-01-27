@@ -12,7 +12,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(SOURCE_FILES
     main.h
     include/Ellipse.h
-    include/MQTT++.h
+    include/MQTT++Sub.h
     include/Screen.h
     
     main.cpp

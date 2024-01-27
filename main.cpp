@@ -68,40 +68,54 @@ bool setup()
 
 bool loop()
 {
-    using namespace mqtt::topics::parameters;
+    // retrieving stored parameters from MQTT
+    int _xCenter, _yCenter,
+        _xRadius, _yRadius,
+        _thickness,
+        _ringColour = 255 * (int) mqtt::topics::parameters::isBrightfield;
+    bool _isCircle = false;
+
+    if (mqtt::topics::parameters::isGUIControl)
+    {
+        using namespace mqtt::topics::parameters;
+        _xCenter = xCenter;
+        _yCenter = yCenter;
+        _xRadius = xRadius;
+        _yRadius = yRadius;
+        _thickness = thickness;
+        _isCircle = isCircle;
+    }
     // Mat cameraImage;
     // videoCapture.read(cameraImage);
-
-    int ringColour = 255 * (int)isBrightfield;
 
     Mat frame(
         1080,
         1920,
         CV_8UC4,
         Scalar(
-            255 - ringColour,
-            255 - ringColour,
-            255 - ringColour,
+            255 - _ringColour,
+            255 - _ringColour,
+            255 - _ringColour,
             255
         )
     );
 
     Ellipse ellipse(
         Point2f(
-            960 + xCenter,
-            540 + yCenter
+            960 + _xCenter,
+            540 + _yCenter
         ),
         Size2f(
-            2 * (isCircle ? std::min(xRadius, yRadius) : xRadius),
-            2 * (isCircle ? std::min(xRadius, yRadius) : yRadius)
+            2 * (_isCircle ? std::min(_xRadius, _yRadius) : _xRadius),
+            2 * (_isCircle ? std::min(_xRadius, _yRadius) : _yRadius)
         ),
         0,
         Scalar(
-            ringColour,
-            ringColour,
-            ringColour
+            _ringColour,
+            _ringColour,
+            _ringColour
         ),
-        thickness
+        _thickness
     );
     ellipse(frame);
 

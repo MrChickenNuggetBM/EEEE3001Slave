@@ -3,7 +3,7 @@
 
 #include "include/Ellipse.h"
 #include "include/Screen.h"
-#include "include/MQTT++.h"
+#include "include/MQTT++Sub.h"
 #include <iostream>
 #include <termios.h>
 #include <unistd.h>
@@ -20,7 +20,6 @@ using namespace cv;
 
 // VideoCapture videoCapture(0);
 
-bool display(Mat &image);
 bool setup();
 bool loop();
 void teardown();
