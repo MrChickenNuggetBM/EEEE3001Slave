@@ -3,6 +3,7 @@
 
 #include "include/Ellipse.h"
 #include "include/Screen.h"
+#include "include/MQTT++Pub.h"
 #include "include/MQTT++Sub.h"
 #include <iostream>
 #include <termios.h>

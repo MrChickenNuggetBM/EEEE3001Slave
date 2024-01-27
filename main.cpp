@@ -8,7 +8,8 @@ const string TOPICS[]  =
     "parameters/yRadius",
     "parameters/thickness",
     "parameters/isCircle",
-    "parameters/isBrightfield"
+    "parameters/isBrightfield",
+    "parameters/isGUIControl"
 };
 
 // mqtt broker definition
@@ -17,7 +18,7 @@ async_client CLIENT(SERVER_ADDRESS, "raspberrypi");
 // connection OPTIONS
 connect_options OPTIONS;
 // callback
-Callback CALLBACK(CLIENT, OPTIONS, TOPICS, 7);
+Callback CALLBACK(CLIENT, OPTIONS, TOPICS, 8);
 
 // variable for screen
 Screen screen;
@@ -63,21 +64,34 @@ bool setup()
         return false;
     }
 
+    // publishing the default values
+    // {
+    //    using namespace topics::parameters;
+    //    _publish(TOPICS[0], xCenter);
+    //    _publish(TOPICS[1], yCenter);
+    //    _publish(TOPICS[2], xRadius);
+    //    _publish(TOPICS[3], yRadius);
+    //    _publish(TOPICS[4], thickness);
+    //    _publish(TOPICS[5], isCircle);
+    //    _publish(TOPICS[6], isBrightfield);
+    //    _publish(TOPICS[7], isGUIControl);
+    // }
+
     return true;
 }
 
 bool loop()
 {
     // retrieving stored parameters from MQTT
-    int _xCenter, _yCenter,
-        _xRadius, _yRadius,
-        _thickness,
-        _ringColour = 255 * (int) mqtt::topics::parameters::isBrightfield;
+    int _xCenter = 0, _yCenter = 0,
+        _xRadius = 960, _yRadius = 540,
+        _thickness = 3,
+        _ringColour = 255 * (int) topics::parameters::isBrightfield;
     bool _isCircle = false;
 
-    if (mqtt::topics::parameters::isGUIControl)
+    if (topics::parameters::isGUIControl)
     {
-        using namespace mqtt::topics::parameters;
+        using namespace topics::parameters;
         _xCenter = xCenter;
         _yCenter = yCenter;
         _xRadius = xRadius;
@@ -120,7 +134,7 @@ bool loop()
     ellipse(frame);
 
     // imshow("hi", cameraImage);
-    return (screen.send(frame) && (waitKey(1) < 0));
+    return (/* screen.send(frame) && */(waitKey(1) < 0));
 }
 
 void teardown()

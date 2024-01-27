@@ -30,8 +30,8 @@
  *    Frank Pagliughi - initial implementation and documentation
  *******************************************************************************/
 
-#ifndef MQTTPP_H
-#define MQTTPP_H
+#ifndef MQTTPPSub_H
+#define MQTTPPSub_H
 
 #include <iostream>
 #include <cstdlib>
@@ -40,7 +40,7 @@
 #include <cctype>
 #include <thread>
 #include <chrono>
-#include "mqtt/async_client.h"s
+#include "mqtt/async_client.h"
 
 namespace mqtt {
     const int	QoS = 1;
@@ -56,7 +56,7 @@ namespace mqtt {
 
             static bool isCircle = false,
                     isBrightfield = true,
-                    isGUIControl = false;
+                    isGUIControl = true;
         }
     }
 
@@ -173,9 +173,9 @@ namespace mqtt {
             std::string topic = msg->get_topic();
             std::string payload = msg->to_string();
 
-            std::cout << "Message arrived!" << std::endl;
-            std::cout << "\ttopic: '" << topic << "'" << std::endl;
-            std::cout << "\tpayload: '" << payload << "'\n" << std::endl;
+            //std::cout << "Message arrived!" << std::endl;
+            //std::cout << "\ttopic: '" << topic << "'" << std::endl;
+            //std::cout << "\tpayload: '" << payload << "'\n" << std::endl;
 
             if (topic == "parameters/xCenter")
                 topics::parameters::xCenter = std::stoi(payload);
@@ -198,8 +198,7 @@ namespace mqtt {
         void delivery_complete(delivery_token_ptr token) override {}
 
     public:
-        Callback(async_client &CLIENT, connect_options &connOpts, const std::string *topics,
-                 const int numtopics)
+        Callback(async_client &CLIENT, connect_options &connOpts, const std::string *topics, const int numtopics)
                 : nretry_(0),
                   CLIENT(CLIENT),
                   CONN_OPTS(connOpts),
@@ -210,4 +209,4 @@ namespace mqtt {
 
 }
 
-#endif // MQTTPP_H
+#endif // MQTTPPSub_H
