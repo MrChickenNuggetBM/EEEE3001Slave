@@ -90,6 +90,25 @@ namespace mqtt {
         action_listener(const std::string &name) : name_(name) {}
     };
 
+    class delivery_action_listener : public action_listener {
+        atomic<bool> done_;
+
+        void on_failure(const token &tok) override {
+            action_listener::on_failure(tok);
+            done_ = true;
+        }
+
+        void on_success(const token &tok) override {
+            action_listener::on_success(tok);
+            done_ = true;
+        }
+
+    public:
+        delivery_action_listener() : done_(false) {}
+
+        bool is_done() const { return done_; }
+    };
+
 /////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -195,7 +214,10 @@ namespace mqtt {
                 topics::parameters::isGUIControl = (payload == "true");
         }
 
-        void delivery_complete(delivery_token_ptr token) override {}
+        void delivery_complete(delivery_token_ptr token) override {
+            cout << "\tDelivery complete for token: "
+                 << (tok ? tok->get_message_id() : -1) << endl;
+        }
 
     public:
         Callback(async_client &CLIENT, connect_options &connOpts, const std::string *topics, const int numtopics)
