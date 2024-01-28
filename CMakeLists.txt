@@ -13,7 +13,7 @@ set(SOURCE_FILES
     main.h
     include/Ellipse.h
     include/MQTT++Sub.h
-    include/MQTT++Pub.h
+    # include/MQTT++Pub.h
     include/Screen.h
     
     main.cpp

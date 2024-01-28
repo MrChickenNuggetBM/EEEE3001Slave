@@ -17,10 +17,7 @@ const string SERVER_ADDRESS("mqtt://localhost:1883");
 async_client CLIENT(SERVER_ADDRESS, "raspberrypi");
 
 // connection OPTIONS
-connect_options OPTIONS = connect_options_builder()
-        .clean_session()
-        .will(mqtt::message(TOPIC, LWT_PAYLOAD, strlen(LWT_PAYLOAD), QOS, false))
-        .finalize();
+connect_options OPTIONS;
 
 // callback
 Callback CALLBACK(CLIENT, OPTIONS, TOPICS, 8);
@@ -69,31 +66,36 @@ bool setup()
         return false;
     }
 
+    cout << "connected!" << endl;
+
     // publishing the default values
-    // {
-    //    using namespace topics::parameters;
-    //    _publish(TOPICS[0], xCenter);
-    //    _publish(TOPICS[1], yCenter);
-    //    _publish(TOPICS[2], xRadius);
-    //    _publish(TOPICS[3], yRadius);
-    //    _publish(TOPICS[4], thickness);
-    //    _publish(TOPICS[5], isCircle);
-    //    _publish(TOPICS[6], isBrightfield);
-    //    _publish(TOPICS[7], isGUIControl);
-    // }
+    {
+        using namespace topics::parameters;
+        _publish(TOPICS[0], to_string(xCenter), CLIENT);
+        _publish(TOPICS[1], to_string(yCenter), CLIENT);
+        _publish(TOPICS[2], to_string(xRadius), CLIENT);
+        _publish(TOPICS[3], to_string(yRadius), CLIENT);
+        _publish(TOPICS[4], to_string(thickness), CLIENT);
+        _publish(TOPICS[5], isCircle ? "true" : "false", CLIENT);
+        _publish(TOPICS[6], isBrightfield ? "true" : "false", CLIENT);
+        _publish(TOPICS[7], isGUIControl ? "true" : "false", CLIENT);
+    }
+
+    cout << "published!" << endl;
 
     return true;
 }
 
 bool loop()
 {
-    // retrieving stored parameters from MQTT
     int _xCenter = 0, _yCenter = 0,
         _xRadius = 960, _yRadius = 540,
         _thickness = 3,
         _ringColour = 255 * (int) topics::parameters::isBrightfield;
     bool _isCircle = false;
 
+    // if GUIControl
+    // retrieving stored parameters from MQTT
     if (topics::parameters::isGUIControl)
     {
         using namespace topics::parameters;
