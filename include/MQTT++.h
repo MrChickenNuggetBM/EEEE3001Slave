@@ -190,9 +190,9 @@ class Callback : public virtual callback,
         int i = 0;
         for (std::string topic = TOPICS[i]; i < numTopics; topic = TOPICS[++i])
         {
-            std::cout << "\nSubscribing to topic '" << topic << "'" << std::endl
+            std::cout << "Subscribing to topic '" << topic << "'" << std::endl
                       << "\tfor client " << CLIENT.get_client_id() << " using QoS" << QoS << std::endl
-                      << std::flush;
+                      << std::endl << std::flush;
 
             CLIENT.subscribe(topic, QoS, nullptr, SUB_LISTENER);
         }
@@ -241,8 +241,17 @@ class Callback : public virtual callback,
 
     void delivery_complete(delivery_token_ptr token) override
     {
-        std::cout << "\tDelivery complete for token: "
-                  << (token ? token->get_message_id() : -1) << std::endl;
+        if(!token)
+        {
+            std::cout << "Delivery complete for token: -1"
+                      << std::endl << std::flush;
+            return;
+        }
+
+        std::cout << "Delivery complete for token: " << token->get_message_id()
+                  << std::endl << std::flush;
+
+        return;
     }
 
 public:
@@ -256,23 +265,17 @@ public:
 };
 
 // function to publish
-void _publish(std::string topic, std::string payload, async_client& client)
+std::shared_ptr<delivery_token> _publish(std::string topic, std::string payload, async_client& client)
 {
     const char *_topic = topic.data();
     const char *_payload = payload.data();
 
-    std::cout << _topic << std::endl
-              << _payload << std::endl;
+    auto token = client.publish(_topic, _payload, strlen(_payload), QoS, false);
 
-    // delivery_action_listener deliveryListener("Publication");
-    // message_ptr pubmsg = make_message(topic, payload);
-    // std::cout << "start" << std::endl;
-    // client.publish(pubmsg, nullptr, deliveryListener);
-    // std::cout << "end" << std::endl;
+    std::cout << std::endl << "Delivering: " << _topic << " = " << _payload << " [" << token->get_message_id() << "]"
+    << std::endl << std::flush;
 
-    client.publish(_topic, _payload, strlen(_payload), QoS, false)
-        ->wait_for(std::chrono::seconds(10));
-    std::cout << "OK" << std::endl;
+    return token;
 }
 }
 

@@ -57,7 +57,8 @@ bool setup()
     try
     {
         cout << "Connecting to the MQTT server..." << flush;
-        CLIENT.connect(OPTIONS, nullptr, CALLBACK);
+        auto connectToken = CLIENT.connect(OPTIONS, nullptr, CALLBACK);
+        connectToken->wait_for(std::chrono::seconds(10));
     }
     catch (const mqtt::exception& exc)
     {
@@ -66,22 +67,38 @@ bool setup()
         return false;
     }
 
-    cout << "connected!" << endl;
-
     // publishing the default values
+    try
     {
         using namespace topics::parameters;
-        _publish(TOPICS[0], to_string(xCenter), CLIENT);
-        _publish(TOPICS[1], to_string(yCenter), CLIENT);
-        _publish(TOPICS[2], to_string(xRadius), CLIENT);
-        _publish(TOPICS[3], to_string(yRadius), CLIENT);
-        _publish(TOPICS[4], to_string(thickness), CLIENT);
-        _publish(TOPICS[5], isCircle ? "true" : "false", CLIENT);
-        _publish(TOPICS[6], isBrightfield ? "true" : "false", CLIENT);
-        _publish(TOPICS[7], isGUIControl ? "true" : "false", CLIENT);
-    }
+        auto token = _publish(TOPICS[0], to_string(xCenter), CLIENT);
+        token->wait_for(std::chrono::seconds(10));
 
-    cout << "published!" << endl;
+        token = _publish(TOPICS[1], to_string(yCenter), CLIENT);
+        token->wait_for(std::chrono::seconds(10));
+
+        token = _publish(TOPICS[2], to_string(xRadius), CLIENT);
+        token->wait_for(std::chrono::seconds(10));
+
+        token = _publish(TOPICS[3], to_string(yRadius), CLIENT);
+        token->wait_for(std::chrono::seconds(10));
+
+        token = _publish(TOPICS[4], to_string(thickness), CLIENT);
+        token->wait_for(std::chrono::seconds(10));
+
+        token = _publish(TOPICS[5], isCircle ? "true" : "false", CLIENT);
+        token->wait_for(std::chrono::seconds(10));
+
+        token = _publish(TOPICS[6], isBrightfield ? "true" : "false", CLIENT);
+        token->wait_for(std::chrono::seconds(10));
+
+        token = _publish(TOPICS[7], isGUIControl ? "true" : "false", CLIENT);
+        token->wait_for(std::chrono::seconds(10));
+    }
+    catch (const mqtt::exception& exc)
+    {
+        std::cerr << "Error during publish" << exc.what() << std::endl;
+    }
 
     return true;
 }
