@@ -56,7 +56,7 @@ static int xCenter = 0,
            yCenter = 0,
            xRadius = 960,
            yRadius = 540,
-           thickness = 3;
+           thickness = 5;
 
 static bool isCircle = false,
             isBrightfield = true,

@@ -94,3 +94,37 @@ Continuing...
 Program terminated with signal SIGSEGV, Segmentation fault.
 Debugger finished with status 0
 
+
+-- Subject: A start job for unit hostapd.service has begun execution
+-- A start job for unit hostapd.service has begun execution.
+Jan 28 15:01:51 raspberrypi hostapd[615]: Configuration file: /etc/hostapd/hostapd.conf
+Jan 28 15:01:51 raspberrypi hostapd[615]: uap0: Could not connect to kernel driver
+Jan 28 15:01:51 raspberrypi hostapd[615]: Using interface uap0 with hwaddr dc:a6:32:23:1a:d5 and ssid "MGhali"
+Jan 28 15:01:51 raspberrypi hostapd[615]: uap0: interface state UNINITIALIZED->ENABLED
+Jan 28 15:01:51 raspberrypi hostapd[615]: uap0: AP-ENABLED
+-- Subject: A start job for unit hostapd.service has finished successfully
+-- A start job for unit hostapd.service has finished successfully.
+Jan 28 15:02:25 raspberrypi sudo[777]:  mohamed : TTY=tty1 ; PWD=/home/mohamed/EEEE3001/build ; USER=root ; COMMAND=/usr/sbin/service hostapd start
+Jan 28 15:03:16 raspberrypi sudo[1095]:  mohamed : TTY=pts/0 ; PWD=/home/mohamed/EEEE3001/build ; USER=root ; COMMAND=/usr/sbin/service hostapd restart
+-- Subject: A stop job for unit hostapd.service has begun execution
+-- A stop job for unit hostapd.service has begun execution.
+Jan 28 15:03:17 raspberrypi systemd[1]: hostapd.service: Succeeded.
+-- The unit hostapd.service has successfully entered the 'dead' state.
+-- Subject: A stop job for unit hostapd.service has finished
+-- A stop job for unit hostapd.service has finished.
+-- Subject: A start job for unit hostapd.service has begun execution
+-- A start job for unit hostapd.service has begun execution.
+Jan 28 15:03:17 raspberrypi hostapd[1101]: Configuration file: /etc/hostapd/hostapd.conf
+Jan 28 15:03:17 raspberrypi hostapd[1101]: uap0: Could not connect to kernel driver
+Jan 28 15:03:17 raspberrypi hostapd[1101]: Using interface uap0 with hwaddr dc:a6:32:23:1a:d5 and ssid "MGhali"
+Jan 28 15:03:17 raspberrypi hostapd[1101]: uap0: interface state UNINITIALIZED->ENABLED
+Jan 28 15:03:17 raspberrypi hostapd[1101]: uap0: AP-ENABLED
+-- Subject: A start job for unit hostapd.service has finished successfully
+-- A start job for unit hostapd.service has finished successfully.
+Jan 28 15:03:24 raspberrypi hostapd[1102]: uap0: STA e8:f4:08:c3:96:91 IEEE 802.11: associated
+Jan 28 15:03:24 raspberrypi hostapd[1102]: uap0: STA e8:f4:08:c3:96:91 RADIUS: starting accounting session 244ECACF7B59B416
+Jan 28 15:03:24 raspberrypi hostapd[1102]: uap0: STA e8:f4:08:c3:96:91 WPA: pairwise key handshake completed (RSN)
+Jan 28 15:03:32 raspberrypi hostapd[1102]: uap0: STA e8:f4:08:c3:96:91 IEEE 802.11: disassociated
+Jan 28 15:03:32 raspberrypi hostapd[1102]: uap0: STA e8:f4:08:c3:96:91 IEEE 802.11: disassociated
+Jan 28 15:03:32 raspberrypi hostapd[1102]: uap0: STA e8:f4:08:c3:96:91 IEEE 802.11: disassociated
+

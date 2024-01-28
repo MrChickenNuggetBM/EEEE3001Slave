@@ -71,28 +71,28 @@ bool setup()
     try
     {
         using namespace topics::parameters;
-        auto token = _publish(TOPICS[0], to_string(xCenter), CLIENT);
+        auto token = _publish("parameters/xCenterSet", "0", CLIENT);
         token->wait_for(std::chrono::seconds(10));
 
-        token = _publish(TOPICS[1], to_string(yCenter), CLIENT);
+        token = _publish("parameters/yCenterSet", "0", CLIENT);
         token->wait_for(std::chrono::seconds(10));
 
-        token = _publish(TOPICS[2], to_string(xRadius), CLIENT);
+        token = _publish("parameters/xRadiusSet", "960", CLIENT);
         token->wait_for(std::chrono::seconds(10));
 
-        token = _publish(TOPICS[3], to_string(yRadius), CLIENT);
+        token = _publish("parameters/yRadiusSet", "540", CLIENT);
         token->wait_for(std::chrono::seconds(10));
 
-        token = _publish(TOPICS[4], to_string(thickness), CLIENT);
+        token = _publish("parameters/thicknessSet", "5", CLIENT);
         token->wait_for(std::chrono::seconds(10));
 
-        token = _publish(TOPICS[5], isCircle ? "true" : "false", CLIENT);
+        token = _publish("parameters/isCircleSet", "false", CLIENT);
         token->wait_for(std::chrono::seconds(10));
 
-        token = _publish(TOPICS[6], isBrightfield ? "true" : "false", CLIENT);
+        token = _publish("parameters/isBrightfieldSet", "true", CLIENT);
         token->wait_for(std::chrono::seconds(10));
 
-        token = _publish(TOPICS[7], isGUIControl ? "true" : "false", CLIENT);
+        token = _publish("parameters/isGUIControlSet", "false", CLIENT);
         token->wait_for(std::chrono::seconds(10));
     }
     catch (const mqtt::exception& exc)
@@ -158,7 +158,7 @@ bool loop()
     ellipse(frame);
 
     // imshow("hi", cameraImage);
-    return (/* screen.send(frame) && */(waitKey(1) < 0));
+    return (screen.send(frame) && (waitKey(1) < 0));
 }
 
 void teardown()
