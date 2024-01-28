@@ -31,14 +31,14 @@ bool setup()
     system("setterm -cursor off;clear");
 
     // set up the camera
-    // if (!videoCapture.isOpened())
-    // {
-    //     cerr << "Error: Could not open camera" << endl;
-    //     return false;
-    // }
+    if (!videoCapture.isOpened())
+    {
+        cerr << "Error: Could not open camera" << endl;
+        return false;
+    }
 
-    // videoCapture.set(CAP_PROP_FRAME_WIDTH, 960);
-    // videoCapture.set(CAP_PROP_FRAME_HEIGHT, 540);
+    videoCapture.set(CAP_PROP_FRAME_WIDTH, 480);
+    videoCapture.set(CAP_PROP_FRAME_HEIGHT, 270);
 
     // configure code termination
     atexit(teardown);
@@ -71,28 +71,28 @@ bool setup()
     try
     {
         using namespace topics::parameters;
-        auto token = _publish("parameters/xCenterSet", "0", CLIENT);
+        auto token = publishMessage("parameters/xCenterSet", "0", CLIENT);
         token->wait_for(std::chrono::seconds(10));
 
-        token = _publish("parameters/yCenterSet", "0", CLIENT);
+        token = publishMessage("parameters/yCenterSet", "0", CLIENT);
         token->wait_for(std::chrono::seconds(10));
 
-        token = _publish("parameters/xRadiusSet", "960", CLIENT);
+        token = publishMessage("parameters/xRadiusSet", "960", CLIENT);
         token->wait_for(std::chrono::seconds(10));
 
-        token = _publish("parameters/yRadiusSet", "540", CLIENT);
+        token = publishMessage("parameters/yRadiusSet", "540", CLIENT);
         token->wait_for(std::chrono::seconds(10));
 
-        token = _publish("parameters/thicknessSet", "5", CLIENT);
+        token = publishMessage("parameters/thicknessSet", "5", CLIENT);
         token->wait_for(std::chrono::seconds(10));
 
-        token = _publish("parameters/isCircleSet", "false", CLIENT);
+        token = publishMessage("parameters/isCircleSet", "false", CLIENT);
         token->wait_for(std::chrono::seconds(10));
 
-        token = _publish("parameters/isBrightfieldSet", "true", CLIENT);
+        token = publishMessage("parameters/isBrightfieldSet", "true", CLIENT);
         token->wait_for(std::chrono::seconds(10));
 
-        token = _publish("parameters/isGUIControlSet", "false", CLIENT);
+        token = publishMessage("parameters/isGUIControlSet", "false", CLIENT);
         token->wait_for(std::chrono::seconds(10));
     }
     catch (const mqtt::exception& exc)
@@ -105,6 +105,9 @@ bool setup()
 
 bool loop()
 {
+    Mat bfpImage;
+    videoCapture.read(bfpImage);
+
     int _xCenter = 0, _yCenter = 0,
         _xRadius = 960, _yRadius = 540,
         _thickness = 3,
@@ -123,10 +126,10 @@ bool loop()
         _thickness = thickness;
         _isCircle = isCircle;
     }
-    // Mat cameraImage;
-    // videoCapture.read(cameraImage);
+    else {}
 
-    Mat frame(
+    // define the ringImage frame
+    Mat ringImage(
         1080,
         1920,
         CV_8UC4,
@@ -138,6 +141,7 @@ bool loop()
         )
     );
 
+    // define the ellipse
     Ellipse ellipse(
         Point2f(
             960 + _xCenter,
@@ -155,10 +159,19 @@ bool loop()
         ),
         _thickness
     );
-    ellipse(frame);
+
+    // put the ellipse in ringImage
+    ellipse(ringImage);
+
+    // send images
+    auto token = publishImage("images/backfocalplane", bfpImage, CLIENT);
+    token->wait_for(std::chrono::seconds(10));
+
+    token = publishImage("images/ring", ringImage, CLIENT);
+    token->wait_for(std::chrono::seconds(10));
 
     // imshow("hi", cameraImage);
-    return (screen.send(frame) && (waitKey(1) < 0));
+    return (screen.send(ringImage) && (waitKey(1) < 0));
 }
 
 void teardown()

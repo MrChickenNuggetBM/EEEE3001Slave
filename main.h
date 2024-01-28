@@ -18,7 +18,7 @@ using namespace std;
 using namespace mqtt;
 using namespace cv;
 
-// VideoCapture videoCapture(0);
+VideoCapture videoCapture(0);
 
 bool setup();
 bool loop();

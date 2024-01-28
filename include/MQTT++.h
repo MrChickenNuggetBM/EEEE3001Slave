@@ -264,8 +264,8 @@ public:
           numTopics(numtopics) {}
 };
 
-// function to publish
-std::shared_ptr<delivery_token> _publish(std::string topic, std::string payload, async_client& client)
+// function to publish messages
+std::shared_ptr<delivery_token> publishMessage(std::string topic, std::string payload, async_client& client)
 {
     const char *_topic = topic.data();
     const char *_payload = payload.data();
@@ -273,6 +273,22 @@ std::shared_ptr<delivery_token> _publish(std::string topic, std::string payload,
     auto token = client.publish(_topic, _payload, strlen(_payload), QoS, false);
 
     std::cout << std::endl << "Delivering: " << _topic << " = " << _payload << " [" << token->get_message_id() << "]"
+    << std::endl << std::flush;
+
+    return token;
+}
+
+// function to publish images
+std::shared_ptr<delivery_token> publishImage(std::string topic, cv::Mat frame, async_client& client)
+{
+    const char *_topic = topic.data();
+
+    std::vector<uchar> frameBytes;
+    cv::imencode(".jpg", frame, frameBytes);
+    auto msg = make_message(_topic, frameBytes.data(), frameBytes.size());
+    auto token = client.publish(msg);
+
+    std::cout << std::endl << "Delivering: " << _topic << " [" << token->get_message_id() << "]"
     << std::endl << std::flush;
 
     return token;
