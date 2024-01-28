@@ -1,4 +1,4 @@
-// Modified from async_subscribe.cpp
+// Modified from async_subscribe.cpp && async_publish.cpp
 //
 // This is a Paho MQTT C++ client, sample application.
 //
@@ -229,6 +229,18 @@ namespace mqtt {
                   numTopics(numtopics) {}
     };
 
+    // function to publish
+    void _publish(std::string topic, std::string payload)
+    {
+        delivery_action_listener deliveryListener;
+        pubmsg = make_message(topic, payload);
+        client.publish(pubmsg, nullptr, deliveryListener);
+
+        while (!deliveryListener.is_done()) {
+            this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
+        cout << "OK" << endl;
+    }
 }
 
 #endif // MQTTPPSub_H

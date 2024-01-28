@@ -15,8 +15,13 @@ const string TOPICS[]  =
 // mqtt broker definition
 const string SERVER_ADDRESS("mqtt://localhost:1883");
 async_client CLIENT(SERVER_ADDRESS, "raspberrypi");
+
 // connection OPTIONS
-connect_options OPTIONS;
+connect_options OPTIONS = connect_options_builder()
+        .clean_session()
+        .will(mqtt::message(TOPIC, LWT_PAYLOAD, strlen(LWT_PAYLOAD), QOS, false))
+        .finalize();
+
 // callback
 Callback CALLBACK(CLIENT, OPTIONS, TOPICS, 8);
 
