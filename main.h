@@ -4,6 +4,7 @@
 #include "include/Ellipse.h"
 #include "include/Screen.h"
 #include "include/MQTT++.h"
+#include <pigpio.h>
 #include <iostream>
 #include <termios.h>
 #include <unistd.h>

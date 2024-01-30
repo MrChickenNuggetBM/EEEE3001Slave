@@ -23,7 +23,7 @@ connect_options OPTIONS;
 Callback CALLBACK(CLIENT, OPTIONS, TOPICS, 8);
 
 // variable for screen
-Screen screen;
+Screen screen("/dev/fb1");
 
 bool setup()
 {
@@ -99,6 +99,12 @@ bool setup()
     {
         std::cerr << "Error during publish" << exc.what() << std::endl;
     }
+
+    if (gpioInitialise() < 0) return false;
+    gpioSetMode(12, PI_OUTPUT);
+    gpioSetPWMfrequency(12, 1000);
+    gpioSetPWMrange(12, 255);
+    gpioPWM(12, 255);
 
     return true;
 }

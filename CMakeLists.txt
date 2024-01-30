@@ -34,6 +34,7 @@ endif()
 find_package(PahoMqttCpp REQUIRED)
 find_library(PAHO_MQTT_C_LIB paho-mqtt3c REQUIRED)
 find_library(PAHO_MQTT_AS_LIB paho-mqtt3as REQUIRED)
+find_library(PIGPIO_LIBRARY NAMES pigpio)
 
 if(PahoMqttCpp_FOUND)
 	message(STATUS "Found PahoMqttCpp package")
@@ -50,4 +51,4 @@ message(STATUS ${PAHO_MQTT_AS_LIB})
 
 # Link OpenCV and Paho MQTT libraries
 add_executable(${PROJECT_NAME} ${SOURCE_FILES}) # Executable target
-target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} paho-mqttpp3 paho-mqtt3c)
+target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} ${PIGPIO_LIBRARY} paho-mqttpp3 paho-mqtt3c)
