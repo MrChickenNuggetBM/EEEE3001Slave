@@ -13,6 +13,8 @@
 #include <chrono>
 #include <thread>
 
+#define PWM_PIN 12
+
 using ullint = unsigned long long int;
 
 using namespace std;

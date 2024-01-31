@@ -62,6 +62,12 @@ static bool isCircle = false,
             isBrightfield = true,
             isGUIControl = true;
 }
+
+namespace brightness
+{
+int dutyCycle = 50;
+bool isAutomaticBrightness = false;
+}
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -221,6 +227,9 @@ class Callback : public virtual callback,
         //std::cout << "\ttopic: '" << topic << "'" << std::endl;
         //std::cout << "\tpayload: '" << payload << "'\n" << std::endl;
 
+        std::cout << topic << ": " << payload << std::endl;
+
+
         if (topic == "parameters/xCenter")
             topics::parameters::xCenter = std::stoi(payload);
         else if (topic == "parameters/yCenter")
@@ -237,6 +246,10 @@ class Callback : public virtual callback,
             topics::parameters::isBrightfield = (payload == "true");
         else if (topic == "parameters/isGUIControl")
             topics::parameters::isGUIControl = (payload == "true");
+        else if (topic == "brightness/isAutomaticBrightness")
+            topics::brightness::isAutomaticBrightness = (payload == "true");
+        else if (topic == "brightness/dutyCycle")
+            topics::brightness::dutyCycle = std::stoi(payload);
     }
 
     void delivery_complete(delivery_token_ptr token) override
@@ -272,8 +285,9 @@ std::shared_ptr<delivery_token> publishMessage(std::string topic, std::string pa
 
     auto token = client.publish(_topic, _payload, strlen(_payload), QoS, false);
 
-    std::cout << std::endl << "Delivering: " << _topic << " = " << _payload << " [" << token->get_message_id() << "]"
-    << std::endl << std::flush;
+    // std::cout << std::endl << "Delivering: " << _topic << " = " << _payload << " [" << token->get_message_id() << "]"
+    // << std::endl << std::flush;
+    // << std::endl << std::flush;
 
     return token;
 }
@@ -288,8 +302,8 @@ std::shared_ptr<delivery_token> publishImage(std::string topic, cv::Mat frame, a
     auto msg = make_message(_topic, frameBytes.data(), frameBytes.size());
     auto token = client.publish(msg);
 
-    std::cout << std::endl << "Delivering: " << _topic << " [" << token->get_message_id() << "]"
-    << std::endl << std::flush;
+    // std::cout << std::endl << "Delivering: " << _topic << " [" << token->get_message_id() << "]"
+    // << std::endl << std::flush;
 
     return token;
 }
