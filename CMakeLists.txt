@@ -12,8 +12,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(SOURCE_FILES
     main.h
     include/Ellipse.h
-    include/MQTT++.h
     include/Screen.h
+    include/HoughTransform.h
+    include/MQTT++.h
     
     main.cpp
     src/Ellipse.cpp

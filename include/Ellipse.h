@@ -1,5 +1,5 @@
-#ifndef ELLIPSE_H
-#define ELLIPSE_H
+#ifndef ELLIPSE_HPP
+#define ELLIPSE_HPP
 
 #include <opencv2/opencv.hpp>
 
@@ -55,4 +55,4 @@ public:
 	void operator()(const cv::Mat& frame) const;
 };
 
-#endif // ELLIPSE_H
+#endif // ELLIPSE_HPP

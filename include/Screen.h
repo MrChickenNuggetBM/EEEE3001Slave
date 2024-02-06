@@ -1,5 +1,5 @@
-#ifndef SCREEN_H
-#define SCREEN_H
+#ifndef SCREEN_HPP
+#define SCREEN_HPP
 
 #include <iostream>
 #include <fcntl.h>
@@ -28,4 +28,4 @@ public:
     bool send(cv::Mat& image) const;
 };
 
-#endif // SCREEN_H
+#endif // SCREEN_HPP

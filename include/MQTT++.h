@@ -30,8 +30,8 @@
  *    Frank Pagliughi - initial implementation and documentation
  *******************************************************************************/
 
-#ifndef MQTTPPSub_H
-#define MQTTPPSub_H
+#ifndef MQTTPP_HPP
+#define MQTTPP_HPP
 
 #include <iostream>
 #include <cstdlib>
@@ -309,4 +309,4 @@ std::shared_ptr<delivery_token> publishImage(std::string topic, cv::Mat frame, a
 }
 }
 
-#endif // MQTTPPSub_H
+#endif // MQTTPP_HPP
