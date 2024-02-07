@@ -4,8 +4,8 @@ const string TOPICS[]  =
 {
     "parameters/xCenter",
     "parameters/yCenter",
-    "parameters/xRadius",
-    "parameters/yRadius",
+    "parameters/xDiameter",
+    "parameters/yDiameter",
     "parameters/thickness",
     "parameters/isCircle",
     "parameters/isBrightfield",
@@ -27,6 +27,10 @@ Callback CALLBACK(CLIENT, OPTIONS, TOPICS, 11);
 
 // variable for screen
 Screen screen("/dev/fb1");
+// screen dimensions
+const int
+    sWidth = screen.getWidth(),
+    sHeight = screen.getHeight();
 
 bool setup()
 {
@@ -44,7 +48,8 @@ bool setup()
     videoCapture.set(CAP_PROP_FRAME_HEIGHT, 270);
 
     // set the PWM signal
-    if (gpioInitialise() < 0) return false;
+    if (gpioInitialise() < 0)
+        return false;
     gpioSetMode(PWM_PIN, PI_OUTPUT);
     gpioSetPWMfrequency(PWM_PIN, 1000);
     gpioSetPWMrange(PWM_PIN, 100);
@@ -87,19 +92,19 @@ bool setup()
         token = publishMessage("parameters/yCenterSet", "0", CLIENT);
         token->wait_for(std::chrono::seconds(10));
 
-        token = publishMessage("parameters/xRadiusSet", "960", CLIENT);
+        token = publishMessage("parameters/xDiameterSet", "33", CLIENT);
         token->wait_for(std::chrono::seconds(10));
 
-        token = publishMessage("parameters/yRadiusSet", "540", CLIENT);
+        token = publishMessage("parameters/yDiameterSet", "60", CLIENT);
         token->wait_for(std::chrono::seconds(10));
 
-        token = publishMessage("parameters/thicknessSet", "5", CLIENT);
+        token = publishMessage("parameters/thicknessSet", "150", CLIENT);
         token->wait_for(std::chrono::seconds(10));
 
         token = publishMessage("parameters/isCircleSet", "false", CLIENT);
         token->wait_for(std::chrono::seconds(10));
 
-        token = publishMessage("parameters/isBrightfieldSet", "true", CLIENT);
+        token = publishMessage("parameters/isBrightfieldSet", "false", CLIENT);
         token->wait_for(std::chrono::seconds(10));
 
         token = publishMessage("parameters/isGUIControlSet", "false", CLIENT);
@@ -121,25 +126,28 @@ bool setup()
 
 bool loop()
 {
+    // do computer vision -----------------------
     Mat bfpImage;
     videoCapture.read(bfpImage);
-
+    // replace default values
     int _xCenter = 0, _yCenter = 0,
-        _xRadius = 960, _yRadius = 540,
-        _thickness = 5,
-        _ringColour = 255 * (int) topics::parameters::isBrightfield,
+        _xDiameter = sWidth * 0.33,
+        _yDiameter = sHeight * 0.6,
+        _thickness = 150,
         _dutyCycle = 50;
     bool _isCircle = false;
+    // ------------------------------------------
 
     // if GUIControl
     // retrieving stored parameters from MQTT
     if (topics::parameters::isGUIControl)
     {
         using namespace topics::parameters;
-        _xCenter = xCenter;
-        _yCenter = yCenter;
-        _xRadius = xRadius;
-        _yRadius = yRadius;
+        // percentage
+        _xCenter = xCenter * sWidth / 100;
+        _yCenter = yCenter * sHeight / 100;
+        _xDiameter = xDiameter * sWidth / 100;
+        _yDiameter = yDiameter * sHeight / 100;
         _thickness = thickness;
         _isCircle = isCircle;
     }
@@ -149,17 +157,16 @@ bool loop()
     if (!topics::brightness::isAutomaticBrightness)
         _dutyCycle = topics::brightness::dutyCycle;
 
+    // if is brightfield, fill the circle
+    if (topics::parameters::isBrightfield)
+        _thickness = -1;
+
     // define the ringImage frame
     Mat ringImage(
         1080,
         1920,
         CV_8UC4,
-        Scalar(
-            255 - _ringColour,
-            255 - _ringColour,
-            255 - _ringColour,
-            255
-        )
+        Scalar(0, 0, 0, 0)
     );
 
     // define the ellipse
@@ -169,33 +176,31 @@ bool loop()
             540 + _yCenter
         ),
         Size2f(
-            2 * (_isCircle ? std::min(_xRadius, _yRadius) : _xRadius),
-            2 * (_isCircle ? std::min(_xRadius, _yRadius) : _yRadius)
+            _isCircle ? std::min(_xDiameter, _yDiameter) : _xDiameter,
+            _isCircle ? std::min(_xDiameter, _yDiameter) : _yDiameter
         ),
         0,
-        Scalar(
-            _ringColour,
-            _ringColour,
-            _ringColour
-        ),
+        Scalar(255, 255, 255, 255),
         _thickness
     );
 
     // put the ellipse in ringImage
     ellipse(ringImage);
 
-    // send images
-    auto token = publishImage("images/backfocalplane", bfpImage, CLIENT);
+    // send ring image to Node-RED Dashboard
+    auto token = publishImage("images/ring", ringImage, CLIENT);
     token->wait_for(std::chrono::seconds(10));
 
-    token = publishImage("images/ring", ringImage, CLIENT);
+    // send bfp image to Node-RED Dashboard
+    token = publishImage("images/backfocalplane", bfpImage, CLIENT);
     token->wait_for(std::chrono::seconds(10));
 
     // set the duty cycle
     gpioPWM(PWM_PIN, _dutyCycle);
 
     // imshow("hi", cameraImage);
-    return (screen.send(ringImage) && (waitKey(1) < 0));
+    screen.send(ringImage);
+    return (waitKey(1) < 0);
 }
 
 void teardown()
@@ -213,11 +218,14 @@ void teardown()
     // destroyAllWindows();
 
     // Disconnect
-    try {
+    try
+    {
         cout << "\nDisconnecting from the MQTT server..." << flush;
         CLIENT.disconnect()->wait();
         cout << "OK" << endl;
-    } catch (const mqtt::exception& exc) {
+    }
+    catch (const mqtt::exception& exc)
+    {
         cerr << exc << endl;
     }
 

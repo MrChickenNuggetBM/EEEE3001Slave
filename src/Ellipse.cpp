@@ -30,15 +30,15 @@ Ellipse& Ellipse::operator=(const Ellipse& assignedEllipse)
 Scalar Ellipse::getColour() const { return colour; }
 int Ellipse::getThickness() const { return thickness; }
 
-float Ellipse::getMinorRadius() const { return (size.height / 2.0f); }
+float Ellipse::getMinorAxis() const { return (size.height); }
 
-float Ellipse::getMajorRadius() const { return (size.width / 2.0f); }
+float Ellipse::getMajorAxis() const { return (size.width); }
 
 float Ellipse::getEccentricity() const {
-	float sqrMinRad(getMinorRadius());
+	float sqrMinRad(getMinorAxis() / 2);
     sqrMinRad *= sqrMinRad;
 
-	float sqrMajRad(getMajorRadius());
+	float sqrMajRad(getMajorAxis() / 2);
     sqrMajRad *= sqrMajRad;
 
 	return ((float)sqrt(1 - (sqrMinRad / sqrMajRad)));
@@ -46,7 +46,7 @@ float Ellipse::getEccentricity() const {
 
 Size2f Ellipse::getCenter() const { return(center); }
 
-float Ellipse::getArea() const { return((float)(CV_PI * getMinorRadius() * getMajorRadius())); }
+float Ellipse::getArea() const { return((float)(CV_PI * getMinorAxis() * getMajorAxis() / 4)); }
 
 void Ellipse::setColour(const Scalar& newColour)
 {
@@ -80,11 +80,11 @@ void Ellipse::setColour(const Scalar& newColour)
 	}
 }
 
-void Ellipse::setThickness(const int& newThickness) { thickness = max(1, newThickness); }
+void Ellipse::setThickness(const int& newThickness) { thickness = newThickness; }
 
-void Ellipse::setMinorRadius(float newMinorRadius) { size.width = newMinorRadius * 2; }
+void Ellipse::setMinorAxis(float newMinorAxis) { size.width = newMinorAxis; }
 
-void Ellipse::setMajorRadius(float newMajorRadius) { size.height = newMajorRadius * 2; }
+void Ellipse::setMajorAxis(float newMajorAxis) { size.height = newMajorAxis; }
 
 void Ellipse::setCenter(float newX, float newY) { center.x = newX; center.y = newY; }
 void Ellipse::setCenterX(float newX) { center.x = newX; }
@@ -95,8 +95,8 @@ bool Ellipse::isPointInside(const Point2f& point) const
 	Rect_<float> boundingRect = boundingRect2f();
 	if (!boundingRect.contains(point))
 		return(false);
-	float a = getMinorRadius();
-	float b = getMajorRadius();
+	float a = getMinorAxis() / 2;
+	float b = getMajorAxis() / 2;
 	float xDiff = point.x - center.x;
 	float yDiff = point.y - center.y;
 
