@@ -24,15 +24,16 @@ SOFTWARE.
 
 */
 
-#include "opencv2/highgui/highgui.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
-#include <iostream>
-#include <fstream>
+
 
 #ifndef COMPUTER_VISION_HPP
 #define COMPUTER_VISION_HPP
 
-#include <opencv2/opencv.hpp>
+#include "Ellipse.h"
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include <iostream>
+#include <fstream>
 
 struct ellipse_data {
 
@@ -48,5 +49,7 @@ struct ellipse_data {
 
     double orient;
 };
+
+std::vector<Ellipse> detectEllipses(cv::Mat src, unsigned int numEllipses = 1, int minimizedSize = 64);
 
 #endif // COMPUTER_VISION_HPP

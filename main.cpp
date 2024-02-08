@@ -129,6 +129,12 @@ bool loop()
     // do computer vision -----------------------
     Mat bfpImage;
     videoCapture.read(bfpImage);
+
+    /* // detect two ellipses on the image (outer and inner ring)
+    vector<Ellipse> ellipses = detectEllipses(bfpImage, 2);
+    for (unsigned int i = 0; i < ellipses.size(); i++)
+        ellipses[i](bfpImage); */
+
     // replace default values
     int _xCenter = 0, _yCenter = 0,
         _xDiameter = sWidth * 0.33,
