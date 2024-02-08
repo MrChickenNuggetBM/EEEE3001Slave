@@ -1,9 +1,10 @@
-#ifndef MAIN_H
-#define MAIN_H
+#ifndef MAIN_HPP
+#define MAIN_HPP
 
 #include "include/Ellipse.h"
 #include "include/Screen.h"
 #include "include/MQTT++.h"
+#include "include/ComputerVision.h"
 #include <pigpio.h>
 #include <iostream>
 #include <termios.h>
@@ -45,4 +46,4 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-#endif // MAIN_H
+#endif // MAIN_HPP

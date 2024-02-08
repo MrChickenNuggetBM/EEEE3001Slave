@@ -229,7 +229,6 @@ void teardown()
         cerr << exc << endl;
     }
 
-
     cout << endl
          << "Stopped after " << i << " frames" << endl;
 }
