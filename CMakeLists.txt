@@ -9,17 +9,12 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # List your source files manually, excluding undesired files
-set(SOURCE_FILES
+set(SOURCE_FILES_MAIN
     main.h
-    include/Ellipse.h
-    include/Screen.h
-    include/HoughTransform.h
-    include/MQTT++.h
-    
     main.cpp
-    src/Ellipse.cpp
-    src/Screen.cpp
 )
+file(GLOB SOURCE_FILES_H CONFIGURE_DEPENDS "include/*.h")
+file(GLOB SOURCE_FILES_CXX CONFIGURE_DEPENDS "src/*.cpp")
 
 include_directories("/usr/local/include")
 # Find OpenCV
@@ -51,5 +46,5 @@ message(STATUS ${PAHO_MQTT_C_LIB})
 message(STATUS ${PAHO_MQTT_AS_LIB})
 
 # Link OpenCV and Paho MQTT libraries
-add_executable(${PROJECT_NAME} ${SOURCE_FILES}) # Executable target
+add_executable(${PROJECT_NAME} ${SOURCE_FILES_MAIN} ${SOURCE_FILES_H} ${SOURCE_FILES_CXX}) # Executable target
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} ${PIGPIO_LIBRARY} paho-mqttpp3 paho-mqtt3c)
