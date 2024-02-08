@@ -54,9 +54,9 @@ namespace parameters
 {
 static int xCenter = 0,
            yCenter = 0,
-           xRadius = 960,
-           yRadius = 540,
-           thickness = 5;
+           xDiameter = 33,
+           yDiameter = 60,
+           thickness = 150;
 
 static bool isCircle = false,
             isBrightfield = true,
@@ -234,10 +234,10 @@ class Callback : public virtual callback,
             topics::parameters::xCenter = std::stoi(payload);
         else if (topic == "parameters/yCenter")
             topics::parameters::yCenter = std::stoi(payload);
-        else if (topic == "parameters/xRadius")
-            topics::parameters::xRadius = std::stoi(payload);
-        else if (topic == "parameters/yRadius")
-            topics::parameters::yRadius = std::stoi(payload);
+        else if (topic == "parameters/xDiameter")
+            topics::parameters::xDiameter = std::stoi(payload);
+        else if (topic == "parameters/yDiameter")
+            topics::parameters::yDiameter = std::stoi(payload);
         else if (topic == "parameters/thickness")
             topics::parameters::thickness = std::stoi(payload);
         else if (topic == "parameters/isCircle")

@@ -24,8 +24,8 @@ public:
 	// gets
 	cv::Scalar getColour() const;
 	int getThickness() const;
-	float getMinorRadius() const;
-	float getMajorRadius() const;
+	float getMinorAxis() const;
+	float getMajorAxis() const;
 	cv::Size2f getCenter() const;
 	float getEccentricity() const;
 	float getArea() const;
@@ -33,8 +33,8 @@ public:
 	// sets
 	void setColour(const cv::Scalar& newColour);
 	void setThickness(const int& newThickness);
-    void setMinorRadius(float newMinorRadius);
-    void setMajorRadius(float newMajorRadius);
+    void setMinorAxis(float newMinorAxis);
+    void setMajorAxis(float newMajorAxis);
     void setCenter(float newX, float newY);
     void setCenterX(float newX);
     void setCenterY(float newX);
