@@ -8,7 +8,7 @@ const string TOPICS[]  =
     "parameters/yDiameter",
     "parameters/thickness",
     "parameters/isCircle",
-    "parameters/isBrightfield",
+    "parameters/modality",
     "parameters/isGUIControl",
     "parameters/isGUIControl",
     "brightness/isAutomaticBrightness",
@@ -29,8 +29,8 @@ Callback CALLBACK(CLIENT, OPTIONS, TOPICS, 11);
 Screen screen("/dev/fb1");
 // screen dimensions
 const int
-    sWidth = screen.getWidth(),
-    sHeight = screen.getHeight();
+sWidth = screen.getWidth(),
+sHeight = screen.getHeight();
 
 bool setup()
 {
@@ -104,7 +104,7 @@ bool setup()
         token = publishMessage("parameters/isCircleSet", "false", CLIENT);
         token->wait_for(std::chrono::seconds(10));
 
-        token = publishMessage("parameters/isBrightfieldSet", "false", CLIENT);
+        token = publishMessage("parameters/modalitySet", "0", CLIENT);
         token->wait_for(std::chrono::seconds(10));
 
         token = publishMessage("parameters/isGUIControlSet", "false", CLIENT);
@@ -163,16 +163,29 @@ bool loop()
     if (!topics::brightness::isAutomaticBrightness)
         _dutyCycle = topics::brightness::dutyCycle;
 
-    // if is brightfield, fill the circle
-    if (topics::parameters::isBrightfield)
+    // define default colours
+    Scalar backgroundColour = Scalar(0, 0, 0, 0);
+    Scalar ringColour = Scalar(255, 255, 255, 255);
+
+    // if is (bright/dark)field, fill the circle
+    // if darkfield change the colour too
+    switch (topics::parameters::modality)
+    {
+    case 2:
+        backgroundColour = Scalar(255, 255, 255, 255);
+        ringColour = Scalar(0, 0, 0, 0);
+    case 1:
         _thickness = -1;
+    case 0:
+        break;
+    }
 
     // define the ringImage frame
     Mat ringImage(
         1080,
         1920,
         CV_8UC4,
-        Scalar(0, 0, 0, 0)
+        backgroundColour
     );
 
     // define the ellipse
@@ -186,7 +199,7 @@ bool loop()
             _isCircle ? std::min(_xDiameter, _yDiameter) : _yDiameter
         ),
         0,
-        Scalar(255, 255, 255, 255),
+        ringColour,
         _thickness
     );
 

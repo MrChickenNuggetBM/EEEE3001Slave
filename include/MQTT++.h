@@ -59,8 +59,9 @@ static int xCenter = 0,
            thickness = 150;
 
 static bool isCircle = false,
-            isBrightfield = true,
             isGUIControl = true;
+
+static char modality = 0;
 }
 
 namespace brightness
@@ -229,7 +230,6 @@ class Callback : public virtual callback,
 
         std::cout << topic << ": " << payload << std::endl;
 
-
         if (topic == "parameters/xCenter")
             topics::parameters::xCenter = std::stoi(payload);
         else if (topic == "parameters/yCenter")
@@ -242,8 +242,8 @@ class Callback : public virtual callback,
             topics::parameters::thickness = std::stoi(payload);
         else if (topic == "parameters/isCircle")
             topics::parameters::isCircle = (payload == "true");
-        else if (topic == "parameters/isBrightfield")
-            topics::parameters::isBrightfield = (payload == "true");
+        else if (topic == "parameters/modality")
+            topics::parameters::modality = std::stoi(payload);
         else if (topic == "parameters/isGUIControl")
             topics::parameters::isGUIControl = (payload == "true");
         else if (topic == "brightness/isAutomaticBrightness")
