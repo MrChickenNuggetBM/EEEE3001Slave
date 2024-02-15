@@ -127,13 +127,8 @@ bool setup()
 bool loop()
 {
     // do computer vision -----------------------
-    Mat bfpImage;
-    videoCapture.read(bfpImage);
-
-    /* // detect two ellipses on the image (outer and inner ring)
-    vector<Ellipse> ellipses = detectEllipses(bfpImage, 2);
-    for (unsigned int i = 0; i < ellipses.size(); i++)
-        ellipses[i](bfpImage); */
+    Mat cameraImage;
+    videoCapture.read(cameraImage);
 
     // replace default values
     int _xCenter = 0, _yCenter = 0,
@@ -180,14 +175,6 @@ bool loop()
         break;
     }
 
-    // define the ringImage frame
-    Mat ringImage(
-        1080,
-        1920,
-        CV_8UC4,
-        backgroundColour
-    );
-
     // define the ellipse
     Ellipse ellipse(
         Point2f(
@@ -203,15 +190,29 @@ bool loop()
         _thickness
     );
 
+    // define the ringImage frame
+    Mat ringImage(
+        1080,
+        1920,
+        CV_8UC4,
+        backgroundColour
+    ), ringImageBW;
     // put the ellipse in ringImage
     ellipse(ringImage);
+    // cvtColor(ringImage, ringImageBW, COLOR_BGRA2GRAY);
+
+    // detect two ellipses on the image (outer and inner ring)
+    // vector<Ellipse> ellipses = detectEllipses(ringImageBW, 2);
+    // cout << "I found: " << ellipses.size() << endl;
+    // for (unsigned int i = 0; i < ellipses.size(); i++)
+    //     ellipses[i](ringImage);
 
     // send ring image to Node-RED Dashboard
     auto token = publishImage("images/ring", ringImage, CLIENT);
     token->wait_for(std::chrono::seconds(10));
 
     // send bfp image to Node-RED Dashboard
-    token = publishImage("images/backfocalplane", bfpImage, CLIENT);
+    token = publishImage("images/camera", cameraImage, CLIENT);
     token->wait_for(std::chrono::seconds(10));
 
     // set the duty cycle
@@ -234,7 +235,7 @@ void teardown()
     gpioTerminate();
 
     videoCapture.release();
-    // destroyAllWindows();
+    destroyAllWindows();
 
     // Disconnect
     try
