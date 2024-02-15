@@ -1,5 +1,7 @@
 #include "main.h"
 
+const string TOPICS[] = {};
+
 // mqtt broker definition
 const string SERVER_ADDRESS("mqtt://192.168.2.1:1883");
 async_client CLIENT(SERVER_ADDRESS, "raspberrypi");
@@ -59,7 +61,7 @@ bool loop()
     videoCapture.read(cameraImage);
 
     // send image plane image to Node-RED Dashboard
-    token = publishImage("images/imagePlane", cameraImage, CLIENT);
+    auto token = publishImage("images/imagePlane", cameraImage, CLIENT);
     token->wait_for(std::chrono::seconds(10));
     return (waitKey(1) < 0);
 }
