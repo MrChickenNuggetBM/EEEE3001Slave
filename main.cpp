@@ -59,7 +59,7 @@ bool loop()
     videoCapture.read(cameraImage);
 
     // send image plane image to Node-RED Dashboard
-    token = publishImage("images/camera", cameraImage, CLIENT);
+    token = publishImage("images/imagePlane", cameraImage, CLIENT);
     token->wait_for(std::chrono::seconds(10));
     return (waitKey(1) < 0);
 }
