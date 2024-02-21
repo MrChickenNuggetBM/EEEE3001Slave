@@ -8,7 +8,7 @@ async_client CLIENT(SERVER_ADDRESS, "raspberrypi");
 // connection OPTIONS
 connect_options OPTIONS;
 // callback
-Callback CALLBACK(CLIENT, OPTIONS, TOPICS, 11);
+Callback CALLBACK(CLIENT, OPTIONS, TOPICS, 0);
 
 bool setup()
 {
@@ -22,8 +22,8 @@ bool setup()
         return false;
     }
 
-    videoCapture.set(CAP_PROP_FRAME_WIDTH, 960);
-    videoCapture.set(CAP_PROP_FRAME_HEIGHT, 540);
+    videoCapture.set(CAP_PROP_FRAME_WIDTH, 480);
+    videoCapture.set(CAP_PROP_FRAME_HEIGHT, 270);
 
     // configure code termination
     atexit(teardown);
