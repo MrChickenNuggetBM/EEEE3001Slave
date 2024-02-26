@@ -14,6 +14,7 @@ set(SOURCE_FILES_MAIN
     main.h
     main.cpp
 )
+
 file(GLOB SOURCE_FILES_H CONFIGURE_DEPENDS "include/*.h")
 file(GLOB SOURCE_FILES_CXX CONFIGURE_DEPENDS "src/*.cpp")
 

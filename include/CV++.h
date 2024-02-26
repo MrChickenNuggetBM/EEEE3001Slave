@@ -1,10 +1,7 @@
 #ifndef COMPUTER_VISION_HPP
 #define COMPUTER_VISION_HPP
 
-#include <opencv2/opencv.hpp>
-// #include "opencv2/highgui/highgui.hpp"
-// #include "opencv2/imgproc/imgproc.hpp"
-#include <iostream>
+#include "../include/MQTT++.h"
 #include <fstream>
 
 /* --------------------------------------------------------------------------------------------------------------------------------------------------
@@ -121,7 +118,7 @@ public:
     PaddedMat& operator=(const PaddedMat& other);
 
 private:
-    cv::Mat pad(const cv::Mat& mat)
+    cv::Mat pad(const cv::Mat& mat);
 };
 
 std::vector<Ellipse> detectEllipses(cv::Mat src, unsigned int numEllipses = 1, int minimizedSize = 64);

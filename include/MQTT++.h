@@ -1,3 +1,6 @@
+#ifndef MQTTPP_HPP
+#define MQTTPP_HPP
+
 // Modified from async_subscribe.cpp && async_publish.cpp
 //
 // This is a Paho MQTT C++ client, sample application.
@@ -30,9 +33,7 @@
  *    Frank Pagliughi - initial implementation and documentation
  *******************************************************************************/
 
-#ifndef MQTTPP_HPP
-#define MQTTPP_HPP
-
+#include <opencv2/opencv.hpp>
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -68,6 +69,10 @@ namespace brightness
 {
 int dutyCycle = 50;
 bool isAutomaticBrightness = false;
+}
+namespace cv
+{
+    char threshold = 75;
 }
 }
 
@@ -230,26 +235,8 @@ class Callback : public virtual callback,
 
         std::cout << topic << ": " << payload << std::endl;
 
-        if (topic == "parameters/xCenter")
-            topics::parameters::xCenter = std::stoi(payload);
-        else if (topic == "parameters/yCenter")
-            topics::parameters::yCenter = std::stoi(payload);
-        else if (topic == "parameters/xDiameter")
-            topics::parameters::xDiameter = std::stoi(payload);
-        else if (topic == "parameters/yDiameter")
-            topics::parameters::yDiameter = std::stoi(payload);
-        else if (topic == "parameters/thickness")
-            topics::parameters::thickness = std::stoi(payload);
-        else if (topic == "parameters/isCircle")
-            topics::parameters::isCircle = (payload == "true");
-        else if (topic == "parameters/modality")
-            topics::parameters::modality = std::stoi(payload);
-        else if (topic == "parameters/isGUIControl")
-            topics::parameters::isGUIControl = (payload == "true");
-        else if (topic == "brightness/isAutomaticBrightness")
-            topics::brightness::isAutomaticBrightness = (payload == "true");
-        else if (topic == "brightness/dutyCycle")
-            topics::brightness::dutyCycle = std::stoi(payload);
+        if (topic == "cv/threshold")
+            topics::cv::threshold = std::stoi(payload);
     }
 
     void delivery_complete(delivery_token_ptr token) override
