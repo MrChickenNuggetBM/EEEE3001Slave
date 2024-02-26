@@ -1,4 +1,6 @@
 #include "../include/CV++.h"
+#include "../include/MQTT++.h"
+
 using namespace cv;
 using namespace std;
 
@@ -571,14 +573,20 @@ Mat PaddedMat::pad(const Mat &mat)
  */
 vector<Ellipse> detectEllipses(Mat src, unsigned int numEllipses, int minimizedSize)
 {
+    Mat preSrc = src.clone();
+    // format the image
+    const int k1 = 2;
+    cvtColor(src, src, COLOR_BGRA2GRAY);
+    imshow("hi", src);
+    threshold(src, src, mqtt::topics::cv::threshold, 255, THRESH_BINARY);
+    Mat kernel1 = getStructuringElement(MORPH_RECT, Size(k1, k1)); // Adjust kernel size as needed
+    morphologyEx(src, src, MORPH_OPEN, kernel1);
+    imshow("hi2", src);
+
     // add padding to image to make square with length of power of two
     PaddedMat padsrc(src);
 
-    // format the image
-    const int k1 = 2;
-    threshold(padsrc, padsrc, mqtt::topics::cv::threshold, 255, THRESH_BINARY);
-    Mat kernel1 = getStructuringElement(MORPH_RECT, Size(k1, k1)); // Adjust kernel size as needed
-    morphologyEx(padsrc, padsrc, MORPH_OPEN, kernel1);
+    imshow("hi3", padsrc);
 
     // get the ellipses
     vector<Ellipse> ellipses;
@@ -587,25 +595,31 @@ vector<Ellipse> detectEllipses(Mat src, unsigned int numEllipses, int minimizedS
     auto preEllipses = detect_ellipses(
                            padsrc,
                            minimizedSize,
-                           numEllipses);
+                           numEllipses
+                       );
 
     // convert to Ellipse
     for (unsigned int i = 0; i < numEllipses; i++)
     {
         ellipse_data ellipse = preEllipses[i];
 
-        ellipses.push_back(
-            Ellipse(
-                Point2f(
-                    ellipse.x0,
-                    ellipse.y0),
-                Size2f(
-                    ellipse.a,
-                    ellipse.b),
-                ellipse.orient,
-                Scalar(255, 0, 0, 255),
-                5));
+        Ellipse _ellipse = Ellipse(
+                               Point2f(
+                                   ellipse.x0,
+                                   ellipse.y0),
+                               Size2f(
+                                   ellipse.a,
+                                   ellipse.b),
+                               ellipse.orient,
+                               Scalar(255, 0, 0, 255),
+                               5
+                           );
+
+        ellipses.push_back(_ellipse);
+        _ellipse(preSrc);
     }
+
+    imshow("hi4", preSrc);
 
     return ellipses;
 }

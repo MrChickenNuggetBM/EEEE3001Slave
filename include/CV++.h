@@ -1,7 +1,8 @@
 #ifndef COMPUTER_VISION_HPP
 #define COMPUTER_VISION_HPP
 
-#include "../include/MQTT++.h"
+#include "MQTT++.h"
+#include <opencv2/opencv.hpp>
 #include <fstream>
 
 /* --------------------------------------------------------------------------------------------------------------------------------------------------
