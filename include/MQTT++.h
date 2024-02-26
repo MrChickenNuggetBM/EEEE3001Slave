@@ -235,8 +235,8 @@ class Callback : public virtual callback,
 
         std::cout << topic << ": " << payload << std::endl;
 
-        if (topic == "cv/threshold")
-            topics::cv::threshold = std::stoi(payload);
+        //if (topic == "cv/threshold")
+        //    topics::cv::threshold = std::stoi(payload);
     }
 
     void delivery_complete(delivery_token_ptr token) override
