@@ -1,15 +1,10 @@
 #ifndef MAIN_HPP
 #define MAIN_HPP
 
-#include <opencv2/opencv.hpp>
-#include "include/MQTT++.h"
-#include <iostream>
+#include "include/CV++.h"
 #include <termios.h>
 #include <unistd.h>
 #include <csignal>
-#include <fstream>
-#include <chrono>
-#include <thread>
 
 #define PWM_PIN 12
 

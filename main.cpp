@@ -1,14 +1,16 @@
 #include "main.h"
 
-const string TOPICS[] = {};
+const string TOPICS[] = {
+    "cv/threshold"
+};
 
 // mqtt broker definition
 const string SERVER_ADDRESS("mqtt://192.168.2.1:1883");
-async_client CLIENT(SERVER_ADDRESS, "raspberrypi");
+async_client CLIENT(SERVER_ADDRESS, "raspberrypi2");
 // connection OPTIONS
 connect_options OPTIONS;
 // callback
-Callback CALLBACK(CLIENT, OPTIONS, TOPICS, 0);
+Callback CALLBACK(CLIENT, OPTIONS, TOPICS, 1);
 
 bool setup()
 {
@@ -52,6 +54,15 @@ bool setup()
         return false;
     }
 
+    try{
+        auto token = publishMessage("cv/thresholdSet", "60", CLIENT);
+        token->wait_for(std::chrono::seconds(10));
+    }
+    catch (const mqtt::exception& exc)
+    {
+        cerr << "Error during publish" <<endl;
+    }
+
     return true;
 }
 
@@ -61,8 +72,11 @@ bool loop()
     videoCapture.read(cameraImage);
 
     // send image plane image to Node-RED Dashboard
-    auto token = publishImage("images/imagePlane", cameraImage, CLIENT);
+    auto token = publishImage("images/backFocalPlane", cameraImage, CLIENT);
     token->wait_for(std::chrono::seconds(10));
+
+    vector<Ellipse> ellipses = detectEllipses(cameraImage.clone());
+
     return (waitKey(1) < 0);
 }
 
