@@ -33,7 +33,7 @@ public:
         int getThickness() const;
         float getMinorAxis() const;
         float getMajorAxis() const;
-        cv::Size2f getCenter() const;
+        cv::Point2f getCenter() const;
         float getEccentricity() const;
         float getArea() const;
 
@@ -62,6 +62,11 @@ public:
         void operator()(const cv::Mat &frame) const;
 };
 
+// finds the average of two ellipses
+Ellipse ellipseAverage(Ellipse elp1, Ellipse elp2);
+
+extern const std::vector<Ellipse> phaseEllipses;
+
 /* This code has been modified from https://github.com/siamezzze/ellipse_detection
 
 The MIT License (MIT)
@@ -87,6 +92,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 */
+
+extern bool isEllipseFound;
 
 struct ellipse_data
 {
