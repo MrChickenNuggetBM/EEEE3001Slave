@@ -55,7 +55,7 @@ bool setup()
     }
 
     try{
-        auto token = publishMessage("cv/thresholdSet", "150", CLIENT);
+        auto token = publishMessage("cv/thresholdSet", "60", CLIENT);
         token->wait_for(std::chrono::seconds(10));
     }
     catch (const mqtt::exception& exc)
@@ -75,7 +75,7 @@ bool loop()
     auto token = publishImage("images/backFocalPlane", cameraImage, CLIENT);
     token->wait_for(std::chrono::seconds(10));
 
-    vector<Ellipse> ellipses = detectEllipses(cameraImage.clone(), 2);
+    vector<Ellipse> ellipses = detectEllipses(cameraImage.clone());
 
     return (waitKey(1) < 0);
 }

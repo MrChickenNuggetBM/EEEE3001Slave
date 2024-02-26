@@ -122,6 +122,6 @@ private:
     cv::Mat pad(const cv::Mat& mat);
 };
 
-std::vector<Ellipse> detectEllipses(cv::Mat src, unsigned int numEllipses = 1, int minimizedSize = 64);
+std::vector<Ellipse> detectEllipses(cv::Mat src, unsigned int numEllipses = 2, int minimizedSize = 64);
 
 #endif // COMPUTER_VISION_HPP
