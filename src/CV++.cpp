@@ -61,7 +61,7 @@ float Ellipse::getEccentricity() const
     return ((float)sqrt(1 - (sqrMinRad / sqrMajRad)));
 }
 
-Size2f Ellipse::getCenter() const
+Point2f Ellipse::getCenter() const
 {
     return (center);
 }
@@ -196,6 +196,48 @@ void Ellipse::operator()(const Mat &frame) const
     draw(frame);
 }
 
+Ellipse ellipseAverage(Ellipse elp1, Ellipse elp2)
+{
+    Ellipse elp =
+        Ellipse(
+            Point2f(
+                (elp1.getCenter().x + elp2.getCenter().x) / 2,
+                (elp1.getCenter().y + elp2.getCenter().y) / 2
+            ),
+            Size2f(
+                (elp1.getMajorAxis() + elp2.getMajorAxis()) / 2,
+                (elp1.getMinorAxis() + elp2.getMinorAxis()) / 2
+            ),
+            (elp1.angle + elp2.angle) / 2,
+            Scalar(0, 255, 0, 255),
+            (elp1.getThickness() + elp2.getThickness()) / 2
+        );
+
+    return elp;
+}
+
+// contains the phase ring
+const vector<Ellipse> phaseEllipses =
+{
+    // outer
+    Ellipse(
+        Point2f(255, 149),
+        Size2f(46, 46),
+        0,
+        Scalar(0, 255, 255, 255),
+        1
+    ),
+
+    // inner
+    Ellipse(
+        Point2f(255, 149),
+        Size2f(56, 56),
+        0,
+        Scalar(0, 255, 255, 255),
+        1
+    )
+};
+
 /* This following block of code has been modified from https://github.com/siamezzze/ellipse_detection -----------------------------------------------
 
 The MIT License (MIT)
@@ -221,6 +263,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 */
+
+bool isEllipseFound = true;
 
 inline double distance_square(double x1, double y1, double x2, double y2)
 {
@@ -483,6 +527,7 @@ ellipse_data ellipse_detection(Mat edges, int minimized_size = 64, int min_vote 
     if (ellipses.size() < 1)
     {
         cout << "Didn't find anything" << endl;
+        isEllipseFound = false;
         return ellipse_data(-1, -1, -1, -1, 0);
     }
     // cout << "Step 1 of " << n << endl;
@@ -506,8 +551,8 @@ vector<ellipse_data> detect_ellipses(Mat src, int minimized_size = 64, unsigned 
         ellipse_data elp = ellipse_detection(edges, minimized_size, 5, 0);
 
         ellipses[i] = elp;
-        cout << "Found: (x_0 = " << elp.x0 << ", y_0 = " << elp.y0 << ", a = " << elp.a << ", b = " << elp.b <<
-             ", A = " << elp.orient << ") " << endl;
+        // cout << "Found: (x_0 = " << elp.x0 << ", y_0 = " << elp.y0 << ", a = " << elp.a << ", b = " << elp.b <<
+        //      ", A = " << elp.orient << ") " << endl;
         clear_picture(edges, elp);
     }
     return ellipses;
@@ -572,54 +617,62 @@ Mat PaddedMat::pad(const Mat &mat)
  */
 vector<Ellipse> detectEllipses(Mat src, unsigned int numEllipses, int minimizedSize)
 {
+    isEllipseFound = true;
+
     Mat preSrc = src.clone();
     // format the image
     const int k1 = 2;
     cvtColor(src, src, COLOR_BGRA2GRAY);
-    imshow("hi", src);
+    // imshow("hi", src);
     threshold(src, src, mqtt::topics::cv::threshold, 255, THRESH_BINARY);
     Mat kernel1 = getStructuringElement(MORPH_RECT, Size(k1, k1)); // Adjust kernel size as needed
     morphologyEx(src, src, MORPH_OPEN, kernel1);
-    imshow("hi2", src);
+    // imshow("hi2", src);
 
     // add padding to image to make square with length of power of two
     PaddedMat padsrc(src);
-
     imshow("hi3", padsrc);
 
     // get the ellipses
     vector<Ellipse> ellipses;
     ellipses.reserve(numEllipses);
 
-    auto preEllipses = detect_ellipses(
-                           padsrc,
-                           minimizedSize,
-                           numEllipses
-                       );
+    auto preEllipses =
+        detect_ellipses(
+            padsrc,
+            minimizedSize,
+            numEllipses
+        );
 
-    // convert to Ellipse
-    for (unsigned int i = 0; i < numEllipses; i++)
+    // if no ellipses were found, clear
+    if (!isEllipseFound)
     {
-        auto preElp = preEllipses[i];
-
-        auto  elp = Ellipse(
-                        Point2f(
-                            preElp.x0,
-                            preElp.y0),
-                        Size2f(
-                            2 * preElp.a,
-                            2 * preElp.b
-                        ),
-                        preElp.orient,
-                        Scalar(0, 255, 0, 255),
-                        1
-                    );
-
-        ellipses.push_back(elp);
-        elp(preSrc);
+        ellipses.clear();
     }
+    else
+    {
+        // convert to Ellipse
+        for (unsigned int i = 0; i < numEllipses; i++)
+        {
+            auto preElp = preEllipses[i];
 
-    imshow("hi4", preSrc);
+            auto elp =
+                Ellipse(
+                    Point2f(
+                        preElp.x0,
+                        preElp.y0),
+                    Size2f(
+                        2 * preElp.a,
+                        2 * preElp.b
+                    ),
+                    preElp.orient,
+                    Scalar(255, 0, 0, 255),
+                    1
+                );
+
+            ellipses.push_back(elp);
+        }
+    }
 
     return ellipses;
 }

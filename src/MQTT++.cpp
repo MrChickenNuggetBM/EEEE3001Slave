@@ -45,7 +45,7 @@ namespace topics
 {
 namespace cv
 {
-char threshold = 60;
+char threshold = 175;
 }
 }
 

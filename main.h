@@ -21,7 +21,7 @@ bool loop();
 void teardown();
 void teardown(int signal);
 
-ullint i(0);
+ullint ndx(0);
 int main(int argc, char *argv[]) {
     // run setup, if failure return
     if (!setup())
@@ -31,8 +31,8 @@ int main(int argc, char *argv[]) {
     }
 
     // run loop until loop() returns false
-    while (loop(), ++i) {
-        // cout << "Frame: " << i << endl;
+    while (loop(), ++ndx) {
+        // cout << "Frame: " << ndx << endl;
     }
 
     return 0;

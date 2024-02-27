@@ -55,7 +55,7 @@ bool setup()
     }
 
     try{
-        auto token = publishMessage("cv/thresholdSet", "60", CLIENT);
+        auto token = publishMessage("cv/thresholdSet", "175", CLIENT);
         token->wait_for(std::chrono::seconds(10));
     }
     catch (const mqtt::exception& exc)
@@ -75,7 +75,23 @@ bool loop()
     auto token = publishImage("images/backFocalPlane", cameraImage, CLIENT);
     token->wait_for(std::chrono::seconds(10));
 
-    vector<Ellipse> ellipses = detectEllipses(cameraImage.clone());
+    // only do once in 10 loops
+    // to reduce latency
+    static vector<Ellipse> detectedEllipses;
+    if (!(ndx % 10))
+        detectedEllipses = detectEllipses(cameraImage.clone());
+
+    // put ellipses on frame
+    // for (unsigned int i = 0; i < detectedEllipses.size(); i++)
+    //     detectedEllipses[i](cameraImage);
+    for (unsigned int i = 0; i < phaseEllipses.size(); i++)
+        phaseEllipses[i](cameraImage);
+
+    // ellipseAverage(phaseEllipses[0], phaseEllipses[1])(cameraImage);
+    if (isEllipseFound)
+        ellipseAverage(detectedEllipses[0], detectedEllipses[1])(cameraImage);
+
+    imshow("Final", cameraImage);
 
     return (waitKey(1) < 0);
 }
@@ -101,7 +117,7 @@ void teardown()
     }
 
     cout << endl
-         << "Stopped after " << i << " frames" << endl;
+         << "Stopped after " << ndx << " frames" << endl;
 }
 
 void teardown(int signal)
