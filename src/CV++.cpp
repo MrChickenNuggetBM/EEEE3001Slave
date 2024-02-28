@@ -221,7 +221,7 @@ const vector<Ellipse> phaseEllipses =
 {
     // outer
     Ellipse(
-        Point2f(255, 149),
+        Point2f(255, 151),
         Size2f(46, 46),
         0,
         Scalar(0, 255, 255, 255),
@@ -230,7 +230,7 @@ const vector<Ellipse> phaseEllipses =
 
     // inner
     Ellipse(
-        Point2f(255, 149),
+        Point2f(255, 151),
         Size2f(56, 56),
         0,
         Scalar(0, 255, 255, 255),
