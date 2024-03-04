@@ -36,16 +36,32 @@ using namespace std;
 
 namespace mqtt
 {
-// define variables
-const int
-QoS = 1,
-N_RETRY_ATTEMPTS = 5;
+// defining useful constants
+const string TOPICS[] = {
+    "cv/threshold",
+    "cv/noiseKernel",
+    "cv/adaptiveSize"
+};
+
+// mqtt broker definition
+const string SERVER_ADDRESS("mqtt://192.168.2.1:1883");
+async_client CLIENT(SERVER_ADDRESS, "raspberrypi2");
+// connection OPTIONS
+connect_options OPTIONS;
+// callback
+Callback CALLBACK(CLIENT, OPTIONS, TOPICS, 3);
+
+
+const int QoS = 1,
+          N_RETRY_ATTEMPTS = 5;
 
 namespace topics
 {
 namespace cv
 {
-char threshold = 175;
+char threshold = 20;
+char noiseKernel = 1;
+char adaptiveSize = 9;
 }
 }
 
@@ -58,23 +74,23 @@ char threshold = 175;
 
 void action_listener::on_failure(const token &tok)
 {
-    std::cout << name_ << " failure";
+    cout << name_ << " failure";
     if (tok.get_message_id() != 0)
-        std::cout << " for token: [" << tok.get_message_id() << "]" << std::endl;
-    std::cout << std::endl;
+        cout << " for token: [" << tok.get_message_id() << "]" << endl;
+    cout << endl;
 }
 
 void action_listener::on_success(const token &tok)
 {
-    std::cout << name_ << " success";
+    cout << name_ << " success";
     if (tok.get_message_id() != 0)
-        std::cout << " for token: [" << tok.get_message_id() << "]" << std::endl;
+        cout << " for token: [" << tok.get_message_id() << "]" << endl;
     auto top = tok.get_topics();
     if (top && !top->empty())
-        std::cout << "\ttoken topic: '" << (*top)[0] << "', ..." << std::endl;
-    std::cout << std::endl;
+        cout << "\ttoken topic: '" << (*top)[0] << "', ..." << endl;
+    cout << endl;
 }
-action_listener::action_listener(const std::string &name) : name_(name) {}
+action_listener::action_listener(const string &name) : name_(name) {}
 
 void delivery_action_listener::on_failure(const token &tok)
 {
@@ -88,7 +104,7 @@ void delivery_action_listener::on_success(const token &tok)
     done_ = true;
 }
 
-delivery_action_listener::delivery_action_listener(const std::string &name) :
+delivery_action_listener::delivery_action_listener(const string &name) :
     action_listener(name),
     done_(false) {}
 
@@ -107,14 +123,14 @@ bool delivery_action_listener::is_done() const
  */
 void Callback::reconnect()
 {
-    std::this_thread::sleep_for(std::chrono::milliseconds(2500));
+    this_thread::sleep_for(chrono::milliseconds(2500));
     try
     {
         CLIENT.connect(CONN_OPTS, nullptr, *this);
     }
-    catch (const exception &exc)
+    catch (const mqtt::exception &exc)
     {
-        std::cerr << "Error: " << exc.what() << std::endl;
+        cerr << "Error: " << exc.what() << endl;
         exit(1);
     }
 }
@@ -122,7 +138,7 @@ void Callback::reconnect()
 // Re-connection failure
 void Callback::on_failure(const token &tok)
 {
-    std::cout << "Connection attempt failed" << std::endl;
+    cout << "Connection attempt failed" << endl;
     if (++nretry_ > N_RETRY_ATTEMPTS)
         exit(1);
     reconnect();
@@ -133,17 +149,17 @@ void Callback::on_failure(const token &tok)
 void Callback::on_success(const token &tok) {}
 
 // (Re)connection success
-void Callback::connected(const std::string &cause)
+void Callback::connected(const string &cause)
 {
-    std::cout << "\nConnection success" << std::endl
-              << std::endl;
+    cout << "\nConnection success" << endl
+              << endl;
 
     int i = 0;
-    for (std::string topic = TOPICS[i]; i < numTopics; topic = TOPICS[++i])
+    for (string topic = TOPICS[i]; i < numTopics; topic = TOPICS[++i])
     {
-        std::cout << "Subscribing to topic '" << topic << "'" << std::endl
-                  << "\tfor client " << CLIENT.get_client_id() << " using QoS" << QoS << std::endl
-                  << std::endl << std::flush;
+        cout << "Subscribing to topic '" << topic << "'" << endl
+                  << "\tfor client " << CLIENT.get_client_id() << " using QoS" << QoS << endl
+                  << endl << flush;
 
         CLIENT.subscribe(topic, QoS, nullptr, SUB_LISTENER);
     }
@@ -151,13 +167,13 @@ void Callback::connected(const std::string &cause)
 
 // Callback for when the connection is lost.
 // This will initiate the attempt to manually reconnect.
-void Callback::connection_lost(const std::string &cause)
+void Callback::connection_lost(const string &cause)
 {
-    std::cout << "\nConnection lost" << std::endl;
+    cout << "\nConnection lost" << endl;
     if (!cause.empty())
-        std::cout << "\tcause: " << cause << std::endl;
+        cout << "\tcause: " << cause << endl;
 
-    std::cout << "Reconnecting..." << std::endl;
+    cout << "Reconnecting..." << endl;
     nretry_ = 0;
     reconnect();
 }
@@ -165,35 +181,43 @@ void Callback::connection_lost(const std::string &cause)
 // Callback for when a message arrives.
 void Callback::message_arrived(const_message_ptr msg)
 {
-    std::string topic = msg->get_topic();
-    std::string payload = msg->to_string();
+    string topic = msg->get_topic();
+    string payload = msg->to_string();
 
-    //std::cout << "Message arrived!" << std::endl;
-    //std::cout << "\ttopic: '" << topic << "'" << std::endl;
-    //std::cout << "\tpayload: '" << payload << "'\n" << std::endl;
+    //cout << "Message arrived!" << endl;
+    //cout << "\ttopic: '" << topic << "'" << endl;
+    //cout << "\tpayload: '" << payload << "'\n" << endl;
 
-    std::cout << topic << ": " << payload << std::endl;
+    // cout << topic << ": " << payload << endl;
+
+    // cout << topic << ": " << payload << endl;
+
+    // return;
 
     if (topic == "cv/threshold")
-        topics::cv::threshold = std::stoi(payload);
+        topics::cv::threshold = stoi(payload);
+    if (topic == "cv/noiseKernel")
+        topics::cv::noiseKernel = stoi(payload);
+    if (topic == "cv/adaptiveSize")
+        topics::cv::adaptiveSize = stoi(payload);
 }
 
 void Callback::delivery_complete(delivery_token_ptr token)
 {
     if(!token)
     {
-        std::cout << "Delivery complete for token: -1"
-                  << std::endl << std::flush;
+        // cout << "Delivery complete for token: -1"
+        //           << endl << flush;
         return;
     }
 
-    std::cout << "Delivery complete for token: " << token->get_message_id()
-              << std::endl << std::flush;
+    // cout << "Delivery complete for token: " << token->get_message_id()
+    //           << endl << flush;
 
     return;
 }
 
-Callback::Callback(async_client &CLIENT, connect_options &connOpts, const std::string *topics, const int numtopics)
+Callback::Callback(async_client &CLIENT, connect_options &connOpts, const string *topics, const int numtopics)
     : nretry_(0),
       CLIENT(CLIENT),
       CONN_OPTS(connOpts),
@@ -202,32 +226,32 @@ Callback::Callback(async_client &CLIENT, connect_options &connOpts, const std::s
       numTopics(numtopics) {}
 
 // function to publish messages
-std::shared_ptr<delivery_token> publishMessage(std::string topic, std::string payload, async_client& client)
+shared_ptr<delivery_token> publishMessage(string topic, string payload)
 {
     const char *_topic = topic.data();
     const char *_payload = payload.data();
 
-    auto token = client.publish(_topic, _payload, strlen(_payload), QoS, false);
+    auto token = CLIENT.publish(_topic, _payload, strlen(_payload), QoS, false);
 
-    // std::cout << std::endl << "Delivering: " << _topic << " = " << _payload << " [" << token->get_message_id() << "]"
-    // << std::endl << std::flush;
-    // << std::endl << std::flush;
+    // cout << endl << "Delivering: " << _topic << " = " << _payload << " [" << token->get_message_id() << "]"
+    // << endl << flush;
+    // << endl << flush;
 
     return token;
 }
 
 // function to publish images
-std::shared_ptr<delivery_token> publishImage(std::string topic, cv::Mat frame, async_client& client)
+shared_ptr<delivery_token> publishImage(string topic, cv::Mat frame)
 {
     const char *_topic = topic.data();
 
-    std::vector<uchar> frameBytes;
+    vector<uchar> frameBytes;
     cv::imencode(".jpg", frame, frameBytes);
     auto msg = make_message(_topic, frameBytes.data(), frameBytes.size());
-    auto token = client.publish(msg);
+    auto token = CLIENT.publish(msg);
 
-    // std::cout << std::endl << "Delivering: " << _topic << " [" << token->get_message_id() << "]"
-    // << std::endl << std::flush;
+    // cout << endl << "Delivering: " << _topic << " [" << token->get_message_id() << "]"
+    // << endl << flush;
 
     return token;
 }

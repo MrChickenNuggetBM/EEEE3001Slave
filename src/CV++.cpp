@@ -2,6 +2,7 @@
 
 using namespace cv;
 using namespace std;
+using namespace mqtt;
 
 /* --------------------------------------------------------------------------------------------------------------------------------------------------
  * Implementation of the ellipse class
@@ -221,7 +222,7 @@ const vector<Ellipse> phaseEllipses =
 {
     // outer
     Ellipse(
-        Point2f(255, 151),
+        Point2f(245, 146),
         Size2f(46, 46),
         0,
         Scalar(0, 255, 255, 255),
@@ -230,7 +231,7 @@ const vector<Ellipse> phaseEllipses =
 
     // inner
     Ellipse(
-        Point2f(255, 151),
+        Point2f(245, 146),
         Size2f(56, 56),
         0,
         Scalar(0, 255, 255, 255),
@@ -526,7 +527,7 @@ ellipse_data ellipse_detection(Mat edges, int minimized_size = 64, int min_vote 
 
     if (ellipses.size() < 1)
     {
-        cout << "Didn't find anything" << endl;
+        // cout << "Didn't find anything" << endl;
         isEllipseFound = false;
         return ellipse_data(-1, -1, -1, -1, 0);
     }
@@ -617,26 +618,37 @@ Mat PaddedMat::pad(const Mat &mat)
  */
 vector<Ellipse> detectEllipses(Mat src, unsigned int numEllipses, int minimizedSize)
 {
+    const int kernelSize = mqtt::topics::cv::noiseKernel;
     isEllipseFound = true;
 
-    Mat preSrc = src.clone();
-    // format the image
-    const int k1 = 2;
+    // GaussianBlur(src, src, Size(kernelSize, kernelSize), 0);
+
+    // apply noise filter to image -------------------------
     cvtColor(src, src, COLOR_BGRA2GRAY);
-    // imshow("hi", src);
-    threshold(src, src, mqtt::topics::cv::threshold, 255, THRESH_BINARY);
-    Mat kernel1 = getStructuringElement(MORPH_RECT, Size(k1, k1)); // Adjust kernel size as needed
-    morphologyEx(src, src, MORPH_OPEN, kernel1);
-    // imshow("hi2", src);
+
+    // apply Otsu's method threshold to image --------------
+    adaptiveThreshold(src,src,255,ADAPTIVE_THRESH_MEAN_C,THRESH_BINARY_INV, mqtt::topics::cv::adaptiveSize,mqtt::topics::cv::threshold);
+    // threshold(src, src, mqtt::topics::cv::threshold/*140*/, 255, THRESH_BINARY);
+    // threshold(src, src, 0, 255, THRESH_OTSU);
+
+    // send thresholded image to broker
+    auto token = publishImage("cvimages/threshold", src);
+    token->wait_for(std::chrono::seconds(10));
+
+    Mat kernel = getStructuringElement(MORPH_RECT, Size(kernelSize, kernelSize)); // Adjust kernel size as needed
+    morphologyEx(src, src, MORPH_OPEN, kernel);
+
+    // send filtered image to broker
+    token = publishImage("cvimages/filtered", src);
+    token->wait_for(std::chrono::seconds(10));
 
     // add padding to image to make square with length of power of two
     PaddedMat padsrc(src);
-    imshow("hi3", padsrc);
 
-    // get the ellipses
     vector<Ellipse> ellipses;
     ellipses.reserve(numEllipses);
 
+    // apply the hough transform
     auto preEllipses =
         detect_ellipses(
             padsrc,
@@ -644,11 +656,12 @@ vector<Ellipse> detectEllipses(Mat src, unsigned int numEllipses, int minimizedS
             numEllipses
         );
 
-    // if no ellipses were found, clear
+    // if no ellipses were found, send a clear array
     if (!isEllipseFound)
     {
         ellipses.clear();
     }
+    // otherwise convert to an "Ellipse" object
     else
     {
         // convert to Ellipse

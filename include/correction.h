@@ -3,9 +3,11 @@
 
 #include "CV++.h"
 
-Point2f calculateTranslationalCorrection(Ellipse elp, Ellipse refElp);
-float calculateAngleCorrection(Ellipse elp, Ellipse refElp);
-float calculateMajorRadiusCorrection(Ellipse elp, Ellipse refElp);
-float calculateMinorRadiusCorrection(Ellipse elp, Ellipse refElp);
+cv::Point2f calculateTranslationalCorrection(const Ellipse& elp, const Ellipse& refElp);
+float calculateAngleCorrection(const Ellipse& elp, const Ellipse& refElp);
+float calculateMajorRadiusCorrection(const Ellipse& elp, const Ellipse& refElp);
+float calculateMinorRadiusCorrection(const Ellipse& elp, const Ellipse& refElp);
+
+void publishCorrections(const Ellipse& elp, const Ellipse& refElp);
 
 #endif // CORRECTION_HPP

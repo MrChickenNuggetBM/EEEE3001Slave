@@ -51,6 +51,8 @@ namespace topics
 namespace cv
 {
 extern char threshold;
+extern char noiseKernel;
+extern char adaptiveSize;
 }
 }
 
@@ -138,10 +140,21 @@ public:
 };
 
 // function to publish messages
-std::shared_ptr<delivery_token> publishMessage(std::string topic, std::string payload, async_client& client);
+std::shared_ptr<delivery_token> publishMessage(std::string topic, std::string payload);
 
 // function to publish images
-std::shared_ptr<delivery_token> publishImage(std::string topic, cv::Mat frame, async_client& client);
+std::shared_ptr<delivery_token> publishImage(std::string topic, cv::Mat frame);
+
+
+// declaring useful constants
+extern const string TOPICS[];
+// mqtt broker definition
+extern const string SERVER_ADDRESS;
+extern async_client CLIENT;
+// connection OPTIONS
+extern connect_options OPTIONS;
+// callback
+extern Callback CALLBACK;
 }
 
 #endif // MQTTPP_HPP

@@ -1,17 +1,5 @@
 #include "main.h"
 
-const string TOPICS[] = {
-    "cv/threshold"
-};
-
-// mqtt broker definition
-const string SERVER_ADDRESS("mqtt://192.168.2.1:1883");
-async_client CLIENT(SERVER_ADDRESS, "raspberrypi2");
-// connection OPTIONS
-connect_options OPTIONS;
-// callback
-Callback CALLBACK(CLIENT, OPTIONS, TOPICS, 1);
-
 bool setup()
 {
     // clear the terminal
@@ -55,7 +43,13 @@ bool setup()
     }
 
     try{
-        auto token = publishMessage("cv/thresholdSet", "175", CLIENT);
+        auto token = publishMessage("cv/thresholdSet", "20");
+        token->wait_for(std::chrono::seconds(10));
+
+        token = publishMessage("cv/noiseKernelSet", "1");
+        token->wait_for(std::chrono::seconds(10));
+
+        token = publishMessage("cv/adaptiveSizeSet", "9");
         token->wait_for(std::chrono::seconds(10));
     }
     catch (const mqtt::exception& exc)
@@ -72,7 +66,7 @@ bool loop()
     videoCapture.read(cameraImage);
 
     // send image plane image to Node-RED Dashboard
-    auto token = publishImage("images/backFocalPlane", cameraImage, CLIENT);
+    auto token = publishImage("images/backFocalPlane", cameraImage);
     token->wait_for(std::chrono::seconds(10));
 
     // only do once in 10 loops
@@ -87,11 +81,19 @@ bool loop()
     for (unsigned int i = 0; i < phaseEllipses.size(); i++)
         phaseEllipses[i](cameraImage);
 
-    // ellipseAverage(phaseEllipses[0], phaseEllipses[1])(cameraImage);
-    if (isEllipseFound)
-        ellipseAverage(detectedEllipses[0], detectedEllipses[1])(cameraImage);
+    Ellipse phaseAverage = ellipseAverage(phaseEllipses[0], phaseEllipses[1]);
+    //phaseAverage(cameraImage);
 
-    imshow("Final", cameraImage);
+    if (isEllipseFound)
+    {
+        Ellipse detectedAverage = ellipseAverage(detectedEllipses[0], detectedEllipses[1]);
+        detectedAverage(cameraImage);
+        publishCorrections(detectedAverage, phaseAverage);
+    }
+
+    // send Hough Transform image to broker
+    token = publishImage("cvimages/hough",cameraImage);
+    token->wait_for(std::chrono::seconds(10));
 
     return (waitKey(1) < 0);
 }

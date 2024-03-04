@@ -1,7 +1,7 @@
 #ifndef MAIN_HPP
 #define MAIN_HPP
 
-#include "include/CV++.h"
+#include "include/correction.h"
 #include <termios.h>
 #include <unistd.h>
 #include <csignal>
