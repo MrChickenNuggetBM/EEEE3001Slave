@@ -1,5 +1,27 @@
 #include "main.h"
 
+// Callback for when a message arrives.
+void Callback::message_arrived(const_message_ptr msg)
+{
+    using namespace topics;
+
+    string topic = msg->get_topic();
+    string payload = msg->to_string();
+
+    /*
+    cout << "Message arrived!" << endl;
+    cout << "\ttopic: '" << topic << "'" << endl;
+    cout << "\tpayload: '" << payload << "'\n" << endl;
+    */
+
+    if (topic == "cv/threshold")
+        cv::threshold = stoi(payload);
+    else if (topic == "cv/noiseKernel")
+        cv::noiseKernel = stoi(payload);
+    else if (topic == "cv/adaptiveSize")
+        cv::adaptiveSize = stoi(payload);
+}
+
 bool setup()
 {
     // clear the terminal
@@ -120,9 +142,4 @@ void teardown()
 
     cout << endl
          << "Stopped after " << ndx << " frames" << endl;
-}
-
-void teardown(int signal)
-{
-    exit(EXIT_SUCCESS);
 }
