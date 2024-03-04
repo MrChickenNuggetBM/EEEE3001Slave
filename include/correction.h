@@ -1,7 +1,7 @@
 #ifndef CORRECTION_HPP
 #define CORRECTION_HPP
 
-#include "CV++.h"
+#include "../Shared/include/CV++.h"
 
 cv::Point2f calculateTranslationalCorrection(const Ellipse& elp, const Ellipse& refElp);
 float calculateAngleCorrection(const Ellipse& elp, const Ellipse& refElp);
