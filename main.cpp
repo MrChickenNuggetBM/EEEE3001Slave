@@ -65,13 +65,13 @@ bool setup()
     }
 
     try{
-        auto token = publishMessage("cv/thresholdSet", "20");
+        auto token = publishMessage("cv/thresholdSet", to_string(topics::cv::threshold));
         token->wait_for(std::chrono::seconds(10));
 
-        token = publishMessage("cv/noiseKernelSet", "1");
+        token = publishMessage("cv/noiseKernelSet", to_string(topics::cv::noiseKernel));
         token->wait_for(std::chrono::seconds(10));
 
-        token = publishMessage("cv/adaptiveSizeSet", "9");
+        token = publishMessage("cv/adaptiveSizeSet", to_string(topics::cv::adaptiveSize));
         token->wait_for(std::chrono::seconds(10));
     }
     catch (const mqtt::exception& exc)

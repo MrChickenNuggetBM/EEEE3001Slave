@@ -16,6 +16,7 @@ const string TOPICS[] =
     "cv/noiseKernel",
     "cv/adaptiveSize"
 };
+const int numTopics = sizeof(TOPICS)/sizeof(string);
 
 // mqtt broker definition
 const string SERVER_ADDRESS("mqtt://192.168.2.1:1883");
@@ -25,7 +26,7 @@ async_client CLIENT(SERVER_ADDRESS, "Slave");
 connect_options OPTIONS;
 
 // callback
-Callback CALLBACK(CLIENT, OPTIONS, TOPICS, 3);
+Callback CALLBACK(CLIENT, OPTIONS, TOPICS, numTopics);
 }
 
 using ullint = unsigned long long int;
