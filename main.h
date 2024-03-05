@@ -10,37 +10,23 @@
 
 namespace mqtt
 {
-    const string TOPICS[] =
-        {
-            "parameters/xCenter",
-            "parameters/yCenter",
-            "parameters/xDiameter",
-            "parameters/yDiameter",
-            "parameters/thickness",
-            "parameters/isCircle",
-            "parameters/modality",
-            "parameters/isGUIControl",
-            "parameters/isGUIControl",
-            "brightness/isAutomaticBrightness",
-            "brightness/dutyCycle"};
+const string TOPICS[] =
+{
+    "cv/threshold",
+    "cv/noiseKernel",
+    "cv/adaptiveSize"
+};
 
-    // mqtt broker definition
-    const string SERVER_ADDRESS("mqtt://localhost:1883");
-    async_client CLIENT(SERVER_ADDRESS, "raspberrypi");
+// mqtt broker definition
+const string SERVER_ADDRESS("mqtt://192.168.2.1:1883");
+async_client CLIENT(SERVER_ADDRESS, "Slave");
 
-    // connection OPTIONS
-    connect_options OPTIONS;
+// connection OPTIONS
+connect_options OPTIONS;
 
-    // callback
-    Callback CALLBACK(CLIENT, OPTIONS, TOPICS, 11);
+// callback
+Callback CALLBACK(CLIENT, OPTIONS, TOPICS, 3);
 }
-
-// variable for screen
-Screen screen("/dev/fb1");
-// screen dimensions
-const int
-    sWidth = screen.getWidth(),
-    sHeight = screen.getHeight();
 
 using ullint = unsigned long long int;
 
