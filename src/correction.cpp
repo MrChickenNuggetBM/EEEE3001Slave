@@ -45,4 +45,7 @@ void publishCorrections (const Ellipse& elp, const Ellipse& refElp)
     float majRd = calculateMinorRadiusCorrection(elp, refElp);
     token = publishMessage("cv/majRad-correction", to_string(majRd));
     token->wait_for(std::chrono::seconds(10));
+
+    token = publishMessage("cv/isNewValues", "true");
+    token->wait_for(std::chrono::seconds(10));
 }

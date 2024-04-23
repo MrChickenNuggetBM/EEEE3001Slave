@@ -64,7 +64,8 @@ bool setup()
         return false;
     }
 
-    try{
+    try
+    {
         auto token = publishMessage("cv/thresholdSet", to_string(topics::cv::threshold));
         token->wait_for(std::chrono::seconds(10));
 
@@ -79,29 +80,79 @@ bool setup()
         cerr << "Error during publish" <<endl;
     }
 
+    const float _brightness = 0.55,
+                contrast = 0.50,
+                saturation = 0.67;
+
+    // set camera image settings
+    // cout << "brightness: " << _brightness << endl;
+    // videoCapture.set(CAP_PROP_BRIGHTNESS, _brightness);
+    // cout << "contrast: " << contrast << endl;
+    // videoCapture.set(CAP_PROP_CONTRAST, contrast);
+    // cout << "saturation: " << saturation << endl;
+    // videoCapture.set(CAP_PROP_SATURATION, saturation);
+
+    // set camera settings
+    // system("v4l2-ctl -c exposure_dynamic_framerate=1");
+    // system("v4l2-ctl -c scene_mode=8");
+
     return true;
 }
 
 bool loop()
 {
+    // take image and rearrange
     Mat cameraImage;
     videoCapture.read(cameraImage);
-
-    // send image plane image to Node-RED Dashboard
-    auto token = publishImage("images/backFocalPlane", cameraImage);
-    token->wait_for(std::chrono::seconds(10));
+    flip(cameraImage, cameraImage, 0);
+    flip(cameraImage, cameraImage, 1);
+    cameraImage = cameraImage(Range(70,190), Range(200,320));
 
     // only do once in 10 loops
     // to reduce latency
-    static vector<Ellipse> detectedEllipses;
-    if (!(ndx % 10))
+    static vector<Ellipse> detectedEllipses =
+    {
+        Ellipse(
+            Point2f(
+                61,
+                62
+            ),
+            Size2f(
+                54.6,
+                54
+            ),
+            -0.695,
+            Scalar(255, 0, 0, 255),
+            1
+        ),
+        Ellipse(
+            Point2f(
+                61,
+                63
+            ),
+            Size2f(
+                46.6,
+                46
+            ),
+            0.755,
+            Scalar(255, 0, 0, 255),
+            1
+        )
+    };
+    if (!(ndx % 10) && (ndx > 70))
+    {
         detectedEllipses = detectEllipses(cameraImage.clone());
+    }
 
     // put ellipses on frame
     // for (unsigned int i = 0; i < detectedEllipses.size(); i++)
     //     detectedEllipses[i](cameraImage);
     for (unsigned int i = 0; i < phaseEllipses.size(); i++)
         phaseEllipses[i](cameraImage);
+
+    // send image plane image to Node-RED Dashboard
+    auto token = publishImage("images/backFocalPlane", cameraImage);
+    token->wait_for(std::chrono::seconds(10));
 
     Ellipse phaseAverage = ellipseAverage(phaseEllipses[0], phaseEllipses[1]);
     //phaseAverage(cameraImage);
@@ -110,6 +161,9 @@ bool loop()
     {
         Ellipse detectedAverage = ellipseAverage(detectedEllipses[0], detectedEllipses[1]);
         detectedAverage(cameraImage);
+        detectedEllipses[0](cameraImage);
+        detectedEllipses[1](cameraImage);
+        // publishCorrections(detectedAverage, phaseAverage);
         publishCorrections(detectedAverage, phaseAverage);
     }
 

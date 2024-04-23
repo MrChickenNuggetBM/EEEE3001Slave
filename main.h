@@ -6,6 +6,7 @@
 #include <termios.h>
 #include <unistd.h>
 #include <csignal>
+#include <chrono>
 #include "include/correction.h"
 
 namespace mqtt
@@ -58,7 +59,7 @@ int main(int argc, char *argv[])
     // run loop until loop() returns false
     while (loop(), ++ndx)
     {
-        // cout << "Frame: " << ndx << endl;
+        cout << "Frame: " << ndx << endl;
     }
 
     return 0;
