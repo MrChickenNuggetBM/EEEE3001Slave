@@ -85,16 +85,16 @@ bool setup()
                 saturation = 0.67;
 
     // set camera image settings
-    // cout << "brightness: " << _brightness << endl;
-    // videoCapture.set(CAP_PROP_BRIGHTNESS, _brightness);
-    // cout << "contrast: " << contrast << endl;
-    // videoCapture.set(CAP_PROP_CONTRAST, contrast);
-    // cout << "saturation: " << saturation << endl;
-    // videoCapture.set(CAP_PROP_SATURATION, saturation);
+    cout << "brightness: " << _brightness << endl;
+    videoCapture.set(CAP_PROP_BRIGHTNESS, _brightness);
+    cout << "contrast: " << contrast << endl;
+    videoCapture.set(CAP_PROP_CONTRAST, contrast);
+    cout << "saturation: " << saturation << endl;
+    videoCapture.set(CAP_PROP_SATURATION, saturation);
 
     // set camera settings
-    // system("v4l2-ctl -c exposure_dynamic_framerate=1");
-    // system("v4l2-ctl -c scene_mode=8");
+    system("v4l2-ctl -c exposure_dynamic_framerate=1");
+    system("v4l2-ctl -c scene_mode=8");
 
     return true;
 }
