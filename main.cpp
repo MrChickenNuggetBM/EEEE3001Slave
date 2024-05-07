@@ -5,6 +5,7 @@ void Callback::message_arrived(const_message_ptr msg)
 {
     using namespace topics;
 
+    // extract the topic and payload
     string topic = msg->get_topic();
     string payload = msg->to_string();
 
@@ -14,6 +15,8 @@ void Callback::message_arrived(const_message_ptr msg)
     cout << "\tpayload: '" << payload << "'\n" << endl;
     */
 
+   // according to the topic
+   // process the payload
     if (topic == "cv/threshold")
         cv::threshold = stoi(payload);
     else if (topic == "cv/noiseKernel")
@@ -34,8 +37,25 @@ bool setup()
         return false;
     }
 
+    // define camera image constants
+    const float _brightness = 0.55,
+                contrast = 0.50,
+                saturation = 0.67;
+
+    cout << "brightness: " << _brightness << endl;
+    cout << "contrast: " << contrast << endl;
+    cout << "saturation: " << saturation << endl;
+
+    // set camera image settings
     videoCapture.set(CAP_PROP_FRAME_WIDTH, 480);
     videoCapture.set(CAP_PROP_FRAME_HEIGHT, 270);
+    videoCapture.set(CAP_PROP_BRIGHTNESS, _brightness);
+    videoCapture.set(CAP_PROP_CONTRAST, contrast);
+    videoCapture.set(CAP_PROP_SATURATION, saturation);
+
+    // set camera settings
+    system("v4l2-ctl -c exposure_dynamic_framerate=1");
+    system("v4l2-ctl -c scene_mode=8");
 
     // configure code termination
     atexit(teardown);
@@ -64,6 +84,7 @@ bool setup()
         return false;
     }
 
+    // publish default values
     try
     {
         auto token = publishMessage("cv/thresholdSet", to_string(topics::cv::threshold));
@@ -80,22 +101,6 @@ bool setup()
         cerr << "Error during publish" <<endl;
     }
 
-    const float _brightness = 0.55,
-                contrast = 0.50,
-                saturation = 0.67;
-
-    // set camera image settings
-    cout << "brightness: " << _brightness << endl;
-    videoCapture.set(CAP_PROP_BRIGHTNESS, _brightness);
-    cout << "contrast: " << contrast << endl;
-    videoCapture.set(CAP_PROP_CONTRAST, contrast);
-    cout << "saturation: " << saturation << endl;
-    videoCapture.set(CAP_PROP_SATURATION, saturation);
-
-    // set camera settings
-    system("v4l2-ctl -c exposure_dynamic_framerate=1");
-    system("v4l2-ctl -c scene_mode=8");
-
     return true;
 }
 
@@ -108,8 +113,7 @@ bool loop()
     flip(cameraImage, cameraImage, 1);
     cameraImage = cameraImage(Range(70,190), Range(200,320));
 
-    // only do once in 10 loops
-    // to reduce latency
+    // defined Ellipses to be overrided by the detected ellipses
     static vector<Ellipse> detectedEllipses =
     {
         Ellipse(
@@ -139,6 +143,9 @@ bool loop()
             1
         )
     };
+
+    // only do once in 10 loops
+    // to reduce latency
     if (!(ndx % 10) && (ndx > 70))
     {
         detectedEllipses = detectEllipses(cameraImage.clone());
@@ -154,16 +161,20 @@ bool loop()
     auto token = publishImage("images/backFocalPlane", cameraImage);
     token->wait_for(std::chrono::seconds(10));
 
+    // get the average of both phase rings
     Ellipse phaseAverage = ellipseAverage(phaseEllipses[0], phaseEllipses[1]);
     //phaseAverage(cameraImage);
 
     if (isEllipseFound)
     {
+        // apply detected images to camera image
         Ellipse detectedAverage = ellipseAverage(detectedEllipses[0], detectedEllipses[1]);
         detectedAverage(cameraImage);
         detectedEllipses[0](cameraImage);
         detectedEllipses[1](cameraImage);
         // publishCorrections(detectedAverage, phaseAverage);
+
+        // find and publish corrections to the broker
         publishCorrections(detectedAverage, phaseAverage);
     }
 

@@ -11,6 +11,7 @@
 
 namespace mqtt
 {
+// define the topics
 const string TOPICS[] =
 {
     "cv/threshold",
@@ -30,6 +31,7 @@ connect_options OPTIONS;
 Callback CALLBACK(CLIENT, OPTIONS, TOPICS, numTopics);
 }
 
+// loop number
 using ullint = unsigned long long int;
 
 using namespace std;
@@ -59,7 +61,7 @@ int main(int argc, char *argv[])
     // run loop until loop() returns false
     while (loop(), ++ndx)
     {
-        cout << "Frame: " << ndx << endl;
+        // cout << "Frame: " << ndx << endl;
     }
 
     return 0;

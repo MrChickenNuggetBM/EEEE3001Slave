@@ -3,6 +3,7 @@ using namespace  cv;
 using namespace std;
 using namespace mqtt;
 
+// calcualte corrections by comparing both ellipses
 Point2f calculateTranslationalCorrection(const Ellipse& elp, const Ellipse& refElp)
 {
     float x = refElp.center.x - elp.center.x;
@@ -26,8 +27,14 @@ float calculateMinorRadiusCorrection(const Ellipse& elp, const Ellipse& refElp)
         return refElp.getMinorAxis() - elp.getMinorAxis();
 }
 
+
+// publish corrections
 void publishCorrections (const Ellipse& elp, const Ellipse& refElp)
 {
+    // calculate using the functions above
+    // then publish
+    // for each of the parameters
+    
     Point2f point = calculateTranslationalCorrection(elp, refElp);
     auto token = publishMessage("cv/x-correction", to_string(point.x));
     token->wait_for(std::chrono::seconds(10));
